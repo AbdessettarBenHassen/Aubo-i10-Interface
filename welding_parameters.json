@@ -1,0 +1,31 @@
+{
+    "welding_parameters": {
+        "global_values": {
+            "y_value1": "10",
+            "y_value2": "0.000",
+            "x_value1": "5.000",
+            "x_value2": "315.000",
+            "y_value3": "1",
+            "y_value4": "2.000",
+            "x_value3": "10.000",
+            "x_value4": "320.000"
+        },
+        "0": {
+            "weld_current": "120.000",
+            "weld_voltage": "1.500",
+            "arc_ending_a": "40.000",
+            "arc_ending_v": "1.000",
+            "remove_stick_a": "50.000",
+            "remove_stick_v": "0.000",
+            "arc_ending_s": "0.400",
+            "proof_stick": "0.600",
+            "starting_a": "140.000",
+            "starting_v": "0.600",
+            "starting_s": "1.500",
+            "reserve": "0.800",
+            "wire_fb": "0.100",
+            "arc_in_advance": "0.000",
+            "comment": ""
+        }
+    }
+}
