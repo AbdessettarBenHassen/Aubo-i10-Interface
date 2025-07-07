@@ -1,0 +1,11 @@
+Voltage calculé (weld) [A]: 3.091 V
+Voltage calculé (remove stick) [A]: 0.193 V
+Voltage calculé (starting) [A]: 1.932 V
+Voltage calculé (arc ending) [A]: -0.773 V
+Équation: y = 0.019x + -0.773
+
+Voltage calculé (weld) [V]: 2.125 V
+Voltage calculé (arc ending) [V]: 16.363 V
+Voltage calculé (remove stick) [V]: 0.000 V
+Voltage calculé (starting) [V]: 0.128 V
+Équation: y = 0.212x + 0.000
