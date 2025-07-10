@@ -1005,7 +1005,7 @@ class MainWindow(QMainWindow):
         self.orientation_step = 0.5  # en degrés
         self.orientation_step_value = QLabel(f"{self.orientation_step:.1f} deg")
         # Position Control (déplacé à droite)
-
+        
         position_control_group = QGroupBox("Position Control")
         position_control_layout = QGridLayout()
         directions = ["X+", "X-", "Y+", "Y-", "Z+", "Z-"]
@@ -1104,6 +1104,7 @@ class MainWindow(QMainWindow):
 
         # Connecter la checkbox à une fonction
         self.step_mode_checkbox.stateChanged.connect(self.toggle_step_mode)
+         # Disable it so the user can't toggle it
 
         step_mode_group.setLayout(step_mode_layout)
         layout.addWidget(step_mode_group, 1, 1)
@@ -1122,13 +1123,19 @@ class MainWindow(QMainWindow):
             increase_btn.pressed.connect(
                 partial(utl.start_move_joint, self.robot, i + 1, "+", self, self.joint_step_value)
             )
-        
-            increase_btn.released.connect(utl.stop_move_joint)
+
+            increase_btn.released.connect(
+                partial(utl.stop_move_joint, self.robot, i + 1, "+")
+            )
 
             decrease_btn.pressed.connect(
-                partial(utl.start_move_joint, self.robot, i + 1, "-",  self, self.joint_step_value)
+                partial(utl.start_move_joint, self.robot, i + 1, "-", self, self.joint_step_value)
             )
-            decrease_btn.released.connect(utl.stop_move_joint)
+
+            decrease_btn.released.connect(
+                partial(utl.stop_move_joint, self.robot, i + 1, "-")
+            )
+
 
  
             value_display = QLineEdit()
@@ -1212,14 +1219,16 @@ class MainWindow(QMainWindow):
         # Contrôle de vitesse (Speed)
         speed_layout = QHBoxLayout()
         speed_label = QLabel("Speed:")
-        speed_slider = QSlider(Qt.Horizontal)
-        speed_slider.setMinimum(0)
-        speed_slider.setMaximum(100)
-        speed_slider.setValue(50)
+        self.speed_slider = QSlider(Qt.Horizontal)
+        self.speed_slider.setMinimum(0)
+        self.speed_slider.setMaximum(100)
+        self.speed_slider.setValue(50)
+        self.speed_slider.valueChanged.connect(lambda value: utl.update_joint_speed_from_slider(value, self.robot))
+         # Print to console
         speed_layout.addWidget(speed_label)
-        speed_layout.addWidget(speed_slider)
+        speed_layout.addWidget(self.speed_slider)
         buttons_speed_layout.addLayout(speed_layout)
-
+        
         buttons_speed_group.setLayout(buttons_speed_layout)
         layout.addWidget(buttons_speed_group, 3, 1, 1, 1)
 
@@ -1354,6 +1363,7 @@ class MainWindow(QMainWindow):
         Active ou désactive les pas de déplacement en fonction de l'état de la checkbox.
         """
         self.st=self.step_mode_checkbox.isChecked()
+
         if self.step_mode_checkbox.isChecked():
             # Activer les pas de déplacement
             self.position_step = float(self.position_step_value.text().split()[0])* 1000   # Récupérer la valeur du champ
@@ -1731,8 +1741,13 @@ class MainWindow(QMainWindow):
             self.save_parameters_file() 
 
     def closeEvent(self, event):
-        """Sauvegarde lors de la fermeture de l'application"""
-        self.save_current_parameters()
+        print("Window is closing, cleaning up...")
+        # Stop joystick thread if present
+        if hasattr(self, "joystick") and self.joystick is not None:
+            self.joystick.stop()
+        # Stop timer if present (future-proofing)
+        if hasattr(self, "timer") and self.timer is not None:
+            self.timer.stop()
         event.accept()
 
     def show_virtual_keyboard(self, target_input):
@@ -2836,7 +2851,7 @@ class MainWindow(QMainWindow):
         # Sauvegarder dans le dictionnaire interne
         self.saved_programs[program_name] = program_content
 
-        # Définir le répertoire de sauvegarde s’il n’existe pas
+        # Définir le répertoire de sauvegarde s'il n'existe pas
         if not self.save_dir:
             self.save_dir = os.path.join(os.getcwd(), "programs")
             os.makedirs(self.save_dir, exist_ok=True)
@@ -2859,7 +2874,7 @@ class MainWindow(QMainWindow):
             print(f"Erreur lors de la sauvegarde : {e}")
             return
 
-        # Réinitialiser l’état de base de l’interface
+        # Réinitialiser l'état de base de l'interface
         self.show_basic_condition()
 
 
@@ -3805,3 +3820,5 @@ class MainWindow(QMainWindow):
         from datetime import datetime
         current_date = datetime.now().strftime("%Y%m%d_%H%M%S")  # Format YYYYMMDD_HHMMSS
         return f"Program_{current_date}"
+
+   

@@ -77,7 +77,7 @@ def get_robot_current_position(robot, window, coords=None):
         if state in (0, 1):
             user_di_states.append(state)
         else:
-            print(f"Échec de la lecture de l'état de {user_di}")
+            #print(f"Échec de la lecture de l'état de {user_di}")
             user_di_states.append(None)
     
     target_joints_tuple = None

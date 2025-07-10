@@ -8,108 +8,108 @@ from multiprocessing import Process, Queue
 import os
 from math import pi
 
-# 创建一个logger
+# Create a logger
 #logger = logging.getLogger()
 
 logger = logging.getLogger('main.robotcontrol')
 
 
 def logger_init():
-    # Log等级总开关
+    # Log level main switch
     logger.setLevel(logging.INFO)
 
-    # 创建log目录
+    # Create log directory
     if not os.path.exists('./logfiles'):
         os.mkdir('./logfiles')
 
-    # 创建一个handler，用于写入日志文件
+    # Create a handler for writing log files
     logfile = './logfiles/robot-ctl-python.log'
 
-    # 以append模式打开日志文件
+    # Open log file in append mode
     # fh = logging.FileHandler(logfile, mode='a')
     fh = RotatingFileHandler(logfile, mode='a', maxBytes=1024*1024*50, backupCount=30)
 
-    # 输出到file的log等级的开关
+    # File log level switch
     fh.setLevel(logging.INFO)
 
-    # 再创建一个handler，用于输出到控制台
+    # Create another handler for console output
     ch = logging.StreamHandler()
 
-    # 输出到console的log等级的开关
+    # Console log level switch
     ch.setLevel(logging.INFO)
 
-    # 定义handler的输出格式
+    # Define handler output format
     # formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
     formatter = logging.Formatter("%(asctime)s [%(thread)u] %(levelname)s: %(message)s")
 
-    # 为文件输出设定格式
+    # Set format for file output
     fh.setFormatter(formatter)
 
-    # 控制台输出设定格式
+    # Set format for console output
     ch.setFormatter(formatter)
 
-    # 设置文件输出到logger
+    # Set file output to logger
     logger.addHandler(fh)
 
-    # 设置控制台输出到logger
+    # Set console output to logger
     logger.addHandler(ch)
 
 
 class RobotEventType:
-    RobotEvent_armCanbusError = 0  # 机械臂CAN总线错误
-    RobotEvent_remoteHalt = 1  # 机械臂停止
-    RobotEvent_remoteEmergencyStop = 2  # 机械臂远程急停
-    RobotEvent_jointError = 3  # 关节错误
-    RobotEvent_forceControl = 4  # 力控制
-    RobotEvent_exitForceControl = 5  # 退出力控制
-    RobotEvent_softEmergency = 6  # 软急停
-    RobotEvent_exitSoftEmergency = 7  # 退出软急停
-    RobotEvent_collision = 8  # 碰撞
-    RobotEvent_collisionStatusChanged = 9  # 碰撞状态改变
-    RobotEvent_tcpParametersSucc = 10  # 工具动力学参数设置成功
-    RobotEvent_powerChanged = 11  # 机械臂电源开关状态改变
-    RobotEvent_ArmPowerOff = 12  # 机械臂电源关闭
-    RobotEvent_mountingPoseChanged = 13  # 安装位置发生改变
-    RobotEvent_encoderError = 14  # 编码器错误
-    RobotEvent_encoderLinesError = 15  # 编码器线数不一致
-    RobotEvent_singularityOverspeed = 16  # 奇异点超速
-    RobotEvent_currentAlarm = 17  # 机械臂电流异常
-    RobotEvent_toolioError = 18  # 机械臂工具端错误
-    RobotEvent_robotStartupPhase = 19  # 机械臂启动阶段
-    RobotEvent_robotStartupDoneResult = 20  # 机械臂启动完成结果
-    RobotEvent_robotShutdownDone = 21  # 机械臂关机结果
-    RobotEvent_atTrackTargetPos = 22  # 机械臂轨迹运动到位信号通知
-    RobotEvent_SetPowerOnDone = 23  # 设置电源状态完成
-    RobotEvent_ReleaseBrakeDone = 24  # 机械臂刹车释放完成
-    RobotEvent_robotControllerStateChaned = 25  # 机械臂控制状态改变
-    RobotEvent_robotControllerError = 26  # 机械臂控制错误----一般是算法规划出现问题时返回
-    RobotEvent_socketDisconnected = 27  # socket断开连接
-    RobotEvent_overSpeed = 28  # 超速
-    RobotEvent_algorithmException = 29  # 机械臂算法异常
-    RobotEvent_boardIoPoweron = 30  # 外部上电信号
-    RobotEvent_boardIoRunmode = 31  # 联动/手动
-    RobotEvent_boardIoPause = 32  # 外部暂停信号
-    RobotEvent_boardIoStop = 33  # 外部停止信号
-    RobotEvent_boardIoHalt = 34  # 外部关机信号
-    RobotEvent_boardIoEmergency = 35  # 外部急停信号
-    RobotEvent_boardIoRelease_alarm = 36  # 外部报警解除信号
-    RobotEvent_boardIoOrigin_pose = 37  # 外部回原点信号
-    RobotEvent_boardIoAutorun = 38  # 外部自动运行信号
-    RobotEvent_safetyIoExternalEmergencyStope = 39  # 外部急停输入01
-    RobotEvent_safetyIoExternalSafeguardStope = 40  # 外部保护停止输入02
-    RobotEvent_safetyIoReduced_mode = 41  # 缩减模式输入
-    RobotEvent_safetyIoSafeguard_reset = 42  # 防护重置
-    RobotEvent_safetyIo3PositionSwitch = 43  # 三态开关1
-    RobotEvent_safetyIoOperationalMode = 44  # 操作模式
-    RobotEvent_safetyIoManualEmergencyStop = 45  # 示教器急停01
-    RobotEvent_safetyIoSystemStop = 46  # 系统停止输入
-    RobotEvent_alreadySuspended = 47  # 机械臂暂停
-    RobotEvent_alreadyStopped = 48  # 机械臂停止
-    RobotEvent_alreadyRunning = 49  # 机械臂运行
-    RobotEvent_MoveEnterStopState = 1300 #运动进入到stop阶段
+    RobotEvent_armCanbusError = 0  # Arm CAN bus error
+    RobotEvent_remoteHalt = 1  # Arm stop
+    RobotEvent_remoteEmergencyStop = 2  # Arm remote emergency stop
+    RobotEvent_jointError = 3  # Joint error
+    RobotEvent_forceControl = 4  # Force control
+    RobotEvent_exitForceControl = 5  # Exit force control
+    RobotEvent_softEmergency = 6  # Soft emergency stop
+    RobotEvent_exitSoftEmergency = 7  # Exit soft emergency stop
+    RobotEvent_collision = 8  # Collision
+    RobotEvent_collisionStatusChanged = 9  # Collision status changed
+    RobotEvent_tcpParametersSucc = 10  # Tool dynamics parameter set successfully
+    RobotEvent_powerChanged = 11  # Arm power switch state changed
+    RobotEvent_ArmPowerOff = 12  # Arm power off
+    RobotEvent_mountingPoseChanged = 13  # Mounting position changed
+    RobotEvent_encoderError = 14  # Encoder error
+    RobotEvent_encoderLinesError = 15  # Encoder line count mismatch
+    RobotEvent_singularityOverspeed = 16  # Singularity overspeed
+    RobotEvent_currentAlarm = 17  # Arm current abnormal
+    RobotEvent_toolioError = 18  # Arm tool end error
+    RobotEvent_robotStartupPhase = 19  # Arm startup phase
+    RobotEvent_robotStartupDoneResult = 20  # Arm startup complete result
+    RobotEvent_robotShutdownDone = 21  # Arm shutdown result
+    RobotEvent_atTrackTargetPos = 22  # Arm trajectory motion reached target position notification
+    RobotEvent_SetPowerOnDone = 23  # Set power state complete
+    RobotEvent_ReleaseBrakeDone = 24  # Arm brake release complete
+    RobotEvent_robotControllerStateChaned = 25  # Arm control state changed
+    RobotEvent_robotControllerError = 26  # Arm control error----usually returned when algorithm planning has problems
+    RobotEvent_socketDisconnected = 27  # Socket disconnected
+    RobotEvent_overSpeed = 28  # Overspeed
+    RobotEvent_algorithmException = 29  # Arm algorithm exception
+    RobotEvent_boardIoPoweron = 30  # External power-on signal
+    RobotEvent_boardIoRunmode = 31  # Linkage/manual
+    RobotEvent_boardIoPause = 32  # External pause signal
+    RobotEvent_boardIoStop = 33  # External stop signal
+    RobotEvent_boardIoHalt = 34  # External shutdown signal
+    RobotEvent_boardIoEmergency = 35  # External emergency stop signal
+    RobotEvent_boardIoRelease_alarm = 36  # External alarm release signal
+    RobotEvent_boardIoOrigin_pose = 37  # External return to origin signal
+    RobotEvent_boardIoAutorun = 38  # External auto-run signal
+    RobotEvent_safetyIoExternalEmergencyStope = 39  # External emergency stop input 01
+    RobotEvent_safetyIoExternalSafeguardStope = 40  # External safeguard stop input 02
+    RobotEvent_safetyIoReduced_mode = 41  # Reduced mode input
+    RobotEvent_safetyIoSafeguard_reset = 42  # Safeguard reset
+    RobotEvent_safetyIo3PositionSwitch = 43  # Three-position switch 1
+    RobotEvent_safetyIoOperationalMode = 44  # Operation mode
+    RobotEvent_safetyIoManualEmergencyStop = 45  # Teach pendant emergency stop 01
+    RobotEvent_safetyIoSystemStop = 46  # System stop input
+    RobotEvent_alreadySuspended = 47  # Arm paused
+    RobotEvent_alreadyStopped = 48  # Arm stopped
+    RobotEvent_alreadyRunning = 49  # Arm running
+    RobotEvent_MoveEnterStopState = 1300 # Motion entered stop phase
     RobotEvent_None = 999999
 
-    # 非错误事件
+    # Non-error events
     NoError = (RobotEvent_forceControl,
                RobotEvent_exitForceControl,
                RobotEvent_tcpParametersSucc,
@@ -169,16 +169,16 @@ class RobotEventType:
 
 
 class RobotErrorType:
-    RobotError_SUCC = 0  # 无错误
+    RobotError_SUCC = 0  # No error
     RobotError_Base = 2000
-    RobotError_RSHD_INIT_FAILED = RobotError_Base + 1  # 库初始化失败
-    RobotError_RSHD_UNINIT = RobotError_Base + 2  # 库未初始化
-    RobotError_NoLink = RobotError_Base + 3  # 无链接
-    RobotError_Move = RobotError_Base + 4  # 机械臂移动错误
+    RobotError_RSHD_INIT_FAILED = RobotError_Base + 1  # Library initialization failed
+    RobotError_RSHD_UNINIT = RobotError_Base + 2  # Library not initialized
+    RobotError_NoLink = RobotError_Base + 3  # No link
+    RobotError_Move = RobotError_Base + 4  # Arm movement error
     RobotError_ControlError = RobotError_Base + RobotEventType.RobotEvent_robotControllerError
-    RobotError_LOGIN_FAILED = RobotError_Base + 5  # 机械臂登录失败
-    RobotError_NotLogin = RobotError_Base + 6  # 机械臂未登录
-    RobotError_ERROR_ARGS = RobotError_Base + 7  # 参数错误
+    RobotError_LOGIN_FAILED = RobotError_Base + 5  # Arm login failed
+    RobotError_NotLogin = RobotError_Base + 6  # Arm not logged in
+    RobotError_ERROR_ARGS = RobotError_Base + 7  # Parameter error
 
     def __init__(self):
         pass
@@ -203,10 +203,10 @@ class RobotError(Exception):
 
 
 class RobotDefaultParameters:
-    # 缺省的动力学参数
+    # Default dynamics parameters
     tool_dynamics = {"position": (0.0, 0.0, 0.0), "payload": 1.0, "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
 
-    # 缺省碰撞等级
+    # Default collision grade
     collision_grade = 6
 
     def __init__(self):
@@ -218,18 +218,18 @@ class RobotDefaultParameters:
 
 
 class RobotMoveTrackType:
-    # 圆弧
+    # Arc
     ARC_CIR = 2
-    # 轨迹
+    # Track
     CARTESIAN_MOVEP = 3
    # The following four third-order spline interpolation curves have discontinuous accelerations of start and end points, and are not suitable for new joint-driven versions
 # cubic spline interpolation (over control point), automatically optimize trajectory running time, currently does not support pose changes
     CARTESIAN_CUBICSPLINE = 4
-    # 需要设定三次均匀B样条插值(过控制点)的时间间隔,目前不支持姿态变化
+    # Need to set the time interval for cubic uniform B-spline interpolation (over control point), currently does not support pose changes
     CARTESIAN_UBSPLINEINTP = 5
-    # 三阶样条插值曲线
+    # Third-order spline interpolation curve
     JIONT_CUBICSPLINE = 6
-    # 可用于轨迹回放
+    # Can be used for trajectory playback
     JOINT_UBSPLINEINTP = 7
 
     def __init__(self):
@@ -237,12 +237,12 @@ class RobotMoveTrackType:
 
 
 class RobotIOType:
-    # 控制柜IO
+    # Control cabinet IO
     ControlBox_DI = 0
     ControlBox_DO = 1
     ControlBox_AI = 2
     ControlBox_AO = 3
-    # 用户IO
+    # User IO
     User_DI = 4
     User_DO = 5
     User_AI = 6
@@ -266,7 +266,7 @@ class RobotToolIoName:
 
 
 class RobotUserIoName:
-    # 控制柜用户ＤＩ
+    # Control cabinet user DI
     user_di_00 = "U_DI_00"
     user_di_01 = "U_DI_01"
     user_di_02 = "U_DI_02"
@@ -284,7 +284,7 @@ class RobotUserIoName:
     user_di_16 = "U_DI_16"
     user_di_17 = "U_DI_17"
 
-    # 控制柜用户ＤＯ
+    # Control cabinet user DO
     user_do_00 = "U_DO_00"
     user_do_01 = "U_DO_01"
     user_do_02 = "U_DO_02"
@@ -302,7 +302,7 @@ class RobotUserIoName:
     user_do_16 = "U_DO_16"
     user_do_17 = "U_DO_17"
 
-    # 控制柜模拟量ＩＯ
+    # Control cabinet analog IO
     user_ai_00 = "VI0"
     user_ai_01 = "VI1"
     user_ai_02 = "VI2"
@@ -318,13 +318,13 @@ class RobotUserIoName:
 
 
 class RobotStatus:
-    # 机械臂当前停止
+    # Current arm stop
     Stopped = 0
-    # 机械臂当前运行
+    # Current arm running
     Running = 1
-    # 机械臂当前暂停
+    # Current arm paused
     Paused = 2
-    # 机械臂当前恢复
+    # Current arm resumed
     Resumed = 3
 
     def __init__(self):
@@ -332,9 +332,9 @@ class RobotStatus:
 
 
 class RobotRunningMode:
-    # 机械臂仿真模式
+    # Arm simulator mode
     RobotModeSimulator = 0
-    # 机械臂真实模式
+    # Arm real mode
     RobotModeReal = 1
 
     def __init__(self):
@@ -361,11 +361,11 @@ class RobotToolIoAddr:
 
 
 class RobotCoordType:
-    # 基座坐标系
+    # Base coordinate system
     Robot_Base_Coordinate = 0
-    # 末端坐标系
+    # End coordinate system
     Robot_End_Coordinate = 1
-    # 用户坐标系
+    # User coordinate system
     Robot_World_Coordinate = 2
 
     def __init__(self):
@@ -388,9 +388,9 @@ class RobotCoordCalMethod:
 
 
 class RobotToolDigitalIoDir:
-    # 输入
+    # Input
     IO_IN = 0
-    # 输出
+    # Output
     IO_OUT = 1
 
     def __init__(self):
@@ -398,7 +398,7 @@ class RobotToolDigitalIoDir:
 
 
 class Auboi5Robot:
-    # 客户端个数
+    # Number of clients
     __client_count = 0
 
     def __init__(self):
@@ -421,7 +421,7 @@ class Auboi5Robot:
     def get_local_time():
         """"
         * FUNCTION:    get_local_time
-        * DESCRIPTION: 获取系统当前时间
+        * DESCRIPTION: Get system current time
         * INPUTS:      无输入
         * OUTPUTS:
         * RETURNS:     输出系统当前时间字符串
@@ -432,7 +432,7 @@ class Auboi5Robot:
     def robot_event_callback(self, event):
         """"
         * FUNCTION:    robot_event_callback
-        * DESCRIPTION: 机械臂事件
+        * DESCRIPTION: Arm event
         * INPUTS:      无输入
         * OUTPUTS:
         * RETURNS:     系统事件回调函数
@@ -448,7 +448,7 @@ class Auboi5Robot:
     def raise_error(error_type, error_code, error_msg):
         """"
         * FUNCTION:    raise_error
-        * DESCRIPTION: 抛出异常事件
+        * DESCRIPTION: Throw exception event
         * INPUTS:      无输入
         * OUTPUTS:
         * RETURNS:     无
@@ -459,7 +459,7 @@ class Auboi5Robot:
     def check_event(self):
         """"
         * FUNCTION:    check_event
-        * DESCRIPTION: 检查机械臂是否发生异常事件
+        * DESCRIPTION: Check if arm has abnormal events
         * INPUTS:      input
         * OUTPUTS:     output
         * RETURNS:     void
@@ -474,7 +474,7 @@ class Auboi5Robot:
     def initialize():
         """"
         * FUNCTION:    initialize
-        * DESCRIPTION: 初始化机械臂控制库
+        * DESCRIPTION: Initialize arm control library
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -491,7 +491,7 @@ class Auboi5Robot:
     def uninitialize():
         """"
         * FUNCTION:    uninitialize
-        * DESCRIPTION: 反初始化机械臂控制库
+        * DESCRIPTION: Reverse initialize arm control library
         * INPUTS:      input
         * OUTPUTS:     output
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -503,7 +503,7 @@ class Auboi5Robot:
     def create_context(self):
         """"
         * FUNCTION:    create_context
-        * DESCRIPTION: 创建机械臂控制上下文句柄
+        * DESCRIPTION: Create arm control context handle
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RSHD
@@ -515,7 +515,7 @@ class Auboi5Robot:
     def get_context(self):
         """"
         * FUNCTION:    get_context
-        * DESCRIPTION: 获取机械臂当前控制上下文
+        * DESCRIPTION: Get current arm control context
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     上下文句柄RSHD
@@ -526,9 +526,9 @@ class Auboi5Robot:
     def connect(self, ip='localhost', port=8899):
         """"
         * FUNCTION:    connect
-        * DESCRIPTION: 链接机械臂服务器
-        * INPUTS:      ip 机械臂服务器地址
-        *              port 端口号
+        * DESCRIPTION: Link to arm server
+        * INPUTS:      ip Arm server address
+        *              port Port number
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -555,7 +555,7 @@ class Auboi5Robot:
     def disconnect(self):
         """"
          * FUNCTION:    disconnect
-         * DESCRIPTION: 断开机械臂服务器链接
+         * DESCRIPTION: Disconnect from arm server link
          * INPUTS:
          * OUTPUTS:
          * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -575,10 +575,10 @@ class Auboi5Robot:
                       tool_dynamics=RobotDefaultParameters.tool_dynamics):
         """
         * FUNCTION:    robot_startup
-        * DESCRIPTION: 启动机械臂
-        * INPUTS:      collision：碰撞等级范围(0~10) 缺省：6
-        *              tool_dynamics:运动学参数
-        *              tool_dynamics = 位置，单位(m) ：{"position": (0.0, 0.0, 0.0),
+        * DESCRIPTION: Start arm
+        * INPUTS:      collision: collision grade range (0~10) Default: 6
+        *              tool_dynamics: kinematics parameters
+        *              tool_dynamics = position, unit (m): {"position": (0.0, 0.0, 0.0),
         *                              负载，单位(kg)： "payload": 1.0,
         *                              惯量：          "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
         *
@@ -599,7 +599,7 @@ class Auboi5Robot:
     def robot_shutdown(self):
         """
         * FUNCTION:    robot_shutdown
-        * DESCRIPTION: 关闭机械臂
+        * DESCRIPTION: Close arm
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -626,7 +626,7 @@ class Auboi5Robot:
     def init_profile(self):
         """"
         * FUNCTION:    init_profile
-        * DESCRIPTION: 初始化机械臂控制全局属性
+        * DESCRIPTION: Initialize global attributes of arm control
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -644,8 +644,8 @@ class Auboi5Robot:
     def set_joint_maxacc(self, joint_maxacc=(1.0, 1.0, 1.0, 1.0, 1.0, 1.0)):
         """
         * FUNCTION:    set_joint_maxacc
-        * DESCRIPTION: 设置六个关节的最大加速度
-        * INPUTS:      joint_maxacc:六个关节的最大加速度，单位(rad/s)
+        * DESCRIPTION: Set maximum acceleration of six joints
+        * INPUTS:      joint_maxacc: maximum acceleration of six joints, unit (rad/s)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -661,7 +661,7 @@ class Auboi5Robot:
     def get_joint_maxacc(self):
         """U_DO_00
         * FUNCTION:    get_joint_maxacc
-        * DESCRIPTION: 获取六个关节的最大加速度
+        * DESCRIPTION: Get maximum acceleration of six joints
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 六个关节的最大加速度单位(rad/s^2)
@@ -678,8 +678,8 @@ class Auboi5Robot:
     def set_joint_maxvelc(self, joint_maxvelc=(1.0, 1.0, 1.0, 1.0, 1.0, 1.0)):
         """
         * FUNCTION:    set_joint_maxvelc
-        * DESCRIPTION: 设置六个关节的最大速度
-        * INPUTS:      joint_maxvelc:六个关节的最大速度，单位(rad/s)
+        * DESCRIPTION: Set maximum speed of six joints
+        * INPUTS:      joint_maxvelc: maximum speed of six joints, unit (rad/s)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -695,7 +695,7 @@ class Auboi5Robot:
     def get_joint_maxvelc(self):
         """
         * FUNCTION:    get_joint_maxvelc
-        * DESCRIPTION: 获取六个关节的最大速度
+        * DESCRIPTION: Get maximum speed of six joints
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 六个关节的最大速度(rad/s)
@@ -712,8 +712,8 @@ class Auboi5Robot:
     def set_end_max_line_acc(self, end_maxacc=0.1):
         """
         * FUNCTION:    set_end_max_line_acc
-        * DESCRIPTION: 设置机械臂末端最大线加速度
-        * INPUTS:      end_maxacc:末端最大加线速度，单位(m/s^2)
+        * DESCRIPTION: Set maximum linear acceleration of arm end
+        * INPUTS:      end_maxacc: maximum linear speed of end, unit (m/s^2)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -729,7 +729,7 @@ class Auboi5Robot:
     def get_end_max_line_acc(self):
         """
         * FUNCTION:    get_end_max_line_acc
-        * DESCRIPTION: 获取机械臂末端最大线加速度
+        * DESCRIPTION: Get maximum linear acceleration of arm end
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 机械臂末端最大加速度，单位(m/s^2)
@@ -746,8 +746,8 @@ class Auboi5Robot:
     def set_end_max_line_velc(self, end_maxvelc=0.1):
         """
         * FUNCTION:    set_end_max_line_velc
-        * DESCRIPTION: 设置机械臂末端最大线速度
-        * INPUTS:      end_maxacc:末端最大线速度，单位(m/s)
+        * DESCRIPTION: Set maximum linear speed of arm end
+        * INPUTS:      end_maxacc: maximum linear speed of end, unit (m/s)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -763,7 +763,7 @@ class Auboi5Robot:
     def get_end_max_line_velc(self):
         """
         * FUNCTION:    get_end_max_line_velc
-        * DESCRIPTION: 获取机械臂末端最大线速度
+        * DESCRIPTION: Get maximum linear speed of arm end
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 机械臂末端最大速度，单位(m/s)
@@ -780,8 +780,8 @@ class Auboi5Robot:
     def set_end_max_angle_acc(self, end_maxacc=0.1):
         """
         * FUNCTION:    set_end_max_angle_acc
-        * DESCRIPTION: 设置机械臂末端最大角加速度
-        * INPUTS:      end_maxacc:末端最大加速度，单位(rad/s^2)
+        * DESCRIPTION: Set maximum angular acceleration of arm end
+        * INPUTS:      end_maxacc: maximum acceleration of end, unit (rad/s^2)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -797,7 +797,7 @@ class Auboi5Robot:
     def get_end_max_angle_acc(self):
         """
         * FUNCTION:    get_end_max_angle_acc
-        * DESCRIPTION: 获取机械臂末端最大角加速度
+        * DESCRIPTION: Get maximum angular acceleration of arm end
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 机械臂末端最大角加速度，单位(m/s^2)
@@ -814,8 +814,8 @@ class Auboi5Robot:
     def set_end_max_angle_velc(self, end_maxvelc=0.1):
         """
         * FUNCTION:    set_end_max_angle_velc
-        * DESCRIPTION: 设置机械臂末端最大角速度
-        * INPUTS:      end_maxacc:末端最大速度，单位(rad/s)
+        * DESCRIPTION: Set maximum angular speed of arm end
+        * INPUTS:      end_maxacc: maximum speed of end, unit (rad/s)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -831,7 +831,7 @@ class Auboi5Robot:
     def get_end_max_angle_velc(self):
         """
         * FUNCTION:    get_end_max_angle_velc
-        * DESCRIPTION: 获取机械臂末端最大角速度
+        * DESCRIPTION: Get maximum angular speed of arm end
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 机械臂末端最大速度，单位(rad/s)
@@ -848,9 +848,9 @@ class Auboi5Robot:
     def move_to_target_in_cartesian(self, pos, rpy_xyz):
         """
         * FUNCTION:    move_to_target_in_cartesian
-        * DESCRIPTION: 给出笛卡尔坐标值和欧拉角，机械臂轴动到目标位置和姿态
-        * INPUTS:      pos:位置坐标（x，y，z），单位(m)
-        *              rpy：欧拉角（rx，ry，rz）,单位（度）
+        * DESCRIPTION: Given Cartesian coordinates and Euler angles, the arm axes move to the target position and attitude
+        * INPUTS:      pos: position coordinates (x, y, z), unit (m)
+        *              rpy: Euler angles (rx, ry, rz), unit (degrees)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -860,17 +860,17 @@ class Auboi5Robot:
         if self.rshd >= 0 and self.connected:
             # degrees -> arc degrees
             rpy_xyz = [i / 180.0 * pi for i in rpy_xyz]
-            # 欧拉角转四元数
+            # Euler angle to quaternion
             ori = libpyauboi5.rpy_to_quaternion(self.rshd, rpy_xyz)
 
-            # 逆运算得关节角
+            # Inverse calculation to get joint angles
             joint_radian = libpyauboi5.get_current_waypoint(self.rshd)
 
             ik_result = libpyauboi5.inverse_kin(self.rshd, joint_radian['joint'], pos, ori)
 
             logging.info("ik_result====>{0}".format(ik_result))
             
-            # 轴动到目标位置
+            # Arm moves to target position
             result = libpyauboi5.move_joint(self.rshd, ik_result["joint"])
             if result != RobotErrorType.RobotError_SUCC:
                 self.raise_error(RobotErrorType.RobotError_Move, result, "move error")
@@ -880,11 +880,11 @@ class Auboi5Robot:
             logger.warn("RSHD uninitialized or not login!!!")
             return RobotErrorType.RobotError_NotLogin
 
-    def move_joint(self, joint_radian=(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000), issync=True):
+    def move_joint(self, joint_radian=(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000), issync=False):
         """
         * FUNCTION:    move_joint
-        * DESCRIPTION: 机械臂轴动
-        * INPUTS:      joint_radian:六个关节的关节角，单位(rad)
+        * DESCRIPTION: Arm axes move
+        * INPUTS:      joint_radian: joint angles of six joints, unit (rad)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -904,8 +904,8 @@ class Auboi5Robot:
     def move_line(self, joint_radian=(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)):
         """
         * FUNCTION:    move_line
-        * DESCRIPTION: 机械臂保持当前姿态直线运动
-        * INPUTS:      joint_radian:六个关节的关节角，单位(rad)
+        * DESCRIPTION: Arm moves in a straight line while maintaining the current attitude
+        * INPUTS:      joint_radian: joint angles of six joints, unit (rad)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -925,8 +925,8 @@ class Auboi5Robot:
     def move_rotate(self, user_coord, rotate_axis, rotate_angle):
         """
         * FUNCTION:    move_rotate
-        * DESCRIPTION: 保持当前位置变换姿态做旋转运动
-        * INPUTS:      user_coord:用户坐标系
+        * DESCRIPTION: Maintain current position and perform rotational motion
+        * INPUTS:      user_coord: user coordinate system
         *              user_coord = {'coord_type': 2,
         *               'calibrate_method': 0,
         *               'calibrate_points':
@@ -938,8 +938,8 @@ class Auboi5Robot:
         *                   {"pos": (0.0, 0.0, 0.0),
         *                    "ori": (1.0, 0.0, 0.0, 0.0)}
         *               }
-        *              rotate_axis:转轴(x,y,z) 例如：(1,0,0)表示沿Y轴转动
-        *              rotate_angle:旋转角度 单位（rad）
+        *              rotate_axis: rotation axis (x,y,z) For example: (1,0,0) means rotating around the Y axis
+        *              rotate_angle: rotation angle Unit (rad)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -955,7 +955,7 @@ class Auboi5Robot:
     def clear_offline_track(self):
         """
         * FUNCTION:    clear_offline_track
-        * DESCRIPTION: 清理服务器上的非在线轨迹运动数据
+        * DESCRIPTION: Clear non-online trajectory motion data on server
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -972,9 +972,9 @@ class Auboi5Robot:
     def append_offline_track_waypoint(self, waypoints):
         """
         * FUNCTION:    append_offline_track_waypoint
-        * DESCRIPTION: 向服务器添加非在线轨迹运动路点
-        * INPUTS:      waypoints 非在线轨迹运动路点元祖(可包含小于3000个路点), 单位:弧度
-        *              例如:((0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+        * DESCRIPTION: Add non-online trajectory motion waypoints to server
+        * INPUTS:      waypoints Tuple of non-online trajectory motion waypoints (can contain less than 3000 waypoints), unit: radians
+        *               For example: ((0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
         *                    (0.0,-0.000001,-0.000001,0.000001,-0.000001, 0.0))
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -991,8 +991,8 @@ class Auboi5Robot:
     def append_offline_track_file(self, track_file):
         """
         * FUNCTION:    append_offline_track_file
-        * DESCRIPTION: 向服务器添加非在线轨迹运动路点文件
-        * INPUTS:      路点文件全路径,路点文件的每一行包含六个关节的关节角(弧度),用逗号隔开
+        * DESCRIPTION: Add non-online trajectory motion waypoints file to server
+        * INPUTS:       Full path to waypoints file, each line in the waypoints file contains joint angles of six joints (in radians), separated by commas
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1008,7 +1008,7 @@ class Auboi5Robot:
     def startup_offline_track(self):
         """
         * FUNCTION:    startup_offline_track
-        * DESCRIPTION: 通知服务器启动非在线轨迹运动
+        * DESCRIPTION: Notify server to start non-online trajectory motion
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1025,7 +1025,7 @@ class Auboi5Robot:
     def stop_offline_track(self):
         """
         * FUNCTION:    stop_offline_track
-        * DESCRIPTION: 通知服务器停止非在线轨迹运动
+        * DESCRIPTION: Notify server to stop non-online trajectory motion
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1042,7 +1042,7 @@ class Auboi5Robot:
     def enter_tcp2canbus_mode(self):
         """
         * FUNCTION:    enter_tcp2canbus_mode
-        * DESCRIPTION: 通知服务器进入TCP2CANBUS透传模式
+        * DESCRIPTION: Notify server to enter TCP2CANBUS transparent transmission mode
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1059,7 +1059,7 @@ class Auboi5Robot:
     def leave_tcp2canbus_mode(self):
         """
         * FUNCTION:    leave_tcp2canbus_mode
-        * DESCRIPTION: 通知服务器退出TCP2CANBUS透传模式
+        * DESCRIPTION: Notify server to exit TCP2CANBUS transparent transmission mode
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1076,8 +1076,8 @@ class Auboi5Robot:
     def set_waypoint_to_canbus(self, joint_radian=(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)):
         """
         * FUNCTION:    set_waypoint_to_canbus
-        * DESCRIPTION: 透传运动路点到CANBUS
-        * INPUTS:      joint_radian:六个关节的关节角，单位(rad)
+        * DESCRIPTION: Transmit motion waypoints to CANBUS
+        * INPUTS:      joint_radian: joint angles of six joints, unit (rad)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1093,7 +1093,7 @@ class Auboi5Robot:
     def remove_all_waypoint(self):
         """
         * FUNCTION:    remove_all_waypoint
-        * DESCRIPTION: 清除所有已经设置的全局路点
+        * DESCRIPTION: Clear all global waypoints already set
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1110,8 +1110,8 @@ class Auboi5Robot:
     def add_waypoint(self, joint_radian=(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)):
         """
         * FUNCTION:    add_waypoint
-        * DESCRIPTION: 添加全局路点用于轨迹运动
-        * INPUTS:      joint_radian:六个关节的关节角，单位(rad)
+        * DESCRIPTION: Add global waypoints for trajectory motion
+        * INPUTS:      joint_radian: joint angles of six joints, unit (rad)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1127,8 +1127,8 @@ class Auboi5Robot:
     def set_blend_radius(self, blend_radius=0.01):
         """
         * FUNCTION:    set_blend_radius
-        * DESCRIPTION: 设置交融半径
-        * INPUTS:      blend_radius:交融半径，单位(m)
+        * DESCRIPTION: Set blending radius
+        * INPUTS:      blend_radius: blending radius, unit (m)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1148,8 +1148,8 @@ class Auboi5Robot:
     def set_circular_loop_times(self, circular_count=1):
         """
         * FUNCTION:    set_circular_loop_times
-        * DESCRIPTION: 设置圆运动圈数
-        * INPUTS:      circular_count:圆的运动圈数
+        * DESCRIPTION: Set number of circular motions
+        * INPUTS:      circular_count: number of circular motions
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1167,8 +1167,8 @@ class Auboi5Robot:
     def set_user_coord(self, user_coord):
         """
         * FUNCTION:    set_user_coord
-        * DESCRIPTION: 设置用户坐标系
-        * INPUTS:      user_coord:用户坐标系
+        * DESCRIPTION: Set user coordinate system
+        * INPUTS:      user_coord: user coordinate system
         *              user_coord = {'coord_type': RobotCoordType.Robot_World_Coordinate,
         *               'calibrate_method': RobotCoordCalMethod.CoordCalMethod_xOy,
         *               'calibrate_points':
@@ -1194,7 +1194,7 @@ class Auboi5Robot:
     def set_base_coord(self):
         """
         * FUNCTION:    set_base_coord
-        * DESCRIPTION: 设置基座坐标系
+        * DESCRIPTION: Set base coordinate system
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1211,8 +1211,8 @@ class Auboi5Robot:
     def check_user_coord(self, user_coord):
         """
         * FUNCTION:    check_user_coord
-        * DESCRIPTION: 检查用户坐标系参数设置是否合理
-        * INPUTS:      user_coord:用户坐标系
+        * DESCRIPTION: Check if user coordinate system parameters are reasonable
+        * INPUTS:      user_coord: user coordinate system
         *              user_coord = {'coord_type': 2,
         *               'calibrate_method': 0,
         *               'calibrate_points':
@@ -1233,9 +1233,9 @@ class Auboi5Robot:
     def set_relative_offset_on_base(self, relative_pos, relative_ori):
         """
         * FUNCTION:    set_relative_offset_on_base
-        * DESCRIPTION: 设置基于基座标系运动偏移量
-        * INPUTS:      relative_pos=(x, y, z) 相对位移，单位(m)
-        *              relative_ori=(w,x,y,z) 相对姿态
+        * DESCRIPTION: Set motion offset based on base coordinate system
+        * INPUTS:      relative_pos=(x, y, z) relative displacement, unit (m)
+        *              relative_ori=(w,x,y,z) relative attitude
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1252,10 +1252,10 @@ class Auboi5Robot:
     def set_relative_offset_on_user(self, relative_pos, relative_ori, user_coord):
         """
         * FUNCTION:    set_relative_offset_on_user
-        * DESCRIPTION: 设置基于用户标系运动偏移量
-        * INPUTS:      relative_pos=(x, y, z) 相对位移，单位(m)
-        *              relative_ori=(w,x,y,z) 目标姿态
-        *              user_coord:用户坐标系
+        * DESCRIPTION: Set motion offset based on user coordinate system
+        * INPUTS:      relative_pos=(x, y, z) relative displacement, unit (m)
+        *              relative_ori=(w,x,y,z) target attitude
+        *              user_coord: user coordinate system
         *              user_coord = {'coord_type': 2,
         *               'calibrate_method': 0,
         *               'calibrate_points':
@@ -1281,7 +1281,7 @@ class Auboi5Robot:
     def set_no_arrival_ahead(self):
         """
         * FUNCTION:    set_no_arrival_ahead
-        * DESCRIPTION: 取消提前到位设置
+        * DESCRIPTION: Cancel pre-arrival setup
         * INPUTS:
         *
         * OUTPUTS:
@@ -1303,8 +1303,8 @@ class Auboi5Robot:
     def set_arrival_ahead_distance(self, distance=0.0):
         """
         * FUNCTION:    set_arrival_ahead_distance
-        * DESCRIPTION: 设置距离模式下的提前到位距离
-        * INPUTS:      distance 提前到位距离 单位（米）
+        * DESCRIPTION: Set pre-arrival distance in distance mode
+        * INPUTS:      distance Pre-arrival distance in distance mode, unit (meters)
         *
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1325,8 +1325,8 @@ class Auboi5Robot:
     def set_arrival_ahead_time(self, sec=0.0):
         """
         * FUNCTION:    set_arrival_ahead_time
-        * DESCRIPTION: 设置时间模式下的提前到位时间
-        * INPUTS:      sec 提前到位时间　单位（秒）
+        * DESCRIPTION: Set pre-arrival time in time mode
+        * INPUTS:      sec Pre-arrival time in time mode, unit (seconds)
         *
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1347,8 +1347,8 @@ class Auboi5Robot:
     def set_arrival_ahead_blend(self, distance=0.0):
         """
         * FUNCTION:    set_arrival_ahead_blend
-        * DESCRIPTION: 设置距离模式下交融半径距离
-        * INPUTS:      blend 交融半径 单位（米）
+        * DESCRIPTION: Set blending radius in distance mode
+        * INPUTS:      blend Blending radius in distance mode, unit (meters)
         *
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1393,10 +1393,10 @@ class Auboi5Robot:
     def forward_kin(self, joint_radian=(0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)):
         """
         * FUNCTION:    forward_kin
-        * DESCRIPTION: 正解
-        * INPUTS:      joint_radian:六个关节的关节角，单位(rad)
+        * DESCRIPTION: Forward solution
+        * INPUTS:      joint_radian: joint angles of six joints, unit (rad)
         * OUTPUTS:
-        * RETURNS:     成功返回: 关节正解结果，结果为详见NOTES
+        * RETURNS:     成功返回: Joint forward solution, result as per NOTES
         *              失败返回: None
         *
         * NOTES:       六个关节角 {'joint': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -1413,12 +1413,12 @@ class Auboi5Robot:
                     pos=(0.0, 0.0, 0.0), ori=(1.0, 0.0, 0.0, 0.0)):
         """
         * FUNCTION:    forward_kin
-        * DESCRIPTION: 逆解
-        * INPUTS:      joint_radian:起始点六个关节的关节角，单位(rad)
-        *              pos位置(x, y, z)单位(m)
-        *              ori位姿(w, x, y, z)
+        * DESCRIPTION: Inverse solution
+        * INPUTS:      joint_radian: joint angles of six joints at starting point, unit (rad)
+        *              pos Position (x, y, z) in unit (m)
+        *              ori Pose (w, x, y, z)
         * OUTPUTS:
-        * RETURNS:     成功返回: 关节正解结果，结果为详见NOTES
+        * RETURNS:     成功返回: Joint forward solution, result as per NOTES
         *              失败返回: None
         *
         * NOTES:       六个关节角 {'joint': [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
@@ -1434,10 +1434,10 @@ class Auboi5Robot:
     def base_to_user(self, pos, ori, user_coord, user_tool):
         """
         * FUNCTION:    base_to_user
-        * DESCRIPTION: 用户坐标系转基座坐标系
-        * INPUTS:      pos:基座标系下的位置(x, y, z)单位(m)
-        *              ori:基座标系下的姿态(w, x, y, z)
-        *              user_coord:用户坐标系
+        * DESCRIPTION: Convert user coordinate system to base coordinate system
+        * INPUTS:      pos: position in base coordinate system (x, y, z) in unit (m)
+        *              ori: attitude in base coordinate system (w, x, y, z)
+        *              user_coord: user coordinate system
         *              user_coord = {'coord_type': 2,
         *               'calibrate_method': 0,
         *               'calibrate_points':
@@ -1448,7 +1448,7 @@ class Auboi5Robot:
         *                   {"pos": (0.0, 0.0, 0.0),
         *                    "ori": (1.0, 0.0, 0.0, 0.0)}
         *               }
-        *               user_tool用户工具描述
+        *               user_tool User tool description
         *               user_tool={"pos": (x, y, z), "ori": (w, x, y, z)}
         * OUTPUTS:
         * RETURNS:     成功返回: 返回位置和姿态{"pos": (x, y, z), "ori": (w, x, y, z)}
@@ -1461,10 +1461,10 @@ class Auboi5Robot:
     def user_to_base(self, pos, ori, user_coord, user_tool):
         """
         * FUNCTION:    user_to_base
-        * DESCRIPTION: 用户坐标系转基座标系
-        * INPUTS:      pos:用户标系下的位置(x, y, z)单位(m)
-        *              ori:用户标系下的姿态(w, x, y, z)
-        *              user_coord:用户坐标系
+        * DESCRIPTION: Convert user coordinate system to base coordinate system
+        * INPUTS:      pos: position in user coordinate system (x, y, z) in unit (m)
+        *              ori: attitude in user coordinate system (w, x, y, z)
+        *              user_coord: user coordinate system
         *              user_coord = {'coord_type': 2,
         *               'calibrate_method': 0,
         *               'calibrate_points':
@@ -1475,7 +1475,7 @@ class Auboi5Robot:
         *                   {"pos": (0.0, 0.0, 0.0),
         *                    "ori": (1.0, 0.0, 0.0, 0.0)}
         *               }
-        *               user_tool用户工具描述
+        *               user_tool User tool description
         *               user_tool={"pos": (x, y, z), "ori": (w, x, y, z)}
         * OUTPUTS:
         * RETURNS:     成功返回: 返回位置和姿态{"pos": (x, y, z), "ori": (w, x, y, z)}
@@ -1488,10 +1488,10 @@ class Auboi5Robot:
     def base_to_base_additional_tool(self, flange_pos, flange_ori, user_tool):
         """
         * FUNCTION:    base_to_base_additional_tool
-        * DESCRIPTION: 基坐标系转基座标得到工具末端点的位置和姿态
-        * INPUTS:      pos:基于基座标系的法兰盘中心位置信息(x, y, z)单位(m)
-        *              ori:基于基座标系的姿态信息(w, x, y, z)
-        *              user_tool用户工具描述
+        * DESCRIPTION: Convert base coordinate system to base coordinate system to get position and attitude of tool end
+        * INPUTS:      pos: position of flange center in base coordinate system (x, y, z) in unit (m)
+        *              ori: attitude information in base coordinate system (w, x, y, z)
+        *              user_tool User tool description
         *              user_tool={"pos": (x, y, z), "ori": (w, x, y, z)}
         * OUTPUTS:
         * RETURNS:     成功返回: 返回基于基座标系的工具末端位置位置和姿态信息{"pos": (x, y, z), "ori": (w, x, y, z)}
@@ -1504,8 +1504,8 @@ class Auboi5Robot:
     def rpy_to_quaternion(self, rpy):
         """
         * FUNCTION:    rpy_to_quaternion
-        * DESCRIPTION: 欧拉角转四元数
-        * INPUTS:      rpy:欧拉角(rx, ry, rz)，单位(m)
+        * DESCRIPTION: Euler angle to quaternion
+        * INPUTS:      rpy: Euler angles (rx, ry, rz), unit (m)
         * OUTPUTS:
         * RETURNS:     成功返回: 四元数结果，结果为详见NOTES
         *              失败返回: None
@@ -1521,13 +1521,13 @@ class Auboi5Robot:
     def quaternion_to_rpy(self, ori):
         """
         * FUNCTION:    quaternion_to_rpy
-        * DESCRIPTION: 四元数转欧拉角
+        * DESCRIPTION: Quaternion to Euler angle
         * INPUTS:      四元数(w, x, y, z)
         * OUTPUTS:
         * RETURNS:     成功返回: 欧拉角结果，结果为详见NOTES
         *              失败返回: None
         *
-        * NOTES:       rpy:欧拉角(rx, ry, rz)，单位(m)
+        * NOTES:       rpy: Euler angles (rx, ry, rz), unit (m)
         """
         if self.rshd >= 0:
             return libpyauboi5.quaternion_to_rpy(self.rshd, ori)
@@ -1538,7 +1538,7 @@ class Auboi5Robot:
     def set_tool_end_param(self, tool_end_param):
         """
         * FUNCTION:    set_tool_end_param
-        * DESCRIPTION: 设置末端工具参数
+        * DESCRIPTION: Set tool end parameters
         * INPUTS:      末端工具参数： tool_end_param={"pos": (x, y, z), "ori": (w, x, y, z)}
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1556,7 +1556,7 @@ class Auboi5Robot:
     def set_none_tool_dynamics_param(self):
         """
         * FUNCTION:    set_none_tool_dynamics_param
-        * DESCRIPTION: 设置无工具的动力学参数
+        * DESCRIPTION: Set dynamics parameters without tool
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1574,9 +1574,9 @@ class Auboi5Robot:
     def set_tool_dynamics_param(self, tool_dynamics):
         """
         * FUNCTION:    set_tool_end_param
-        * DESCRIPTION: 设置工具的动力学参数
-        * INPUTS:      tool_dynamics:运动学参数
-        *              tool_dynamics = 位置，单位(m) ：{"position": (0.0, 0.0, 0.0),
+        * DESCRIPTION: Set dynamics parameters of tool
+        * INPUTS:      tool_dynamics: kinematics parameters
+        *              tool_dynamics = position, unit (m): {"position": (0.0, 0.0, 0.0),
         *                              负载，单位(kg)： "payload": 1.0,
         *                              惯量：          "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
         * OUTPUTS:
@@ -1595,11 +1595,11 @@ class Auboi5Robot:
     def get_tool_dynamics_param(self):
         """
         * FUNCTION:    get_tool_dynamics_param
-        * DESCRIPTION: 获取末端工具参数
+        * DESCRIPTION: Get tool end parameters
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 运动学参数
-        *              tool_dynamics = 位置，单位(m) ：{"position": (0.0, 0.0, 0.0),
+        *              tool_dynamics = position, unit (m): {"position": (0.0, 0.0, 0.0),
         *                              负载，单位(kg)： "payload": 1.0,
         *                              惯量：          "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
         *
@@ -1617,7 +1617,7 @@ class Auboi5Robot:
     def set_none_tool_kinematics_param(self):
         """
         * FUNCTION:    set_none_tool_kinematics_param
-        * DESCRIPTION: 设置无工具运动学参数　
+        * DESCRIPTION: Set kinematics parameters without tool
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1635,7 +1635,7 @@ class Auboi5Robot:
     def set_tool_kinematics_param(self, tool_end_param):
         """
         * FUNCTION:    set_tool_kinematics_param
-        * DESCRIPTION: 设置工具的运动学参数　
+        * DESCRIPTION: Set kinematics parameters of tool
         * INPUTS:      末端工具参数： tool_end_param={"pos": (x, y, z), "ori": (w, x, y, z)}
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1653,7 +1653,7 @@ class Auboi5Robot:
     def get_tool_kinematics_param(self):
         """
         * FUNCTION:     set_tool_kinematics_param
-        * DESCRIPTION: 设置工具的运动学参数　
+        * DESCRIPTION: Set kinematics parameters of tool
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 工具的运动学参数
@@ -1672,7 +1672,7 @@ class Auboi5Robot:
     def move_stop(self):
         """
         * FUNCTION:    move_stop
-        * DESCRIPTION: 停止机械臂运动
+        * DESCRIPTION: Stop arm motion
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1689,7 +1689,7 @@ class Auboi5Robot:
     def move_pause(self):
         """
         * FUNCTION:    move_pause
-        * DESCRIPTION: 暂停机械臂运动
+        * DESCRIPTION: Pause arm motion
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1706,7 +1706,7 @@ class Auboi5Robot:
     def move_continue(self):
         """
         * FUNCTION:    move_continue
-        * DESCRIPTION: 暂停后回复机械臂运动
+        * DESCRIPTION: Resume arm motion after pause
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1723,7 +1723,7 @@ class Auboi5Robot:
     def collision_recover(self):
         """
         * FUNCTION:    collision_recover
-        * DESCRIPTION: 机械臂碰撞后恢复
+        * DESCRIPTION: Arm collision recovery
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1740,10 +1740,10 @@ class Auboi5Robot:
     def get_robot_state(self):
         """
         * FUNCTION:    get_robot_state
-        * DESCRIPTION: 获取机械臂当前状态
+        * DESCRIPTION: Get current state of arm
         * INPUTS:
         * OUTPUTS:
-        * RETURNS:     成功返回: 机械臂当前状态
+        * RETURNS:     成功返回: Current state of arm
         *              机械臂当前停止:RobotStatus.Stopped
         *              机械臂当前运行:RobotStatus.Running
         *              机械臂当前暂停:RobotStatus.Paused
@@ -1762,7 +1762,7 @@ class Auboi5Robot:
     def enter_reduce_mode(self):
         """
         * FUNCTION:    enter_reduce_mode
-        * DESCRIPTION: 设置机械臂运动进入缩减模式
+        * DESCRIPTION: Set arm motion to reduced mode
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1779,7 +1779,7 @@ class Auboi5Robot:
     def exit_reduce_mode(self):
         """
         * FUNCTION:    exit_reduce_mode
-        * DESCRIPTION: 设置机械臂运动退出缩减模式
+        * DESCRIPTION: Set arm motion to exit reduced mode
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1796,7 +1796,7 @@ class Auboi5Robot:
     def project_startup(self):
         """
         * FUNCTION:    project_startup
-        * DESCRIPTION: 通知机械臂工程启动，服务器同时开始检测安全IO
+        * DESCRIPTION: Notify arm project to start, server also starts to detect safety IO
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1813,7 +1813,7 @@ class Auboi5Robot:
     def rs_project_stop(self):
         """
         * FUNCTION:    rs_project_stop
-        * DESCRIPTION: 通知机械臂工程停止，服务器停止检测安全IO
+        * DESCRIPTION: Notify arm project to stop, server stops to detect safety IO
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -1830,10 +1830,10 @@ class Auboi5Robot:
     def set_work_mode(self, mode=0):
         """
         * FUNCTION:    set_work_mode
-        * DESCRIPTION: 设置机械臂服务器工作模式
-        * INPUTS:      mode:服务器工作模式
-        *              机械臂仿真模式:RobotRunningMode.RobotModeSimulator
-        *              机械臂真实模式:RobotRunningMode.RobotModeReal
+        * DESCRIPTION: Set server work mode of arm
+        * INPUTS:      mode: server work mode
+        *               Arm simulator mode: RobotRunningMode.RobotModeSimulator
+        *               Arm real mode: RobotRunningMode.RobotModeReal
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1849,14 +1849,14 @@ class Auboi5Robot:
     def get_work_mode(self):
         """
         * FUNCTION:    set_work_mode
-        * DESCRIPTION: 获取机械臂服务器当前工作模式
-        * INPUTS:      mode:服务器工作模式
-        *              机械臂仿真模式:RobotRunningMode.RobotModeSimulator
-        *              机械臂真实模式:RobotRunningMode.RobotModeReal
+        * DESCRIPTION: Get current server work mode of arm
+        * INPUTS:      mode: server work mode
+        *               Arm simulator mode: RobotRunningMode.RobotModeSimulator
+        *               Arm real mode: RobotRunningMode.RobotModeReal
         * OUTPUTS:
-        * RETURNS:     成功返回: 服务器工作模式
-        *              机械臂仿真模式:RobotRunningMode.RobotModeSimulator
-        *              机械臂真实模式:RobotRunningMode.RobotModeReal
+        * RETURNS:     成功返回: Server work mode
+        *               Arm simulator mode: RobotRunningMode.RobotModeSimulator
+        *               Arm real mode: RobotRunningMode.RobotModeReal
         *
         *              失败返回: None
         * NOTES:
@@ -1871,8 +1871,8 @@ class Auboi5Robot:
     def set_collision_class(self, grade=6):
         """
         * FUNCTION:    set_collision_class
-        * DESCRIPTION: 设置机械臂碰撞等级
-        * INPUTS:      grade碰撞等级:碰撞等级 范围（0～10）
+        * DESCRIPTION: Set arm collision grade
+        * INPUTS:      grade: collision grade, collision grade range (0~10)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -1888,7 +1888,7 @@ class Auboi5Robot:
     def is_have_real_robot(self):
         """
         * FUNCTION:    is_have_real_robot
-        * DESCRIPTION: 获取当前是否已经链接真实机械臂
+        * DESCRIPTION: Get whether real arm has been linked
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 1：存在 0：不存在
@@ -1905,7 +1905,7 @@ class Auboi5Robot:
     def is_online_mode(self):
         """
         * FUNCTION:    is_online_mode
-        * DESCRIPTION: 当前机械臂是否运行在联机模式
+        * DESCRIPTION: Whether arm is running in online mode
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 1：在 0：不在
@@ -1922,7 +1922,7 @@ class Auboi5Robot:
     def is_online_master_mode(self):
         """
         * FUNCTION:    is_online_master_mode
-        * DESCRIPTION: 当前机械臂是否运行在联机主模式
+        * DESCRIPTION: Whether arm is running in online master mode
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 1：主模式 0：从模式
@@ -1939,7 +1939,7 @@ class Auboi5Robot:
     def get_joint_status(self):
         """
         * FUNCTION:    get_joint_status
-        * DESCRIPTION: 获取机械臂当前状态信息
+        * DESCRIPTION: Get current state information of arm
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 返回六个关节状态，包括：电流，电压，温度
@@ -1963,8 +1963,8 @@ class Auboi5Robot:
     def get_current_waypoint(self):
         """
         * FUNCTION:    get_current_waypoint
-        * DESCRIPTION: 获取机械臂当前位置信息
-        * INPUTS:      grade碰撞等级:碰撞等级 范围（0～10）
+        * DESCRIPTION: Get current position information of arm
+        * INPUTS:      grade: collision grade, collision grade range (0~10)
         * OUTPUTS:
         * RETURNS:     成功返回: 关节位置信息，结果为详见NOTES
         *              失败返回: None
@@ -2006,9 +2006,9 @@ class Auboi5Robot:
     def get_board_io_status(self, io_type, io_name):
         """
         * FUNCTION:    get_board_io_status
-        * DESCRIPTION: 获取IO状态
-        * INPUTS:      io_type:类型
-        *              io_name:名称 RobotUserIoName.user_dx_xx
+        * DESCRIPTION: Get IO status
+        * INPUTS:      io_type: type
+        *              io_name: name RobotUserIoName.user_dx_xx
         * OUTPUTS:
         * RETURNS:     成功返回: IO状态 double数值(数字IO，返回0或1,模拟IO返回浮点数）
         *              失败返回: None
@@ -2024,10 +2024,10 @@ class Auboi5Robot:
     def set_board_io_status(self, io_type, io_name, io_value):
         """
         * FUNCTION:    set_board_io_status
-        * DESCRIPTION: 设置IO状态
-        * INPUTS:      io_type:类型
-        *              io_name:名称 RobotUserIoName.user_dx_xx
-        *              io_value:状态数值(数字IO，返回0或1,模拟IO返回浮点数）
+        * DESCRIPTION: Set IO status
+        * INPUTS:      io_type: type
+        *              io_name: name RobotUserIoName.user_dx_xx
+        *              io_value: status value (digital IO returns 0 or 1, analog IO returns floating point number)
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -2043,8 +2043,8 @@ class Auboi5Robot:
     def set_tool_power_type(self, power_type=RobotToolPowerType.OUT_0V):
         """
         * FUNCTION:    set_tool_power_type
-        * DESCRIPTION: 设置工具端电源类型
-        * INPUTS:      power_type:电源类型
+        * DESCRIPTION: Set power type of tool end
+        * INPUTS:      power_type: power type
         *              RobotToolPowerType.OUT_0V
         *              RobotToolPowerType.OUT_12V
         *              RobotToolPowerType.OUT_24V
@@ -2063,8 +2063,8 @@ class Auboi5Robot:
     def get_tool_power_type(self):
         """
         * FUNCTION:    get_tool_power_type
-        * DESCRIPTION: 获取工具端电源类型
-        * INPUTS:      power_type:电源类型
+        * DESCRIPTION: Get power type of tool end
+        * INPUTS:      power_type: power type
 
         * OUTPUTS:
         * RETURNS:     成功返回: 电源类型，包括如下：
@@ -2086,9 +2086,9 @@ class Auboi5Robot:
                          io_type=RobotToolDigitalIoDir.IO_OUT):
         """
         * FUNCTION:    set_tool_io_type
-        * DESCRIPTION: 设置工具端数字IO类型
-        * INPUTS:      io_addr:工具端IO地址 详见class RobotToolIoAddr
-        *              io_type:工具端IO类型 详见class RobotToolDigitalIoDir
+        * DESCRIPTION: Set digital IO type of tool end
+        * INPUTS:      io_addr: tool end IO address 详见class RobotToolIoAddr
+        *              io_type: tool end IO type 详见class RobotToolDigitalIoDir
 
         * OUTPUTS:
         * RETURNS:     成功返回: IO类型，包括如下：
@@ -2108,7 +2108,7 @@ class Auboi5Robot:
     def get_tool_power_voltage(self):
         """
         * FUNCTION:    get_tool_power_voltage
-        * DESCRIPTION: 获取工具端电压数值
+        * DESCRIPTION: Get voltage value of tool end
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: 返回电压数值，单位（伏特）
@@ -2125,8 +2125,8 @@ class Auboi5Robot:
     def get_tool_io_status(self, io_name):
         """
         * FUNCTION:    get_tool_io_status
-        * DESCRIPTION: 获取工具端IO状态
-        * INPUTS:      io_name:IO名称
+        * DESCRIPTION: Get status of tool end IO
+        * INPUTS:      io_name: IO name
 
         * OUTPUTS:
         * RETURNS:     成功返回: 返回工具端IO状态
@@ -2144,9 +2144,9 @@ class Auboi5Robot:
     def set_tool_io_status(self, io_name, io_status):
         """
         * FUNCTION:    set_tool_io_status
-        * DESCRIPTION: 设置工具端IO状态
+        * DESCRIPTION: Set status of tool end IO
         * INPUTS:      io_name：工具端IO名称
-        *              io_status:工具端IO状态: 取值范围（0或1）
+        *              io_status: tool end IO status: value range (0 or 1)
 
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -2163,7 +2163,7 @@ class Auboi5Robot:
     def startup_excit_traj_track(self, track_file='', track_type=0, subtype=0):
         """
         * FUNCTION:    startup_excit_traj_track
-        * DESCRIPTION: 通知服务器启动辨识轨迹运动
+        * DESCRIPTION: Notify server to start identifying trajectory motion
         * INPUTS:
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
@@ -2180,10 +2180,10 @@ class Auboi5Robot:
     def get_dynidentify_results(self):
         """
         * FUNCTION:    get_dynidentify_results
-        * DESCRIPTION: 获取辨识结果
+        * DESCRIPTION: Get identification results
         * INPUTS:
         * OUTPUTS:
-        * RETURNS:     成功返回: 辨识结果数组
+        * RETURNS:     成功返回: Identification result array
         *              失败返回: None
         * NOTES:
         """
@@ -2197,8 +2197,8 @@ class Auboi5Robot:
     def set_robot_event_callback(self, callback):
         """
         * FUNCTION:    set_robot_event_callback
-        * DESCRIPTION: 设置机械臂事件回调函数
-        * INPUTS:      callback：回调函数名称
+        * DESCRIPTION: Set callback function for arm events
+        * INPUTS:      callback: name of callback function
         * OUTPUTS:
         * RETURNS:     成功返回: RobotError.RobotError_SUCC
         *              失败返回: 其他
@@ -2211,31 +2211,31 @@ class Auboi5Robot:
             return RobotErrorType.RobotError_LOGIN_FAILED
 
 
-# 测试函数
+# Test function
 def test(test_count):
-    # 初始化logger
+    # Initialize logger
     logger_init()
 
-    # 启动测试
+    # Start testing
     logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-    # 系统初始化
+    # System initialization
     Auboi5Robot.initialize()
 
-    # 创建机械臂控制类
+    # Create arm control class
     robot = Auboi5Robot()
 
-    # 创建上下文
+    # Create context
     handle = robot.create_context()
 
-    # 打印上下文
+    # Print context
     logger.info("robot.rshd={0}".format(handle))
 
     try:
 
-        # 链接服务器
+        # Link to server
         # ip = 'localhost'
-        ip = '192.168.0.23'
+        ip = '192.168.11.128'
 
         port = 8899
         result = robot.connect(ip, port)
@@ -2243,52 +2243,52 @@ def test(test_count):
         if result != RobotErrorType.RobotError_SUCC:
             logger.info("connect server{0}:{1} failed.".format(ip, port))
         else:
-            # # 重新上电
+            # # Re-power
             #robot.robot_shutdown()
             #
-            # # 上电
+            # # Power on
             robot.robot_startup()
             #
-            # # 设置碰撞等级
+            # # Set collision grade
             robot.set_collision_class(7)
 
-            # 设置工具端电源为１２ｖ
+            # Set tool power to 12V
             # robot.set_tool_power_type(RobotToolPowerType.OUT_12V)
 
-            # 设置工具端ＩＯ_0为输出
+            # Set tool IO_0 to output
             #robot.set_tool_io_type(RobotToolIoAddr.TOOL_DIGITAL_IO_0, RobotToolDigitalIoDir.IO_OUT)
 
-            # 获取工具端ＩＯ_0当前状态
+            # Get status of tool IO_0
             #tool_io_status = robot.get_tool_io_status(RobotToolIoName.tool_io_0)
             #logger.info("tool_io_0={0}".format(tool_io_status))
 
-            # 设置工具端ＩＯ_0状态
+            # Set status of tool IO_0
             #robot.set_tool_io_status(RobotToolIoName.tool_io_0, 1)
 
 
-            # 获取控制柜用户DO
+            # Get control cabinet user DO
             #io_config = robot.get_board_io_config(RobotIOType.User_DO)
 
-            # 输出DO配置
+            # Output DO configuration
             #logger.info(io_config)
 
-            # 当前机械臂是否运行在联机模式
+            # Whether arm is running in online mode
             #logger.info("robot online mode is {0}".format(robot.is_online_mode()))
 
-            # 循环测试
+            # Loop testing
             while test_count > 0:
                 test_count -= 1
 
                 joint_status = robot.get_joint_status()
                 logger.info("joint_status={0}".format(joint_status))
 
-                # 初始化全局配置文件
+                # Initialize global configuration file
                 robot.init_profile()
 
-                # 设置关节最大加速度
+                # Set maximum joint acceleration
                 robot.set_joint_maxacc((0.5, 0.5, 0.5, 0.5, 0.5, 0.5))
 
-                # 设置关节最大加速度
+                # Set maximum joint speed
                 robot.set_joint_maxvelc((0.5, 0.5, 0.5, 0.5, 0.5, 0.5))
 
                 joint_radian = (0.541678, 0.225068, -0.948709, 0.397018, -1.570800, 0.541673)
@@ -2296,72 +2296,72 @@ def test(test_count):
 
                 robot.move_joint(joint_radian)
 
-                # 获取关节最大加速度
+                # Get maximum joint acceleration
                 logger.info(robot.get_joint_maxacc())
 
-                # 正解测试
+                # Forward solution test
                 fk_ret = robot.forward_kin((-0.000003, -0.127267, -1.321122, 0.376934, -1.570796, -0.000008))
                 logger.info(fk_ret)
 
-                # 逆解
+                # Inverse solution
                 joint_radian = (0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
                 ik_result = robot.inverse_kin(joint_radian, fk_ret['pos'], fk_ret['ori'])
                 logger.info(ik_result)
 
-                # 轴动1
+                # Arm axis 1
                 joint_radian = (0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
                 logger.info("move joint to {0}".format(joint_radian))
                 robot.move_joint(joint_radian)
 
-                # 轴动2
+                # Arm axis 2
                 joint_radian = (0.541678, 0.225068, -0.948709, 0.397018, -1.570800, 0.541673)
                 logger.info("move joint to {0}".format(joint_radian))
                 robot.move_joint(joint_radian)
 
-                # 轴动3
+                # Arm axis 3
                 joint_radian = (-0.000003, -0.127267, -1.321122, 0.376934, -1.570796, -0.000008)
                 logger.info("move joint to {0}".format(joint_radian))
                 robot.move_joint(joint_radian)
 
-                # 设置机械臂末端最大线加速度(m/s)
+                # Set maximum linear acceleration of arm end (m/s)
                 robot.set_end_max_line_acc(0.1)
 
-                # 获取机械臂末端最大线加速度(m/s)
+                # Get maximum linear acceleration of arm end (m/s)
                 robot.set_end_max_line_velc(0.2)
 
-                # 清除所有已经设置的全局路点
+                # Clear all global waypoints already set
                 robot.remove_all_waypoint()
 
-                # 添加全局路点1,用于轨迹运动
+                # Add global waypoint 1, for trajectory motion
                 joint_radian = (-0.07618534972551196, 0.5119034115471475, -1.6027922611478171, -0.530740505817827, -1.5436807868161575, -0.08034752365920544)
                 robot.move_joint(joint_radian)
                 robot.remove_all_waypoint()
                 robot.add_waypoint(joint_radian)
 
-                # 添加全局路点2,用于轨迹运动
+                # Add global waypoint 2, for trajectory motion
                 joint_radian = (-0.3742805173826728, 0.10436873450049867, -2.1719984972293678, -0.685032254269936, -1.5487447898276492, -0.37847911633785547)
                 robot.add_waypoint(joint_radian)
 
-                # 添加全局路点3,用于轨迹运动
+                # Add global waypoint 3, for trajectory motion
                 joint_radian = (0.15257591526447342, 0.20142028083176625, -2.0572652820455337, -0.6812332833535826, -1.54140746055885, 0.1484920368010244)
                 robot.add_waypoint(joint_radian)
 
-                # 设置圆运动圈数
+                # Set number of circular motions
                 robot.set_circular_loop_times(3)
 
-                # 圆弧运动
+                # Circular motion
                 logger.info("move_track ARC_CIR")
                 robot.move_track(RobotMoveTrackType.ARC_CIR)
 
-                # 清除所有已经设置的全局路点
+                # Clear all global waypoints already set
                 robot.remove_all_waypoint()
 
-                # 机械臂轴动 回到0位
+                # Arm axes move back to 0 position
                 joint_radian = (0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000)
                 logger.info("move joint to {0}".format(joint_radian))
                 robot.move_joint(joint_radian)
 
-            # 断开服务器链接
+            # Disconnect from server link
             robot.disconnect()
 
     except RobotError as e:
@@ -2369,39 +2369,39 @@ def test(test_count):
 
 
     finally:
-        # 断开服务器链接
+        # Disconnect from server link
         if robot.connected:
-            # 关闭机械臂
+            # Shut down arm
             robot.robot_shutdown()
-            # 断开机械臂链接
+            # Disconnect from arm link
             robot.disconnect()
-        # 释放库资源
+        # Release library resources
         Auboi5Robot.uninitialize()
         logger.info("{0} test completed.".format(Auboi5Robot.get_local_time()))
 
 
 def step_test():
-    # 初始化logger
+    # Initialize logger
     logger_init()
 
-    # 启动测试
+    # Start testing
     logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-    # 系统初始化
+    # System initialization
     Auboi5Robot.initialize()
 
-    # 创建机械臂控制类
+    # Create arm control class
     robot = Auboi5Robot()
 
-    # 创建上下文
+    # Create context
     handle = robot.create_context()
 
-    # 打印上下文
+    # Print context
     logger.info("robot.rshd={0}".format(handle))
 
     try:
 
-        # 链接服务器
+        # Link to server
         ip = 'localhost'
         port = 8899
         result = robot.connect(ip, port)
@@ -2409,28 +2409,28 @@ def step_test():
         if result != RobotErrorType.RobotError_SUCC:
             logger.info("connect server{0}:{1} failed.".format(ip, port))
         else:
-            # 重新上电
+            # Re-power
             robot.robot_shutdown()
 
-            # 上电
+            # Power on
             robot.robot_startup()
 
-            # 设置碰撞等级
+            # Set collision grade
             robot.set_collision_class(7)
 
-            # # 初始化全局配置文件
+            # # Initialize global configuration file
             # robot.init_profile()
             #
             # # logger.info(robot.get_board_io_config(RobotIOType.User_DI))
             #
-            # # 获取当前位置
+            # # Get current position
             # logger.info(robot.get_current_waypoint())
             #
             # joint_radian = (0, 0, 0, 0, 0, 0)
-            # # 轴动到初始位置
+            # # Move to initial position
             # robot.move_joint(joint_radian)
             #
-            # # 沿Ｚ轴运动0.1毫米
+            # # Move 0.1 mm along Z axis
             # current_pos = robot.get_current_waypoint()
             #
             # current_pos['pos'][2] -= 0.001
@@ -2444,44 +2444,44 @@ def step_test():
             #
             # robot.move_line(ik_result['joint'])
 
-            # 断开服务器链接
+            # Disconnect from server link
             robot.disconnect()
 
     except RobotError as e:
         logger.error("robot Event:{0}".format(e))
 
     finally:
-        # 断开服务器链接
+        # Disconnect from server link
         if robot.connected:
-            # 断开机械臂链接
+            # Disconnect from arm link
             robot.disconnect()
-        # 释放库资源
+        # Release library resources
         Auboi5Robot.uninitialize()
         logger.info("{0} test completed.".format(Auboi5Robot.get_local_time()))
 
 
 # def excit_traj_track_test():
-#     # 初始化logger
+#     # Initialize logger
 #     logger_init()
 
-#     # 启动测试
+#     # Start testing
 #     logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-#     # 系统初始化
+#     # System initialization
 #     Auboi5Robot.initialize()
 
-#     # 创建机械臂控制类
+#     # Create arm control class
 #     robot = Auboi5Robot()
 
-#     # 创建上下文
+#     # Create context
 #     handle = robot.create_context()
 
-#     # 打印上下文
+#     # Print context
 #     logger.info("robot.rshd={0}".format(handle))
 
 #     try:
 
-#         # 链接服务器
+#         # Link to server
 #         ip = 'localhost'
 #         port = 8899
 #         result = robot.connect(ip, port)
@@ -2490,35 +2490,35 @@ def step_test():
 #             logger.info("connect server{0}:{1} failed.".format(ip, port))
 #         else:
 
-#             # 重新上电
+#             # Re-power
 #             # robot.robot_shutdown()
 
-#             # 上电
+#             # Power on
 #             # robot.robot_startup()
 
-#             # 设置碰撞等级
+#             # Set collision grade
 #             # robot.set_collision_class(7)
 
 #             joint_radian = (0, 0, 0, 0, 0, 0)
-#             # 轴动到初始位置
+#             # Move to initial position
 #             robot.move_joint(joint_radian)
 
 #             logger.info("starup excit traj track....")
 
-#             # 启动辨识轨迹
+#             # Start identifying trajectory
 #             #robot.startup_excit_traj_track("dynamics_exciting_trajectories/excitTraj1.offt", 1, 0)
 
-#             # 延时两秒等待辨识结果
+#             # Wait for 2 seconds for identification results
 #             #time.sleep(5)
 
-#             # 获取辨识结果
+#             # Get identification results
 #             dynidentify_ret = robot.get_dynidentify_results()
 #             logger.info("dynidentify result={0}".format(dynidentify_ret))
 #             for i in range(0,54):
 # 	            dynidentify_ret[i] = dynidentify_ret[i]/1024.0
 #             logger.info("dynidentify result={0}".format(dynidentify_ret))
 
-#             # 断开服务器链接
+#             # Disconnect from server link
 #             robot.disconnect()
 
 #     except RobotError as e:
@@ -2526,36 +2526,36 @@ def step_test():
 
 
 #     finally:
-#         # 断开服务器链接
+#         # Disconnect from server link
 #         if robot.connected:
-#             # 断开机械臂链接
+#             # Disconnect from arm link
 #             robot.disconnect()
-#         # 释放库资源
+#         # Release library resources
 #         Auboi5Robot.uninitialize()
 
 
 def move_rotate_test():
-    # 初始化logger
+    # Initialize logger
     logger_init()
 
-    # 启动测试
+    # Start testing
     logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-    # 系统初始化
+    # System initialization
     Auboi5Robot.initialize()
 
-    # 创建机械臂控制类
+    # Create arm control class
     robot = Auboi5Robot()
 
-    # 创建上下文
+    # Create context
     handle = robot.create_context()
 
-    # 打印上下文
+    # Print context
     logger.info("robot.rshd={0}".format(handle))
 
     try:
 
-        # 链接服务器
+        # Link to server
         ip = 'localhost'
         port = 8899
         result = robot.connect(ip, port)
@@ -2564,35 +2564,35 @@ def move_rotate_test():
             logger.info("connect server{0}:{1} failed.".format(ip, port))
         else:
 
-            # 重新上电
+            # Re-power
             # robot.robot_shutdown()
 
-            # 上电
+            # Power on
             # robot.robot_startup()
 
-            # 设置碰撞等级
+            # Set collision grade
             # robot.set_collision_class(7)
 
             # joint_radian = (1, 0, 0, 0, 0, 0)
-            # # 轴动到初始位置
+            # # Move to initial position
             # robot.move_joint(joint_radian)
 
             joint_radian = (0.541678, 0.225068, -0.948709, 0.397018, -1.570800, 0.541673)
             logger.info("move joint to {0}".format(joint_radian))
             robot.move_joint(joint_radian)
 
-            # 获取当前位置
+            # Get current position
             current_pos = robot.get_current_waypoint()
 
-            # 工具转轴的向量（相对于法兰盘，这样需要测量得到x,y,z本测试样例默认以x=0,y=0,ｚ轴为0.1米）
+            # Tool rotation axis vector (relative to flange, so x,y,z need to be measured to get 0.1 meters)
             tool_pos_on_end = (0, 0, 0.10)
 
-            # 工具姿态（w,x,y,z 相对于法兰盘，不知道的情况下，默认填写如下信息）
+            # Tool attitude (w,x,y,z relative to flange, default information if not known)
             tool_ori_on_end = (1, 0, 0, 0)
 
             tool_desc = {"pos": tool_pos_on_end, "ori": tool_ori_on_end}
 
-            # 得到法兰盘工具末端点相对于基座坐标系中的位置
+            # Get position of tool end relative to base coordinate system
             tool_pos_on_base = robot.base_to_base_additional_tool(current_pos['pos'],
                                                                   current_pos['ori'],
                                                                   tool_desc)
@@ -2601,12 +2601,12 @@ def move_rotate_test():
 
             logger.info("tool_pos_on_base={0}".format(tool_pos_on_base['pos'][0]))
 
-            # 讲工具转轴向量平移到基座坐标系下(旋转方向符合右手准则)
+            # Translate tool rotation axis vector to base coordinate system (rotation direction follows right-hand rule)
             rotate_axis = map(lambda a, b: a - b, tool_pos_on_base['pos'], current_pos['pos'])
 
             logger.info("rotate_axis={0}".format(rotate_axis))
 
-            # 坐标系默认使用基座坐标系（默认填写下面的值就可以了）
+            # Default coordinate system uses base coordinate system (default values are fine)
             user_coord = {'coord_type': RobotCoordType.Robot_Base_Coordinate,
                           'calibrate_method': 0,
                           'calibrate_points':
@@ -2618,48 +2618,48 @@ def move_rotate_test():
                                "ori": (1.0, 0.0, 0.0, 0.0)}
                           }
 
-            # 调用转轴旋转接口，最后一个参数为旋转角度（弧度）
+            # Call rotation axis interface, last parameter is rotation angle (radians)
             robot.move_rotate(user_coord, rotate_axis, 1)
 
-            # 断开服务器链接
+            # Disconnect from server link
             robot.disconnect()
 
     except RobotError as e:
         logger.error("robot Event:{0}".format(e))
 
     finally:
-        # 断开服务器链接
+        # Disconnect from server link
         if robot.connected:
-            # 断开机械臂链接
+            # Disconnect from arm link
             robot.disconnect()
-        # 释放库资源
+        # Release library resources
         Auboi5Robot.uninitialize()
 
 
 def test_rsm():
-    # 初始化logger
+    # Initialize logger
     logger_init()
 
-    # 启动测试
+    # Start testing
     logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-    # 系统初始化
+    # System initialization
     Auboi5Robot.initialize()
 
-    # 创建机械臂控制类
+    # Create arm control class
     robot = Auboi5Robot()
 
-    # 创建上下文
+    # Create context
     handle = robot.create_context()
 
-    # 打印上下文
+    # Print context
     logger.info("robot.rshd={0}".format(handle))
 
     try:
 
-        # 链接服务器
+        # Link to server
         #ip = 'localhost'
-        ip = '192.168.10.88'
+        ip = '192.168.11.128'
         port = 8899
         result = robot.connect(ip, port)
         
@@ -2672,7 +2672,7 @@ def test_rsm():
             # robot.move_pause()
 
             #joint_radian = (0, 0, 0, 0, 0, 0)
-            # 轴动到初始位置
+            # Move to initial position
             #robot.move_joint(joint_radian)
 
             while True:
@@ -2690,7 +2690,7 @@ def test_rsm():
                 # print(rel1)
                 # print("++++++++++++++++++++++++")
 
-            # 断开服务器链接
+            # Disconnect from server link
             robot.disconnect()
 
     except RobotError as e:
@@ -2698,11 +2698,11 @@ def test_rsm():
 
 
     finally:
-        # 断开服务器链接
+        # Disconnect from server link
         if robot.connected:
-            # 断开机械臂链接
+            # Disconnect from arm link
             robot.disconnect()
-        # 释放库资源
+        # Release library resources
         Auboi5Robot.uninitialize()
 
 
@@ -2720,28 +2720,28 @@ class GetRobotWaypointProcess(Process):
             self._waypoints = waypoints
 
     def run(self):
-        # 初始化logger
+        # Initialize logger
         logger_init()
 
-        # 启动测试
+        # Start testing
         logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-        # 系统初始化
+        # System initialization
         Auboi5Robot.initialize()
 
-        # 创建机械臂控制类
+        # Create arm control class
         robot = Auboi5Robot()
 
-        # 创建上下文
+        # Create context
         handle = robot.create_context()
 
-        # 打印上下文
+        # Print context
         logger.info("robot.rshd={0}".format(handle))
 
         try:
-            # 链接服务器
+            # Link to server
             #ip = 'localhost'
-            ip = '192.168.65.131'
+            ip = '192.168.11.128'
             port = 8899
             result = robot.connect(ip, port)
 
@@ -2755,18 +2755,18 @@ class GetRobotWaypointProcess(Process):
                     print("----------------------------------------------")
 
 
-                    # 断开服务器链接
+                    # Disconnect from server link
                 robot.disconnect()
 
         except RobotError as e:
             logger.error("robot Event:{0}".format(e))
 
         except KeyboardInterrupt:
-            # 断开服务器链接
+            # Disconnect from server link
             if robot.connected:
-                # 断开机械臂链接
+                # Disconnect from arm link
                 robot.disconnect()
-            # 释放库资源
+            # Release library resources
             Auboi5Robot.uninitialize()
             print("get  waypoint run end-------------------------")
 
@@ -2777,22 +2777,22 @@ def runWaypoint(queue):
 
 
 def test_process_demo():
-    # 初始化logger
+    # Initialize logger
     logger_init()
 
-    # 启动测试
+    # Start testing
     logger.info("{0} test beginning...".format(Auboi5Robot.get_local_time()))
 
-    # 系统初始化
+    # System initialization
     Auboi5Robot.initialize()
 
-    # 创建机械臂控制类
+    # Create arm control class
     robot = Auboi5Robot()
 
-    # 创建上下文
+    # Create context
     handle = robot.create_context()
 
-    # 打印上下文
+    # Print context
     logger.info("robot.rshd={0}".format(handle))
 
     try:
@@ -2810,9 +2810,9 @@ def test_process_demo():
         time.sleep(5)
         print("process started.")
 
-        # 链接服务器
+        # Link to server
         #ip = 'localhost'
-        ip = '192.168.65.131'
+        ip = '192.168.11.128'
         port = 8899
         result = robot.connect(ip, port)
 
@@ -2832,13 +2832,13 @@ def test_process_demo():
                 joint_radian = (0.541678, 0.225068, -0.948709, 0.397018, -1.570800, 0.541673)
                 robot.move_joint(joint_radian, True)
                 
-
+                print("finished0")
                 joint_radian = (55.5/180.0*pi, -20.5/180.0*pi, -72.5/180.0*pi, 38.5/180.0*pi, -90.5/180.0*pi, 55.5/180.0*pi)
                 robot.move_joint(joint_radian, True)
-
+                time.sleep(3)
+                print("finished1")
                 joint_radian = (0, 0, 0, 0, 0, 0)
                 robot.move_joint(joint_radian, True)
-
                 print("-----------------------------")
 
                 queue.put(joint_radian)
@@ -2849,7 +2849,7 @@ def test_process_demo():
 
                 # print("-----------------------------")
 
-                # 断开服务器链接
+                # Disconnect from server link
             robot.disconnect()
 
     except KeyboardInterrupt:
@@ -2861,11 +2861,11 @@ def test_process_demo():
 
 
     finally:
-        # 断开服务器链接
+        # Disconnect from server link
         if robot.connected:
-            # 断开机械臂链接
+            # Disconnect from arm link
             robot.disconnect()
-        # 释放库资源
+        # Release library resources
         Auboi5Robot.uninitialize()
         print("run end-------------------------")
 

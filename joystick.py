@@ -47,7 +47,7 @@ class JoystickManager(threading.Thread):
             print(f"Joystick connected: {self.joystick.get_name()}")
         else:
             self.connected = False
-            print("No joystick detected")
+            #print("No joystick detected")
     
     def run(self):
         self.running = True
@@ -118,6 +118,7 @@ class JoystickManager(threading.Thread):
     
     def stop(self):
         self.running = False
+        self.join()  # Wait for the thread to finish
         if self.joystick:
             self.joystick.quit()
         pygame.quit()

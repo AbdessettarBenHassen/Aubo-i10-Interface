@@ -8,6 +8,7 @@ import logging
 logger = logging.getLogger('main.robotcontrol')
 timers = {}
 cartesian_timers = {}
+stopped_joints = set()
 
 def radian_to_degree(radians):
         """
@@ -58,9 +59,10 @@ def robot_connect(ip):
     logger_init()
     logger.info(f"{Auboi5Robot.get_local_time()} test beginning...")
 
-    Auboi5Robot.initialize()
+    
     
     robot = Auboi5Robot()
+    robot.initialize()
 
     handle = robot.create_context()
     logger.info(f"robot.rshd={handle}")
@@ -93,6 +95,10 @@ logger = logging.getLogger('main.robotcontrol')
 # Dictionnaire pour stocker les timers
 timers = {}
 
+
+
+
+
 def start_move_joint(robot, joint, direction, self, joint_step_value):
     """
     Démarre le mouvement d'un joint dans une direction spécifique.
@@ -116,68 +122,65 @@ def start_move_joint(robot, joint, direction, self, joint_step_value):
     else:
         move_joint(robot, joint, direction, self.st, joint_step_value)
 
-def stop_move_joint():
+def stop_move_joint(robot, joint, direction):
     """
-    Arrête tous les mouvements des joints ou des coordonnées cartésiennes.
+    Stop the movement of a specific joint in a specific direction.
     """
-    for timer in timers.values():
-        timer.stop()
-    timers.clear()
-    print("Stopped all joint/cartesian movements")  # Log
-
-
-def move_joint(robot, joint, direction, st, joint_step_value):
-    """
-    Modifie la valeur d'un joint et met à jour le robot.
-    
-    :param robot: Référence au robot.
-    :param joint: Numéro du joint (1 à 6).
-    :param direction: "+" pour augmenter, "-" pour diminuer.
-    :param step_mode_active: Booléen indiquant si le Step Mode est activé.
-    :param joint_step_value: Référence au QLabel affichant la valeur du Joint Step.
-    """
-    global joints
    
+    key = (joint, direction)
+    stopped_joints.add(key)  # Flag this movement as stopped
+    
+    if key in timers:
+        timers[key].stop()
+        del timers[key]
+        print(f"Stopped movement of joint {joint} in direction {direction}")
+    
+
+def update_joint_speed_from_slider(value, robot):
+    global value_from_slider
+    value_from_slider = value
+    print(f"Set joint_maxvelc: {value_from_slider}")
+def move_joint(robot, joint, direction, st, joint_step_value):
+    global joints
     try:
+        # Check if movement was stopped
+        if (joint, direction) in stopped_joints:
+            stopped_joints.remove((joint, direction))
+            raise RuntimeError(f"Movement for joint {joint} in direction '{direction}' was stopped manually.")
+
+        # --- existing code continues here ---
         
-        
-        # Vérifier si joint_step_value contient du texte valide
         joint_step_text = joint_step_value.text().strip()
         if not joint_step_text:
             raise ValueError("La valeur du Joint Step est vide.")
 
-        # Extraire la valeur numérique de joint_step
         joint_step = float(joint_step_text.split()[0])
-        joint_step_rad = math.radians(joint_step)  # Conversion en radians
+        joint_step_rad = math.radians(joint_step)
         print(f"Valeur extraite : {joint_step}° -> {joint_step_rad} rad")
         
-
-         # Force en booléen
-        if (st):
+        if st:
             step = math.radians(joint_step)
-           
         else:
-            step = 0.01
+            step = ((value_from_slider * 0.05) / 100) * 2
 
-        # Modifier la valeur du joint en fonction de la direction
         if direction == "+":
             th.joints[joint - 1] += step
         elif direction == "-":
             th.joints[joint - 1] -= step
         else:
             raise ValueError("Direction invalide : utilisez '+' ou '-'.")
-        
 
-        robot.move_joint(th.joints)
-        
-        # Afficher le mouvement dans la console
+        print(step)
+        robot.move_joint(th.joints, True)
         print(f"Joint {joint} déplacé de {step} dans la direction '{direction}'.")
-        
 
     except ValueError as ve:
         print(f"Erreur de valeur : {ve}")
+    except RuntimeError as re:
+        print(f"Stop detected: {re}")
     except Exception as ex:
         print(f"Erreur inattendue : {ex}")
+
 
 
 

@@ -6,7 +6,8 @@ from threads import *
 import sys
 from PyQt5.QtCore import QTimer
 
-ip = '192.168.95.158'
+ip = '192.168.0.23'
+#ip = '192.168.11.128'
 
 # Global state
 rt = False  # Toggle between position/orientation control
@@ -74,32 +75,39 @@ def axis_handler(axis_id: int, value: int):
 
 def hat_handler(hat_id: int, value: tuple):
     print(f"Hat {hat_id} moved to {value}")
+
+
 def main():
     # Initialize connection
     robot, queue = utl.robot_connect(ip)
+    robot.set_arrival_ahead_distance(1)
+    
+    #robot.set_blend_radius(0.05)
+
     #  if robot:
     #     robot.robot_startup()
     #     robot.set_base_coord()
     
+    #joint_maxvelc = (2.596177, 2.596177, 2.596177, 3.110177, 3.110177, 3.110177)
+    #joint_maxacc = (17.308779/2.5, 17.308779/2.5, 17.308779/2.5, 17.308779/2.5, 17.308779/2.5, 17.308779/2.5)
+    #robot.set_joint_maxacc(joint_maxacc)
+    #robot.set_joint_maxvelc(joint_maxvelc)
+    
     # Setup UI
     app = QApplication(sys.argv)
-    window = MainWindow(robot)
-    
+    window = MainWindow(robot)    #robot.set_joint_maxacc(joint_maxacc)
     # Create joystick manager
     joystick = JoystickManager(
         axis_threshold=0.1,  # Lower threshold for continuous control
         button_callback=button_handler,
         axis_callback=axis_handler,
         hat_callback=hat_handler
-    )
-    joystick.start()
-    
-    # Position updater
+     )
+    joystick.start()  # <-- Move this line here!
     timer = QTimer(window)
     timer.timeout.connect(lambda: get_robot_current_position(robot, window))
-    timer.start(100)  # Update every 100ms
-    
+    timer.start(100)# Update every 100ms
     window.show()
-    sys.exit(app.exec_())
+    app.exec_()
 if __name__ == "__main__":
     main()

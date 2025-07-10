@@ -16284,3 +16284,1216 @@
 2025-07-07 13:38:07,883 [26844] INFO: robot.rshd=0
 2025-07-07 13:38:13,026 [26844] INFO: Process started.
 2025-07-07 13:38:13,028 [26844] INFO: ip=192.168.95.158, port=8899
+2025-07-07 16:02:11,109 [24136] INFO: Jul 07 2025 16:02:11 test beginning...
+2025-07-07 16:02:11,109 [24136] INFO: robot.rshd=0
+2025-07-07 16:02:16,190 [24136] INFO: ip=192.168.65.131, port=8899
+2025-07-07 16:02:37,209 [24136] ERROR: login failed!
+2025-07-07 16:02:37,209 [24136] INFO: connect server192.168.65.131:8899 failed.
+2025-07-07 16:02:39,013 [24136] INFO: client_count=0
+2025-07-07 16:02:39,013 [24136] INFO: test completed
+2025-07-07 16:33:46,850 [19620] INFO: Jul 07 2025 16:33:46 test beginning...
+2025-07-07 16:33:46,855 [19620] INFO: robot.rshd=0
+2025-07-07 16:33:51,902 [19620] INFO: Process started.
+2025-07-07 16:33:51,902 [19620] INFO: ip=192.168.95.158, port=8899
+2025-07-07 16:34:12,960 [19620] ERROR: login failed!
+2025-07-07 16:34:12,961 [19620] ERROR: Failed to connect to server 192.168.95.158:8899.
+2025-07-07 16:34:30,149 [19608] INFO: Jul 07 2025 16:34:30 test beginning...
+2025-07-07 16:34:30,150 [19608] INFO: robot.rshd=0
+2025-07-07 16:34:35,172 [19608] INFO: Process started.
+2025-07-07 16:34:35,172 [19608] INFO: ip=192.168.11.128, port=8899
+2025-07-07 16:38:27,241 [20284] INFO: Jul 07 2025 16:38:27 test beginning...
+2025-07-07 16:38:27,243 [20284] INFO: robot.rshd=0
+2025-07-07 16:38:32,257 [20284] INFO: Process started.
+2025-07-07 16:38:32,257 [20284] INFO: ip=192.168.11.128, port=8899
+2025-07-07 16:43:04,470 [396] INFO: Jul 07 2025 16:43:04 test beginning...
+2025-07-07 16:43:04,471 [396] INFO: robot.rshd=0
+2025-07-07 16:43:09,485 [396] INFO: Process started.
+2025-07-07 16:43:09,485 [396] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:19:27,054 [21076] INFO: Jul 07 2025 17:19:27 test beginning...
+2025-07-07 17:19:27,056 [21076] INFO: robot.rshd=0
+2025-07-07 17:19:32,081 [21076] INFO: Process started.
+2025-07-07 17:19:32,081 [21076] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:21:38,563 [21124] INFO: Jul 07 2025 17:21:38 test beginning...
+2025-07-07 17:21:38,564 [21124] INFO: robot.rshd=0
+2025-07-07 17:21:43,583 [21124] INFO: Process started.
+2025-07-07 17:21:43,583 [21124] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:23:56,176 [3036] INFO: Jul 07 2025 17:23:56 test beginning...
+2025-07-07 17:23:56,176 [3036] INFO: robot.rshd=0
+2025-07-07 17:24:01,191 [3036] INFO: Process started.
+2025-07-07 17:24:01,191 [3036] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:26:47,820 [20692] INFO: Jul 07 2025 17:26:47 test beginning...
+2025-07-07 17:26:47,821 [20692] INFO: robot.rshd=0
+2025-07-07 17:26:52,847 [20692] INFO: Process started.
+2025-07-07 17:26:52,847 [20692] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:27:38,786 [8152] INFO: Jul 07 2025 17:27:38 test beginning...
+2025-07-07 17:27:38,787 [8152] INFO: robot.rshd=0
+2025-07-07 17:27:43,798 [8152] INFO: Process started.
+2025-07-07 17:27:43,798 [8152] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:28:51,048 [1172] INFO: Jul 07 2025 17:28:51 test beginning...
+2025-07-07 17:28:51,049 [1172] INFO: robot.rshd=0
+2025-07-07 17:28:56,069 [1172] INFO: Process started.
+2025-07-07 17:28:56,069 [1172] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:31:36,304 [7296] INFO: Jul 07 2025 17:31:36 test beginning...
+2025-07-07 17:31:36,304 [7296] INFO: robot.rshd=0
+2025-07-07 17:31:41,318 [7296] INFO: Process started.
+2025-07-07 17:31:41,318 [7296] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:33:31,646 [7468] INFO: Jul 07 2025 17:33:31 test beginning...
+2025-07-07 17:33:31,647 [7468] INFO: robot.rshd=0
+2025-07-07 17:33:36,669 [7468] INFO: Process started.
+2025-07-07 17:33:36,669 [7468] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:35:30,622 [1892] INFO: Jul 07 2025 17:35:30 test beginning...
+2025-07-07 17:35:30,623 [1892] INFO: robot.rshd=0
+2025-07-07 17:35:35,640 [1892] INFO: Process started.
+2025-07-07 17:35:35,640 [1892] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:37:49,254 [20824] INFO: Jul 07 2025 17:37:49 test beginning...
+2025-07-07 17:37:49,255 [20824] INFO: robot.rshd=0
+2025-07-07 17:37:54,267 [20824] INFO: Process started.
+2025-07-07 17:37:54,267 [20824] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:38:19,806 [19104] INFO: Jul 07 2025 17:38:19 test beginning...
+2025-07-07 17:38:19,807 [19104] INFO: robot.rshd=0
+2025-07-07 17:38:24,825 [19104] INFO: Process started.
+2025-07-07 17:38:24,825 [19104] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:38:45,857 [7300] INFO: Jul 07 2025 17:38:45 test beginning...
+2025-07-07 17:38:45,858 [7300] INFO: robot.rshd=0
+2025-07-07 17:38:50,870 [7300] INFO: Process started.
+2025-07-07 17:38:50,870 [7300] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:39:34,328 [19804] INFO: Jul 07 2025 17:39:34 test beginning...
+2025-07-07 17:39:34,330 [19804] INFO: robot.rshd=0
+2025-07-07 17:39:39,344 [19804] INFO: Process started.
+2025-07-07 17:39:39,344 [19804] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:43:44,966 [18772] INFO: Jul 07 2025 17:43:44 test beginning...
+2025-07-07 17:43:44,966 [18772] INFO: robot.rshd=0
+2025-07-07 17:43:50,003 [18772] INFO: ip=192.168.65.131, port=8899
+2025-07-07 17:44:11,028 [18772] ERROR: login failed!
+2025-07-07 17:44:11,028 [18772] INFO: connect server192.168.65.131:8899 failed.
+2025-07-07 17:44:12,005 [18772] INFO: client_count=0
+2025-07-07 17:44:12,006 [18772] INFO: test completed
+2025-07-07 17:44:22,958 [20912] INFO: Jul 07 2025 17:44:22 test beginning...
+2025-07-07 17:44:22,958 [20912] INFO: robot.rshd=0
+2025-07-07 17:44:28,019 [20912] INFO: client_count=0
+2025-07-07 17:44:30,094 [20612] INFO: Jul 07 2025 17:44:30 test beginning...
+2025-07-07 17:44:30,095 [20612] INFO: robot.rshd=0
+2025-07-07 17:44:35,120 [20612] INFO: Process started.
+2025-07-07 17:44:35,120 [20612] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:47:29,829 [21188] INFO: Jul 07 2025 17:47:29 test beginning...
+2025-07-07 17:47:29,829 [21188] INFO: robot.rshd=0
+2025-07-07 17:47:34,856 [21188] INFO: Process started.
+2025-07-07 17:47:34,856 [21188] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:48:15,178 [19220] INFO: Jul 07 2025 17:48:15 test beginning...
+2025-07-07 17:48:15,178 [19220] INFO: robot.rshd=0
+2025-07-07 17:48:20,194 [19220] INFO: Process started.
+2025-07-07 17:48:20,194 [19220] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:48:39,005 [19220] INFO: client_count=0
+2025-07-07 17:48:40,095 [21104] INFO: Jul 07 2025 17:48:40 test beginning...
+2025-07-07 17:48:40,096 [21104] INFO: robot.rshd=0
+2025-07-07 17:48:45,112 [21104] INFO: Process started.
+2025-07-07 17:48:45,112 [21104] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:49:45,532 [8716] INFO: Jul 07 2025 17:49:45 test beginning...
+2025-07-07 17:49:45,533 [8716] INFO: robot.rshd=0
+2025-07-07 17:49:50,554 [8716] INFO: Process started.
+2025-07-07 17:49:50,554 [8716] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:50:45,063 [2492] INFO: Jul 07 2025 17:50:45 test beginning...
+2025-07-07 17:50:45,064 [2492] INFO: robot.rshd=0
+2025-07-07 17:50:50,080 [2492] INFO: Process started.
+2025-07-07 17:50:50,080 [2492] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:55:57,941 [20884] INFO: Jul 07 2025 17:55:57 test beginning...
+2025-07-07 17:55:57,941 [20884] INFO: robot.rshd=0
+2025-07-07 17:56:02,951 [20884] INFO: Process started.
+2025-07-07 17:56:02,951 [20884] INFO: ip=192.168.11.128, port=8899
+2025-07-07 17:56:23,964 [20884] ERROR: login failed!
+2025-07-07 17:56:23,964 [20884] ERROR: Failed to connect to server 192.168.11.128:8899.
+2025-07-07 17:58:36,798 [11588] INFO: Jul 07 2025 17:58:36 test beginning...
+2025-07-07 17:58:36,799 [11588] INFO: robot.rshd=0
+2025-07-07 17:58:41,815 [11588] INFO: Process started.
+2025-07-07 17:58:41,815 [11588] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:03:22,563 [5084] INFO: Jul 07 2025 18:03:22 test beginning...
+2025-07-07 18:03:22,564 [5084] INFO: robot.rshd=0
+2025-07-07 18:03:27,580 [5084] INFO: Process started.
+2025-07-07 18:03:27,580 [5084] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:07:54,880 [20928] INFO: Jul 07 2025 18:07:54 test beginning...
+2025-07-07 18:07:54,881 [20928] INFO: robot.rshd=0
+2025-07-07 18:07:59,902 [20928] INFO: Process started.
+2025-07-07 18:07:59,902 [20928] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:11:44,638 [12468] INFO: Jul 07 2025 18:11:44 test beginning...
+2025-07-07 18:11:44,638 [12468] INFO: robot.rshd=0
+2025-07-07 18:11:49,659 [12468] INFO: Process started.
+2025-07-07 18:11:49,659 [12468] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:12:49,424 [11384] INFO: Jul 07 2025 18:12:49 test beginning...
+2025-07-07 18:12:49,424 [11384] INFO: robot.rshd=0
+2025-07-07 18:12:54,435 [11384] INFO: Process started.
+2025-07-07 18:12:54,435 [11384] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:27:12,022 [2364] INFO: Jul 07 2025 18:27:12 test beginning...
+2025-07-07 18:27:12,022 [2364] INFO: robot.rshd=0
+2025-07-07 18:27:17,035 [2364] INFO: Process started.
+2025-07-07 18:27:17,035 [2364] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:37:00,354 [19568] INFO: Jul 07 2025 18:37:00 test beginning...
+2025-07-07 18:37:00,355 [19568] INFO: robot.rshd=0
+2025-07-07 18:37:05,369 [19568] INFO: Process started.
+2025-07-07 18:37:05,369 [19568] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:39:36,301 [11272] INFO: Jul 07 2025 18:39:36 test beginning...
+2025-07-07 18:39:36,302 [11272] INFO: robot.rshd=0
+2025-07-07 18:39:41,323 [11272] INFO: Process started.
+2025-07-07 18:39:41,323 [11272] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:41:00,480 [7844] INFO: Jul 07 2025 18:41:00 test beginning...
+2025-07-07 18:41:00,481 [7844] INFO: robot.rshd=0
+2025-07-07 18:41:05,497 [7844] INFO: Process started.
+2025-07-07 18:41:05,497 [7844] INFO: ip=192.168.11.128, port=8899
+2025-07-07 18:44:58,180 [13360] INFO: Jul 07 2025 18:44:58 test beginning...
+2025-07-07 18:44:58,181 [13360] INFO: robot.rshd=0
+2025-07-07 18:45:03,205 [13360] INFO: Process started.
+2025-07-07 18:45:03,205 [13360] INFO: ip=192.168.11.128, port=8899
+2025-07-08 23:57:30,845 [16500] INFO: Jul 08 2025 23:57:30 test beginning...
+2025-07-08 23:57:30,848 [16500] INFO: robot.rshd=0
+2025-07-08 23:57:35,876 [16500] INFO: Process started.
+2025-07-08 23:57:35,879 [16500] INFO: ip=192.168.11.128, port=8899
+2025-07-08 23:57:59,918 [16500] INFO: Moved cartesian axis 4 in direction -
+2025-07-08 23:58:00,466 [16500] INFO: Moved cartesian axis 4 in direction -
+2025-07-08 23:58:01,004 [16500] INFO: Moved cartesian axis 4 in direction -
+2025-07-08 23:59:55,110 [6016] INFO: Jul 08 2025 23:59:55 test beginning...
+2025-07-08 23:59:55,111 [6016] INFO: robot.rshd=0
+2025-07-09 00:00:00,134 [6016] INFO: Process started.
+2025-07-09 00:00:00,134 [6016] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:15:03,326 [17360] INFO: Jul 09 2025 00:15:03 test beginning...
+2025-07-09 00:15:03,328 [17360] INFO: robot.rshd=0
+2025-07-09 00:15:08,354 [17360] INFO: Process started.
+2025-07-09 00:15:08,354 [17360] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:16:15,188 [21336] INFO: Jul 09 2025 00:16:15 test beginning...
+2025-07-09 00:16:15,189 [21336] INFO: robot.rshd=0
+2025-07-09 00:16:20,215 [21336] INFO: Process started.
+2025-07-09 00:16:20,215 [21336] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:17:46,714 [14124] INFO: Jul 09 2025 00:17:46 test beginning...
+2025-07-09 00:17:46,715 [14124] INFO: robot.rshd=0
+2025-07-09 00:17:51,740 [14124] INFO: Process started.
+2025-07-09 00:17:51,740 [14124] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:22:16,289 [7996] INFO: Jul 09 2025 00:22:16 test beginning...
+2025-07-09 00:22:16,290 [7996] INFO: robot.rshd=0
+2025-07-09 00:22:21,318 [7996] INFO: Process started.
+2025-07-09 00:22:21,318 [7996] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:34:24,675 [13240] INFO: Jul 09 2025 00:34:24 test beginning...
+2025-07-09 00:34:24,679 [13240] INFO: robot.rshd=0
+2025-07-09 00:34:29,700 [13240] INFO: Process started.
+2025-07-09 00:34:29,700 [13240] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:36:16,311 [9724] INFO: Jul 09 2025 00:36:16 test beginning...
+2025-07-09 00:36:16,312 [9724] INFO: robot.rshd=0
+2025-07-09 00:36:21,333 [9724] INFO: Process started.
+2025-07-09 00:36:21,333 [9724] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:37:55,028 [2348] INFO: Jul 09 2025 00:37:55 test beginning...
+2025-07-09 00:37:55,029 [2348] INFO: robot.rshd=0
+2025-07-09 00:38:00,043 [2348] INFO: Process started.
+2025-07-09 00:38:00,043 [2348] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:41:11,337 [19352] INFO: Jul 09 2025 00:41:11 test beginning...
+2025-07-09 00:41:11,338 [19352] INFO: robot.rshd=0
+2025-07-09 00:41:16,357 [19352] INFO: Process started.
+2025-07-09 00:41:16,357 [19352] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:44:04,366 [6288] INFO: Jul 09 2025 00:44:04 test beginning...
+2025-07-09 00:44:04,368 [6288] INFO: robot.rshd=0
+2025-07-09 00:44:09,387 [6288] INFO: Process started.
+2025-07-09 00:44:09,387 [6288] INFO: ip=192.168.11.128, port=8899
+2025-07-09 00:47:18,662 [16608] INFO: Jul 09 2025 00:47:18 test beginning...
+2025-07-09 00:47:18,663 [16608] INFO: robot.rshd=0
+2025-07-09 00:47:23,680 [16608] INFO: Process started.
+2025-07-09 00:47:23,680 [16608] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:15:07,682 [14196] INFO: Jul 09 2025 01:15:07 test beginning...
+2025-07-09 01:15:07,682 [14196] INFO: robot.rshd=0
+2025-07-09 01:15:12,700 [14196] INFO: Process started.
+2025-07-09 01:15:12,700 [14196] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:17:03,887 [14564] INFO: Jul 09 2025 01:17:03 test beginning...
+2025-07-09 01:17:03,888 [14564] INFO: robot.rshd=0
+2025-07-09 01:17:08,930 [14564] INFO: ip=192.168.65.131, port=8899
+2025-07-09 01:17:29,958 [14564] ERROR: login failed!
+2025-07-09 01:17:29,958 [14564] INFO: connect server192.168.65.131:8899 failed.
+2025-07-09 01:17:31,009 [14564] INFO: client_count=0
+2025-07-09 01:17:31,010 [14564] INFO: test completed
+2025-07-09 01:17:53,975 [10148] INFO: Jul 09 2025 01:17:53 test beginning...
+2025-07-09 01:17:53,975 [10148] INFO: robot.rshd=0
+2025-07-09 01:17:59,022 [10148] INFO: ip=192.168.65.131, port=8899
+2025-07-09 01:18:20,046 [10148] ERROR: login failed!
+2025-07-09 01:18:20,046 [10148] INFO: connect server192.168.65.131:8899 failed.
+2025-07-09 01:18:21,010 [10148] INFO: client_count=0
+2025-07-09 01:18:21,011 [10148] INFO: test completed
+2025-07-09 01:19:54,864 [21440] INFO: Jul 09 2025 01:19:54 test beginning...
+2025-07-09 01:19:54,866 [21440] INFO: robot.rshd=0
+2025-07-09 01:19:59,896 [21440] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:20:50,004 [21440] INFO: test completed
+2025-07-09 01:22:48,339 [14048] INFO: Jul 09 2025 01:22:48 test beginning...
+2025-07-09 01:22:48,340 [14048] INFO: robot.rshd=0
+2025-07-09 01:22:53,359 [14048] INFO: Process started.
+2025-07-09 01:22:53,359 [14048] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:25:12,221 [2492] INFO: Jul 09 2025 01:25:12 test beginning...
+2025-07-09 01:25:12,221 [2492] INFO: robot.rshd=0
+2025-07-09 01:25:17,236 [2492] INFO: Process started.
+2025-07-09 01:25:17,236 [2492] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:27:34,479 [8372] INFO: Jul 09 2025 01:27:34 test beginning...
+2025-07-09 01:27:34,481 [8372] INFO: robot.rshd=0
+2025-07-09 01:27:39,503 [8372] INFO: Process started.
+2025-07-09 01:27:39,503 [8372] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:38:48,304 [14576] INFO: Jul 09 2025 01:38:48 test beginning...
+2025-07-09 01:38:48,304 [14576] INFO: robot.rshd=0
+2025-07-09 01:38:53,325 [14576] INFO: Process started.
+2025-07-09 01:38:53,325 [14576] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:40:28,907 [8376] INFO: Jul 09 2025 01:40:28 test beginning...
+2025-07-09 01:40:28,907 [8376] INFO: robot.rshd=0
+2025-07-09 01:40:33,931 [8376] INFO: Process started.
+2025-07-09 01:40:33,931 [8376] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:41:02,298 [11140] INFO: Jul 09 2025 01:41:02 test beginning...
+2025-07-09 01:41:02,300 [11140] INFO: robot.rshd=0
+2025-07-09 01:41:07,316 [11140] INFO: Process started.
+2025-07-09 01:41:07,316 [11140] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:43:52,180 [17032] INFO: Jul 09 2025 01:43:52 test beginning...
+2025-07-09 01:43:52,181 [17032] INFO: robot.rshd=0
+2025-07-09 01:43:57,199 [17032] INFO: Process started.
+2025-07-09 01:43:57,199 [17032] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:49:12,955 [18140] INFO: Jul 09 2025 01:49:12 test beginning...
+2025-07-09 01:49:12,956 [18140] INFO: robot.rshd=0
+2025-07-09 01:49:17,985 [18140] INFO: Process started.
+2025-07-09 01:49:17,985 [18140] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:51:28,478 [17864] INFO: Jul 09 2025 01:51:28 test beginning...
+2025-07-09 01:51:28,479 [17864] INFO: robot.rshd=0
+2025-07-09 01:51:33,501 [17864] INFO: Process started.
+2025-07-09 01:51:33,501 [17864] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:53:04,434 [20424] INFO: Jul 09 2025 01:53:04 test beginning...
+2025-07-09 01:53:04,435 [20424] INFO: robot.rshd=0
+2025-07-09 01:53:09,474 [20424] INFO: ip=192.168.11.128, port=8899
+2025-07-09 01:54:46,006 [20424] INFO: test completed
+2025-07-09 02:01:52,214 [7928] INFO: Jul 09 2025 02:01:52 test beginning...
+2025-07-09 02:01:52,215 [7928] INFO: robot.rshd=0
+2025-07-09 02:01:57,241 [7928] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:04:24,004 [7928] INFO: test completed
+2025-07-09 02:04:35,210 [19308] INFO: Jul 09 2025 02:04:35 test beginning...
+2025-07-09 02:04:35,211 [19308] INFO: robot.rshd=0
+2025-07-09 02:04:40,237 [19308] INFO: Process started.
+2025-07-09 02:04:40,237 [19308] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:05:44,866 [14196] INFO: Jul 09 2025 02:05:44 test beginning...
+2025-07-09 02:05:44,867 [14196] INFO: robot.rshd=0
+2025-07-09 02:05:49,899 [14196] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:06:18,004 [14196] INFO: test completed
+2025-07-09 02:06:18,990 [4060] INFO: Jul 09 2025 02:06:18 test beginning...
+2025-07-09 02:06:18,990 [4060] INFO: robot.rshd=0
+2025-07-09 02:06:24,027 [4060] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:11:46,001 [4060] INFO: test completed
+2025-07-09 02:11:48,070 [19184] INFO: Jul 09 2025 02:11:48 test beginning...
+2025-07-09 02:11:48,071 [19184] INFO: robot.rshd=0
+2025-07-09 02:11:53,086 [19184] INFO: Process started.
+2025-07-09 02:11:53,086 [19184] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:15:18,545 [16748] INFO: Jul 09 2025 02:15:18 test beginning...
+2025-07-09 02:15:18,546 [16748] INFO: robot.rshd=0
+2025-07-09 02:15:23,562 [16748] INFO: Process started.
+2025-07-09 02:15:23,562 [16748] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:17:09,369 [11244] INFO: Jul 09 2025 02:17:09 test beginning...
+2025-07-09 02:17:09,370 [11244] INFO: robot.rshd=0
+2025-07-09 02:17:14,397 [11244] INFO: Process started.
+2025-07-09 02:17:14,397 [11244] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:19:07,295 [5492] INFO: Jul 09 2025 02:19:07 test beginning...
+2025-07-09 02:19:07,295 [5492] INFO: robot.rshd=0
+2025-07-09 02:19:12,319 [5492] INFO: Process started.
+2025-07-09 02:19:12,319 [5492] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:22:40,455 [4488] INFO: Jul 09 2025 02:22:40 test beginning...
+2025-07-09 02:22:40,456 [4488] INFO: robot.rshd=0
+2025-07-09 02:22:45,481 [4488] INFO: Process started.
+2025-07-09 02:22:45,482 [4488] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:23:05,758 [14196] INFO: Jul 09 2025 02:23:05 test beginning...
+2025-07-09 02:23:05,760 [14196] INFO: robot.rshd=0
+2025-07-09 02:23:10,773 [14196] INFO: Process started.
+2025-07-09 02:23:10,774 [14196] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:27:58,708 [780] INFO: Jul 09 2025 02:27:58 test beginning...
+2025-07-09 02:27:58,709 [780] INFO: robot.rshd=0
+2025-07-09 02:28:03,730 [780] INFO: Process started.
+2025-07-09 02:28:03,730 [780] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:30:33,346 [3476] INFO: Jul 09 2025 02:30:33 test beginning...
+2025-07-09 02:30:33,347 [3476] INFO: robot.rshd=0
+2025-07-09 02:30:38,367 [3476] INFO: Process started.
+2025-07-09 02:30:38,367 [3476] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:33:43,480 [8724] INFO: Jul 09 2025 02:33:43 test beginning...
+2025-07-09 02:33:43,480 [8724] INFO: robot.rshd=0
+2025-07-09 02:33:48,510 [8724] INFO: Process started.
+2025-07-09 02:33:48,510 [8724] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:34:29,575 [11216] INFO: Jul 09 2025 02:34:29 test beginning...
+2025-07-09 02:34:29,575 [11216] INFO: robot.rshd=0
+2025-07-09 02:34:34,596 [11216] INFO: Process started.
+2025-07-09 02:34:34,596 [11216] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:43:03,789 [8868] INFO: Jul 09 2025 02:43:03 test beginning...
+2025-07-09 02:43:03,790 [8868] INFO: robot.rshd=0
+2025-07-09 02:43:08,803 [8868] INFO: Process started.
+2025-07-09 02:43:08,803 [8868] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:44:45,884 [13896] INFO: Jul 09 2025 02:44:45 test beginning...
+2025-07-09 02:44:45,886 [13896] INFO: robot.rshd=0
+2025-07-09 02:44:50,907 [13896] INFO: Process started.
+2025-07-09 02:44:50,907 [13896] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:46:38,193 [4940] INFO: Jul 09 2025 02:46:38 test beginning...
+2025-07-09 02:46:38,193 [4940] INFO: robot.rshd=0
+2025-07-09 02:46:43,213 [4940] INFO: Process started.
+2025-07-09 02:46:43,214 [4940] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:49:02,752 [1840] INFO: Jul 09 2025 02:49:02 test beginning...
+2025-07-09 02:49:02,753 [1840] INFO: robot.rshd=0
+2025-07-09 02:49:07,769 [1840] INFO: Process started.
+2025-07-09 02:49:07,769 [1840] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:52:24,078 [18632] INFO: Jul 09 2025 02:52:24 test beginning...
+2025-07-09 02:52:24,079 [18632] INFO: robot.rshd=0
+2025-07-09 02:52:29,111 [18632] INFO: ip=192.168.11.128, port=8899
+2025-07-09 02:56:04,460 [18632] ERROR: robot Event:RobotError type2004 code=10023 msg=move error
+2025-07-09 02:56:05,014 [18632] INFO: test completed
+2025-07-09 03:06:07,961 [9796] INFO: Jul 09 2025 03:06:07 test beginning...
+2025-07-09 03:06:07,962 [9796] INFO: robot.rshd=0
+2025-07-09 03:06:12,981 [9796] INFO: Process started.
+2025-07-09 03:06:12,981 [9796] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:06:47,880 [12772] INFO: Jul 09 2025 03:06:47 test beginning...
+2025-07-09 03:06:47,881 [12772] INFO: robot.rshd=0
+2025-07-09 03:06:52,901 [12772] INFO: Process started.
+2025-07-09 03:06:52,901 [12772] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:09:11,497 [16056] INFO: Jul 09 2025 03:09:11 test beginning...
+2025-07-09 03:09:11,498 [16056] INFO: robot.rshd=0
+2025-07-09 03:09:16,524 [16056] INFO: Process started.
+2025-07-09 03:09:16,524 [16056] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:10:07,097 [4352] INFO: Jul 09 2025 03:10:07 test beginning...
+2025-07-09 03:10:07,098 [4352] INFO: robot.rshd=0
+2025-07-09 03:10:12,116 [4352] INFO: Process started.
+2025-07-09 03:10:12,116 [4352] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:11:14,088 [10132] INFO: Jul 09 2025 03:11:14 test beginning...
+2025-07-09 03:11:14,088 [10132] INFO: robot.rshd=0
+2025-07-09 03:11:19,103 [10132] INFO: Process started.
+2025-07-09 03:11:19,103 [10132] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:13:28,152 [14196] INFO: Jul 09 2025 03:13:28 test beginning...
+2025-07-09 03:13:28,153 [14196] INFO: robot.rshd=0
+2025-07-09 03:13:33,170 [14196] INFO: Process started.
+2025-07-09 03:13:33,170 [14196] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:14:22,297 [11508] INFO: Jul 09 2025 03:14:22 test beginning...
+2025-07-09 03:14:22,297 [11508] INFO: robot.rshd=0
+2025-07-09 03:14:27,318 [11508] INFO: Process started.
+2025-07-09 03:14:27,318 [11508] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:15:02,102 [1852] INFO: Jul 09 2025 03:15:02 test beginning...
+2025-07-09 03:15:02,103 [1852] INFO: robot.rshd=0
+2025-07-09 03:15:07,124 [1852] INFO: Process started.
+2025-07-09 03:15:07,124 [1852] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:15:59,151 [16552] INFO: Jul 09 2025 03:15:59 test beginning...
+2025-07-09 03:15:59,152 [16552] INFO: robot.rshd=0
+2025-07-09 03:16:04,166 [16552] INFO: Process started.
+2025-07-09 03:16:04,166 [16552] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:19:11,238 [14476] INFO: Jul 09 2025 03:19:11 test beginning...
+2025-07-09 03:19:11,239 [14476] INFO: robot.rshd=0
+2025-07-09 03:19:16,264 [14476] INFO: Process started.
+2025-07-09 03:19:16,264 [14476] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:21:26,190 [17052] INFO: Jul 09 2025 03:21:26 test beginning...
+2025-07-09 03:21:26,192 [17052] INFO: robot.rshd=0
+2025-07-09 03:21:31,215 [17052] INFO: Process started.
+2025-07-09 03:21:31,215 [17052] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:22:31,815 [2148] INFO: Jul 09 2025 03:22:31 test beginning...
+2025-07-09 03:22:31,816 [2148] INFO: robot.rshd=0
+2025-07-09 03:22:36,835 [2148] INFO: Process started.
+2025-07-09 03:22:36,835 [2148] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:25:13,507 [21416] INFO: Jul 09 2025 03:25:13 test beginning...
+2025-07-09 03:25:13,508 [21416] INFO: robot.rshd=0
+2025-07-09 03:25:18,535 [21416] INFO: Process started.
+2025-07-09 03:25:18,535 [21416] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:25:38,705 [7456] INFO: Jul 09 2025 03:25:38 test beginning...
+2025-07-09 03:25:38,706 [7456] INFO: robot.rshd=0
+2025-07-09 03:25:43,725 [7456] INFO: Process started.
+2025-07-09 03:25:43,725 [7456] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:28:05,613 [10056] INFO: Jul 09 2025 03:28:05 test beginning...
+2025-07-09 03:28:05,614 [10056] INFO: robot.rshd=0
+2025-07-09 03:28:10,635 [10056] INFO: Process started.
+2025-07-09 03:28:10,635 [10056] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:29:06,470 [6500] INFO: Jul 09 2025 03:29:06 test beginning...
+2025-07-09 03:29:06,472 [6500] INFO: robot.rshd=0
+2025-07-09 03:29:11,491 [6500] INFO: Process started.
+2025-07-09 03:29:11,491 [6500] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:30:04,160 [5204] INFO: Jul 09 2025 03:30:04 test beginning...
+2025-07-09 03:30:04,161 [5204] INFO: robot.rshd=0
+2025-07-09 03:30:09,180 [5204] INFO: Process started.
+2025-07-09 03:30:09,180 [5204] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:30:49,861 [3580] INFO: Jul 09 2025 03:30:49 test beginning...
+2025-07-09 03:30:49,862 [3580] INFO: robot.rshd=0
+2025-07-09 03:30:54,877 [3580] INFO: Process started.
+2025-07-09 03:30:54,877 [3580] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:31:32,165 [4536] INFO: Jul 09 2025 03:31:32 test beginning...
+2025-07-09 03:31:32,166 [4536] INFO: robot.rshd=0
+2025-07-09 03:31:37,186 [4536] INFO: Process started.
+2025-07-09 03:31:37,186 [4536] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:32:41,712 [18924] INFO: Jul 09 2025 03:32:41 test beginning...
+2025-07-09 03:32:41,713 [18924] INFO: robot.rshd=0
+2025-07-09 03:32:46,730 [18924] INFO: Process started.
+2025-07-09 03:32:46,731 [18924] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:33:29,562 [14460] INFO: Jul 09 2025 03:33:29 test beginning...
+2025-07-09 03:33:29,563 [14460] INFO: robot.rshd=0
+2025-07-09 03:33:34,578 [14460] INFO: Process started.
+2025-07-09 03:33:34,582 [14460] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:36:02,652 [9316] INFO: Jul 09 2025 03:36:02 test beginning...
+2025-07-09 03:36:02,653 [9316] INFO: robot.rshd=0
+2025-07-09 03:36:07,669 [9316] INFO: Process started.
+2025-07-09 03:36:07,669 [9316] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:36:31,954 [20876] INFO: Jul 09 2025 03:36:31 test beginning...
+2025-07-09 03:36:31,954 [20876] INFO: robot.rshd=0
+2025-07-09 03:36:36,971 [20876] INFO: Process started.
+2025-07-09 03:36:36,971 [20876] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:37:08,230 [20656] INFO: Jul 09 2025 03:37:08 test beginning...
+2025-07-09 03:37:08,231 [20656] INFO: robot.rshd=0
+2025-07-09 03:37:13,244 [20656] INFO: Process started.
+2025-07-09 03:37:13,244 [20656] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:37:38,742 [2648] INFO: Jul 09 2025 03:37:38 test beginning...
+2025-07-09 03:37:38,743 [2648] INFO: robot.rshd=0
+2025-07-09 03:37:43,764 [2648] INFO: Process started.
+2025-07-09 03:37:43,765 [2648] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:39:40,956 [20520] INFO: Jul 09 2025 03:39:40 test beginning...
+2025-07-09 03:39:40,957 [20520] INFO: robot.rshd=0
+2025-07-09 03:39:45,979 [20520] INFO: Process started.
+2025-07-09 03:39:45,979 [20520] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:42:16,085 [20444] INFO: Jul 09 2025 03:42:16 test beginning...
+2025-07-09 03:42:16,085 [20444] INFO: robot.rshd=0
+2025-07-09 03:42:21,099 [20444] INFO: Process started.
+2025-07-09 03:42:21,099 [20444] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:44:05,476 [7376] INFO: Jul 09 2025 03:44:05 test beginning...
+2025-07-09 03:44:05,477 [7376] INFO: robot.rshd=0
+2025-07-09 03:44:10,501 [7376] INFO: Process started.
+2025-07-09 03:44:10,501 [7376] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:48:27,894 [21468] INFO: Jul 09 2025 03:48:27 test beginning...
+2025-07-09 03:48:27,894 [21468] INFO: robot.rshd=0
+2025-07-09 03:48:32,915 [21468] INFO: Process started.
+2025-07-09 03:48:32,915 [21468] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:50:44,336 [16552] INFO: Jul 09 2025 03:50:44 test beginning...
+2025-07-09 03:50:44,337 [16552] INFO: robot.rshd=0
+2025-07-09 03:50:49,351 [16552] INFO: Process started.
+2025-07-09 03:50:49,351 [16552] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:52:04,010 [16552] INFO: client_count=0
+2025-07-09 03:52:05,924 [10380] INFO: Jul 09 2025 03:52:05 test beginning...
+2025-07-09 03:52:05,925 [10380] INFO: robot.rshd=0
+2025-07-09 03:52:10,947 [10380] INFO: Process started.
+2025-07-09 03:52:10,947 [10380] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:53:40,307 [7608] INFO: Jul 09 2025 03:53:40 test beginning...
+2025-07-09 03:53:40,308 [7608] INFO: robot.rshd=0
+2025-07-09 03:53:45,325 [7608] INFO: Process started.
+2025-07-09 03:53:45,325 [7608] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:54:34,018 [12168] INFO: Jul 09 2025 03:54:34 test beginning...
+2025-07-09 03:54:34,018 [12168] INFO: robot.rshd=0
+2025-07-09 03:54:39,034 [12168] INFO: Process started.
+2025-07-09 03:54:39,034 [12168] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:57:25,692 [4132] INFO: Jul 09 2025 03:57:25 test beginning...
+2025-07-09 03:57:25,693 [4132] INFO: robot.rshd=0
+2025-07-09 03:57:30,713 [4132] INFO: Process started.
+2025-07-09 03:57:30,713 [4132] INFO: ip=192.168.11.128, port=8899
+2025-07-09 03:59:42,869 [15740] INFO: Jul 09 2025 03:59:42 test beginning...
+2025-07-09 03:59:42,869 [15740] INFO: robot.rshd=0
+2025-07-09 03:59:47,887 [15740] INFO: Process started.
+2025-07-09 03:59:47,887 [15740] INFO: ip=192.168.11.128, port=8899
+2025-07-09 04:00:51,386 [16236] INFO: Jul 09 2025 04:00:51 test beginning...
+2025-07-09 04:00:51,386 [16236] INFO: robot.rshd=0
+2025-07-09 04:00:56,413 [16236] INFO: Process started.
+2025-07-09 04:00:56,413 [16236] INFO: ip=192.168.11.128, port=8899
+2025-07-09 04:05:13,934 [5204] INFO: Jul 09 2025 04:05:13 test beginning...
+2025-07-09 04:05:13,935 [5204] INFO: robot.rshd=0
+2025-07-09 04:05:18,950 [5204] INFO: Process started.
+2025-07-09 04:05:18,950 [5204] INFO: ip=192.168.11.128, port=8899
+2025-07-09 04:06:25,634 [8748] INFO: Jul 09 2025 04:06:25 test beginning...
+2025-07-09 04:06:25,635 [8748] INFO: robot.rshd=0
+2025-07-09 04:06:30,656 [8748] INFO: Process started.
+2025-07-09 04:06:30,656 [8748] INFO: ip=192.168.11.128, port=8899
+2025-07-09 04:06:59,488 [6116] INFO: Jul 09 2025 04:06:59 test beginning...
+2025-07-09 04:06:59,489 [6116] INFO: robot.rshd=0
+2025-07-09 04:07:04,509 [6116] INFO: Process started.
+2025-07-09 04:07:04,509 [6116] INFO: ip=192.168.11.128, port=8899
+2025-07-09 04:07:26,786 [10412] INFO: Jul 09 2025 04:07:26 test beginning...
+2025-07-09 04:07:26,787 [10412] INFO: robot.rshd=0
+2025-07-09 04:07:31,810 [10412] INFO: Process started.
+2025-07-09 04:07:31,810 [10412] INFO: ip=192.168.11.128, port=8899
+2025-07-09 04:09:09,187 [12372] INFO: Jul 09 2025 04:09:09 test beginning...
+2025-07-09 04:09:09,188 [12372] INFO: robot.rshd=0
+2025-07-09 04:09:14,213 [12372] INFO: Process started.
+2025-07-09 04:09:14,213 [12372] INFO: ip=192.168.11.128, port=8899
+2025-07-09 11:39:37,266 [20424] INFO: Jul 09 2025 11:39:37 test beginning...
+2025-07-09 11:39:37,266 [20424] INFO: robot.rshd=0
+2025-07-09 11:39:42,303 [20424] INFO: Process started.
+2025-07-09 11:39:42,303 [20424] INFO: ip=192.168.0.23, port=8899
+2025-07-09 11:43:14,541 [17472] INFO: Jul 09 2025 11:43:14 test beginning...
+2025-07-09 11:43:14,544 [17472] INFO: robot.rshd=0
+2025-07-09 11:43:19,578 [17472] INFO: Process started.
+2025-07-09 11:43:19,578 [17472] INFO: ip=192.168.0.23, port=8899
+2025-07-09 11:47:08,919 [16604] INFO: Jul 09 2025 11:47:08 test beginning...
+2025-07-09 11:47:08,922 [16604] INFO: robot.rshd=0
+2025-07-09 11:47:14,023 [16604] INFO: client_count=0
+2025-07-09 11:47:23,911 [9460] INFO: Jul 09 2025 11:47:23 test beginning...
+2025-07-09 11:47:23,913 [9460] INFO: robot.rshd=0
+2025-07-09 11:47:28,945 [9460] INFO: Process started.
+2025-07-09 11:47:28,945 [9460] INFO: ip=192.168.0.23, port=8899
+2025-07-09 11:50:28,705 [20536] INFO: Jul 09 2025 11:50:28 test beginning...
+2025-07-09 11:50:28,710 [20536] INFO: robot.rshd=0
+2025-07-09 11:50:33,753 [20536] INFO: Process started.
+2025-07-09 11:50:33,753 [20536] INFO: ip=192.168.0.23, port=8899
+2025-07-09 11:55:21,944 [19880] INFO: Jul 09 2025 11:55:21 test beginning...
+2025-07-09 11:55:21,946 [19880] INFO: robot.rshd=0
+2025-07-09 11:55:26,983 [19880] INFO: Process started.
+2025-07-09 11:55:26,983 [19880] INFO: ip=192.168.0.23, port=8899
+2025-07-09 11:56:05,534 [11512] INFO: Jul 09 2025 11:56:05 test beginning...
+2025-07-09 11:56:05,534 [11512] INFO: robot.rshd=0
+2025-07-09 11:56:10,581 [11512] INFO: Process started.
+2025-07-09 11:56:10,581 [11512] INFO: ip=192.168.0.23, port=8899
+2025-07-09 12:15:58,312 [6920] INFO: Jul 09 2025 12:15:58 test beginning...
+2025-07-09 12:15:58,317 [6920] INFO: robot.rshd=0
+2025-07-09 12:16:03,358 [6920] INFO: Process started.
+2025-07-09 12:16:03,358 [6920] INFO: ip=192.168.0.23, port=8899
+2025-07-09 12:16:23,636 [7048] INFO: Jul 09 2025 12:16:23 test beginning...
+2025-07-09 12:16:23,638 [7048] INFO: robot.rshd=0
+2025-07-09 12:16:28,676 [7048] INFO: Process started.
+2025-07-09 12:16:28,676 [7048] INFO: ip=192.168.0.23, port=8899
+2025-07-09 12:17:16,109 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,219 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,329 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,438 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,546 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,763 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,874 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:16,983 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,094 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,204 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,313 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,419 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,530 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,747 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,854 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:17,958 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,075 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,184 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,401 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,509 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,619 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,728 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,843 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:18,952 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,060 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,172 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,280 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,502 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,609 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,712 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,825 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:19,941 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,051 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,160 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,272 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,493 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,600 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,703 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,818 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:20,922 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,149 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,257 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,367 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,477 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,581 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,685 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,804 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:21,911 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:22,134 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:22,241 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:22,350 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,044 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,153 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,262 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,372 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,479 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,696 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,807 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:35,914 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,023 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,132 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,256 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,364 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,471 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,581 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,796 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:36,905 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,012 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,120 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,229 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,341 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,463 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,576 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,793 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:37,915 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,023 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,149 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,381 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,491 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,600 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,709 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:38,926 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,035 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,144 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,253 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,469 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,579 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,687 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:39,794 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,015 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,127 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,237 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,347 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,567 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,678 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,804 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:17:40,913 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:01,976 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:02,088 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:02,200 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:03,776 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:03,884 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:03,992 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:04,101 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:04,327 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:04,438 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:04,566 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:04,673 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:04,784 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,016 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,127 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,252 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,360 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,470 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,593 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,718 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:05,937 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,042 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,155 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,263 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,481 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,590 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,693 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:06,806 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,027 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,135 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,243 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,340 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,570 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,670 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,791 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:07,888 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,119 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,228 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,337 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,439 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,547 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,657 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,765 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:08,887 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,096 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,214 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,324 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,433 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,650 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,759 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,864 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:09,970 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,196 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,305 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,415 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,513 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,742 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,851 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:10,961 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,060 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,180 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,278 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,398 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,508 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,714 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,824 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:11,937 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,048 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,268 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,375 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,484 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,593 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,827 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:12,934 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,033 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,152 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,252 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,359 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,478 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,576 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,805 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:13,916 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,020 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,130 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,350 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,459 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,558 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,664 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:14,914 [7048] ERROR: Error moving toward zero pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:19,731 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:19,836 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:19,951 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,060 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,167 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,384 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,495 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,603 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,714 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,823 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:20,931 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,051 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,159 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,378 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,486 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,608 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,716 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,825 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:21,935 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,150 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,262 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,372 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,481 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,583 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,691 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,800 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:22,905 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,134 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,242 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,346 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,450 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,677 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,785 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:23,895 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,005 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,220 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,332 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,439 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,540 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,663 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,782 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,867 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:24,984 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,218 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,327 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,436 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,561 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,778 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,887 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:25,995 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,103 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,211 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,319 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,431 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,528 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,757 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,862 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:26,965 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,076 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,305 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,413 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,522 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,630 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,850 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:27,958 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,065 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,176 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,395 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,504 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,611 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,735 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,860 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:28,967 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,076 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,185 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,422 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,528 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,637 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,747 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:29,966 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,075 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,183 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,294 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,405 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,514 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,623 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,735 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:30,961 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,065 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,174 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,295 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,511 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,623 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,729 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,831 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:31,941 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,050 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,156 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,275 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,497 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,607 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,717 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:32,826 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,044 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,141 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,250 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,369 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,585 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,693 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,804 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:19:33,914 [7048] ERROR: Error moving toward init pose: RobotError type2004 code=10023 msg=move error
+2025-07-09 12:27:54,644 [16500] INFO: Jul 09 2025 12:27:54 test beginning...
+2025-07-09 12:27:54,647 [16500] INFO: robot.rshd=0
+2025-07-09 12:27:59,681 [16500] INFO: Process started.
+2025-07-09 12:27:59,681 [16500] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:33:45,386 [1984] INFO: Jul 09 2025 12:33:45 test beginning...
+2025-07-09 12:33:45,395 [1984] INFO: robot.rshd=0
+2025-07-09 12:33:50,445 [1984] INFO: Process started.
+2025-07-09 12:33:50,445 [1984] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:34:35,466 [1008] INFO: Jul 09 2025 12:34:35 test beginning...
+2025-07-09 12:34:35,468 [1008] INFO: robot.rshd=0
+2025-07-09 12:34:40,499 [1008] INFO: Process started.
+2025-07-09 12:34:40,500 [1008] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:42:26,615 [12712] INFO: Jul 09 2025 12:42:26 test beginning...
+2025-07-09 12:42:26,617 [12712] INFO: robot.rshd=0
+2025-07-09 12:42:31,649 [12712] INFO: Process started.
+2025-07-09 12:42:31,650 [12712] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:43:38,754 [4476] INFO: Jul 09 2025 12:43:38 test beginning...
+2025-07-09 12:43:38,756 [4476] INFO: robot.rshd=0
+2025-07-09 12:43:43,793 [4476] INFO: Process started.
+2025-07-09 12:43:43,794 [4476] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:44:51,961 [11244] INFO: Jul 09 2025 12:44:51 test beginning...
+2025-07-09 12:44:51,962 [11244] INFO: robot.rshd=0
+2025-07-09 12:44:57,004 [11244] INFO: Process started.
+2025-07-09 12:44:57,005 [11244] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:46:21,731 [2308] INFO: Jul 09 2025 12:46:21 test beginning...
+2025-07-09 12:46:21,733 [2308] INFO: robot.rshd=0
+2025-07-09 12:46:26,776 [2308] INFO: Process started.
+2025-07-09 12:46:26,777 [2308] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:51:41,241 [14400] INFO: Jul 09 2025 12:51:41 test beginning...
+2025-07-09 12:51:41,243 [14400] INFO: robot.rshd=0
+2025-07-09 12:51:46,272 [14400] INFO: Process started.
+2025-07-09 12:51:46,273 [14400] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:52:33,990 [3472] INFO: Jul 09 2025 12:52:33 test beginning...
+2025-07-09 12:52:33,994 [3472] INFO: robot.rshd=0
+2025-07-09 12:52:39,029 [3472] INFO: Process started.
+2025-07-09 12:52:39,029 [3472] INFO: ip=192.168.11.128, port=8899
+2025-07-09 12:55:34,062 [11332] INFO: Jul 09 2025 12:55:34 test beginning...
+2025-07-09 12:55:34,065 [11332] INFO: robot.rshd=0
+2025-07-09 12:55:39,105 [11332] INFO: Process started.
+2025-07-09 12:55:39,106 [11332] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:01:35,146 [17404] INFO: Jul 09 2025 13:01:35 test beginning...
+2025-07-09 13:01:35,149 [17404] INFO: robot.rshd=0
+2025-07-09 13:01:40,183 [17404] INFO: Process started.
+2025-07-09 13:01:40,184 [17404] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:01:49,286 [17404] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:05:00,395 [1932] INFO: Jul 09 2025 13:05:00 test beginning...
+2025-07-09 13:05:00,396 [1932] INFO: robot.rshd=0
+2025-07-09 13:05:05,414 [1932] INFO: Process started.
+2025-07-09 13:05:05,415 [1932] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:05:08,400 [1932] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:05:24,121 [1932] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:05:24,473 [1932] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:05:38,126 [19048] INFO: Jul 09 2025 13:05:38 test beginning...
+2025-07-09 13:05:38,127 [19048] INFO: robot.rshd=0
+2025-07-09 13:05:43,145 [19048] INFO: Process started.
+2025-07-09 13:05:43,145 [19048] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:05:48,073 [19048] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:09:44,568 [5080] INFO: Jul 09 2025 13:09:44 test beginning...
+2025-07-09 13:09:44,569 [5080] INFO: robot.rshd=0
+2025-07-09 13:09:49,582 [5080] INFO: Process started.
+2025-07-09 13:09:49,582 [5080] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:10:46,660 [6152] INFO: Jul 09 2025 13:10:46 test beginning...
+2025-07-09 13:10:46,661 [6152] INFO: robot.rshd=0
+2025-07-09 13:10:51,684 [6152] INFO: Process started.
+2025-07-09 13:10:51,684 [6152] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:11:12,990 [6152] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:13:02,599 [12012] INFO: Jul 09 2025 13:13:02 test beginning...
+2025-07-09 13:13:02,599 [12012] INFO: robot.rshd=0
+2025-07-09 13:13:07,625 [12012] INFO: Process started.
+2025-07-09 13:13:07,625 [12012] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:13:44,514 [12012] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:13:44,833 [12012] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:14:09,995 [12012] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:14:13,572 [12012] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:14:13,785 [12012] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:14:20,756 [12012] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:16:49,375 [16244] INFO: Jul 09 2025 13:16:49 test beginning...
+2025-07-09 13:16:49,376 [16244] INFO: robot.rshd=0
+2025-07-09 13:16:54,398 [16244] INFO: Process started.
+2025-07-09 13:16:54,398 [16244] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:17:02,024 [16244] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:20:34,107 [10152] INFO: Jul 09 2025 13:20:34 test beginning...
+2025-07-09 13:20:34,107 [10152] INFO: robot.rshd=0
+2025-07-09 13:20:39,134 [10152] INFO: Process started.
+2025-07-09 13:20:39,134 [10152] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:23:50,462 [5988] INFO: Jul 09 2025 13:23:50 test beginning...
+2025-07-09 13:23:50,463 [5988] INFO: robot.rshd=0
+2025-07-09 13:23:55,486 [5988] INFO: Process started.
+2025-07-09 13:23:55,486 [5988] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:26:33,957 [3552] INFO: Jul 09 2025 13:26:33 test beginning...
+2025-07-09 13:26:33,958 [3552] INFO: robot.rshd=0
+2025-07-09 13:26:38,973 [3552] INFO: Process started.
+2025-07-09 13:26:38,973 [3552] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:27:55,807 [3552] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:29:08,866 [21592] INFO: Jul 09 2025 13:29:08 test beginning...
+2025-07-09 13:29:08,867 [21592] INFO: robot.rshd=0
+2025-07-09 13:29:13,882 [21592] INFO: Process started.
+2025-07-09 13:29:13,882 [21592] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:29:49,509 [4908] INFO: Jul 09 2025 13:29:49 test beginning...
+2025-07-09 13:29:49,510 [4908] INFO: robot.rshd=0
+2025-07-09 13:29:54,533 [4908] INFO: Process started.
+2025-07-09 13:29:54,533 [4908] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:30:14,936 [4908] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:31:00,227 [22300] INFO: Jul 09 2025 13:31:00 test beginning...
+2025-07-09 13:31:00,228 [22300] INFO: robot.rshd=0
+2025-07-09 13:31:05,244 [22300] INFO: Process started.
+2025-07-09 13:31:05,244 [22300] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:38:55,242 [13524] INFO: Jul 09 2025 13:38:55 test beginning...
+2025-07-09 13:38:55,243 [13524] INFO: robot.rshd=0
+2025-07-09 13:39:00,258 [13524] INFO: Process started.
+2025-07-09 13:39:00,258 [13524] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:39:54,620 [13804] INFO: Jul 09 2025 13:39:54 test beginning...
+2025-07-09 13:39:54,621 [13804] INFO: robot.rshd=0
+2025-07-09 13:39:59,634 [13804] INFO: Process started.
+2025-07-09 13:39:59,634 [13804] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:40:00,460 [13804] WARNING: blend radius value range must be 0.01~0.05
+2025-07-09 13:41:04,060 [1360] INFO: Jul 09 2025 13:41:04 test beginning...
+2025-07-09 13:41:04,061 [1360] INFO: robot.rshd=0
+2025-07-09 13:41:09,077 [1360] INFO: Process started.
+2025-07-09 13:41:09,078 [1360] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:41:09,903 [1360] WARNING: blend radius value range must be 0.01~0.05
+2025-07-09 13:44:48,101 [1360] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:45:18,287 [1360] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:45:18,430 [1360] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:45:18,558 [1360] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:45:18,694 [1360] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:45:18,814 [1360] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:45:18,926 [1360] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:45:19,374 [1360] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:45:32,021 [22612] INFO: Jul 09 2025 13:45:32 test beginning...
+2025-07-09 13:45:32,021 [22612] INFO: robot.rshd=0
+2025-07-09 13:45:37,043 [22612] INFO: Process started.
+2025-07-09 13:45:37,043 [22612] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:45:37,868 [22612] WARNING: blend radius value range must be 0.01~0.05
+2025-07-09 13:47:27,655 [12544] INFO: Jul 09 2025 13:47:27 test beginning...
+2025-07-09 13:47:27,656 [12544] INFO: robot.rshd=0
+2025-07-09 13:47:32,671 [12544] INFO: Process started.
+2025-07-09 13:47:32,671 [12544] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:47:53,706 [12544] ERROR: login failed!
+2025-07-09 13:47:53,706 [12544] ERROR: Failed to connect to server 192.168.11.128:8899.
+2025-07-09 13:49:19,004 [12544] INFO: client_count=0
+2025-07-09 13:49:33,152 [14348] INFO: Jul 09 2025 13:49:33 test beginning...
+2025-07-09 13:49:33,153 [14348] INFO: robot.rshd=0
+2025-07-09 13:49:38,166 [14348] INFO: Process started.
+2025-07-09 13:49:38,166 [14348] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:49:38,992 [14348] WARNING: blend radius value range must be 0.01~0.05
+2025-07-09 13:49:42,284 [14348] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:49:49,308 [14348] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:50:00,613 [20728] INFO: Jul 09 2025 13:50:00 test beginning...
+2025-07-09 13:50:00,614 [20728] INFO: robot.rshd=0
+2025-07-09 13:50:05,635 [20728] INFO: Process started.
+2025-07-09 13:50:05,635 [20728] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:50:06,461 [20728] WARNING: blend radius value range must be 0.01~0.05
+2025-07-09 13:50:13,454 [20728] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:50:35,225 [21140] INFO: Jul 09 2025 13:50:35 test beginning...
+2025-07-09 13:50:35,226 [21140] INFO: robot.rshd=0
+2025-07-09 13:50:40,245 [21140] INFO: Process started.
+2025-07-09 13:50:40,245 [21140] INFO: ip=192.168.11.128, port=8899
+2025-07-09 13:50:41,072 [21140] WARNING: blend radius value range must be 0.01~0.05
+2025-07-09 13:50:58,512 [21140] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-09 13:51:19,560 [21140] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-09 13:52:13,406 [18420] INFO: Jul 09 2025 13:52:13 test beginning...
+2025-07-09 13:52:13,406 [18420] INFO: robot.rshd=0
+2025-07-09 13:52:18,427 [18420] INFO: Process started.
+2025-07-09 13:52:18,427 [18420] INFO: ip=192.168.11.128, port=8899
+2025-07-09 14:09:23,363 [15280] INFO: Jul 09 2025 14:09:23 test beginning...
+2025-07-09 14:09:23,363 [15280] INFO: robot.rshd=0
+2025-07-09 14:09:28,382 [15280] INFO: Process started.
+2025-07-09 14:09:28,382 [15280] INFO: ip=192.168.11.128, port=8899
+2025-07-09 14:09:49,419 [15280] ERROR: login failed!
+2025-07-09 14:09:49,419 [15280] ERROR: Failed to connect to server 192.168.11.128:8899.
+2025-07-09 14:13:01,006 [15280] INFO: client_count=0
+2025-07-09 14:13:03,141 [18724] INFO: Jul 09 2025 14:13:03 test beginning...
+2025-07-09 14:13:03,143 [18724] INFO: robot.rshd=0
+2025-07-09 14:13:08,157 [18724] INFO: Process started.
+2025-07-09 14:13:08,157 [18724] INFO: ip=192.168.11.128, port=8899
+2025-07-09 14:13:29,181 [18724] ERROR: login failed!
+2025-07-09 14:13:29,181 [18724] ERROR: Failed to connect to server 192.168.11.128:8899.
+2025-07-09 14:13:47,005 [18724] INFO: client_count=0
+2025-07-09 14:14:52,221 [10704] INFO: Jul 09 2025 14:14:52 test beginning...
+2025-07-09 14:14:52,223 [10704] INFO: robot.rshd=0
+2025-07-09 14:14:57,235 [10704] INFO: Process started.
+2025-07-09 14:14:57,235 [10704] INFO: ip=192.168.11.128, port=8899
+2025-07-09 14:27:27,731 [22412] INFO: Jul 09 2025 14:27:27 test beginning...
+2025-07-09 14:27:27,734 [22412] INFO: robot.rshd=0
+2025-07-09 14:27:32,773 [22412] INFO: Process started.
+2025-07-09 14:27:32,774 [22412] INFO: ip=192.168.0.23, port=8899
+2025-07-09 14:27:55,008 [22412] INFO: client_count=0
+2025-07-09 14:27:59,578 [1216] INFO: Jul 09 2025 14:27:59 test beginning...
+2025-07-09 14:27:59,581 [1216] INFO: robot.rshd=0
+2025-07-09 14:28:04,613 [1216] INFO: Process started.
+2025-07-09 14:28:04,614 [1216] INFO: ip=192.168.0.23, port=8899
+2025-07-09 14:35:49,676 [12196] INFO: Jul 09 2025 14:35:49 test beginning...
+2025-07-09 14:35:49,678 [12196] INFO: robot.rshd=0
+2025-07-09 14:35:54,708 [12196] INFO: Process started.
+2025-07-09 14:35:54,709 [12196] INFO: ip=192.168.0.23, port=8899
+2025-07-09 14:42:55,017 [6628] INFO: Jul 09 2025 14:42:55 test beginning...
+2025-07-09 14:42:55,019 [6628] INFO: robot.rshd=0
+2025-07-09 14:43:00,055 [6628] INFO: Process started.
+2025-07-09 14:43:00,056 [6628] INFO: ip=192.168.0.23, port=8899
+2025-07-09 14:45:09,140 [14292] INFO: Jul 09 2025 14:45:09 test beginning...
+2025-07-09 14:45:09,142 [14292] INFO: robot.rshd=0
+2025-07-09 14:45:14,181 [14292] INFO: Process started.
+2025-07-09 14:45:14,182 [14292] INFO: ip=192.168.0.23, port=8899
+2025-07-09 14:46:29,010 [22268] INFO: Jul 09 2025 14:46:29 test beginning...
+2025-07-09 14:46:29,012 [22268] INFO: robot.rshd=0
+2025-07-09 14:46:34,051 [22268] INFO: Process started.
+2025-07-09 14:46:34,051 [22268] INFO: ip=192.168.0.23, port=8899
+2025-07-09 15:13:20,546 [3056] INFO: Jul 09 2025 15:13:20 test beginning...
+2025-07-09 15:13:20,549 [3056] INFO: robot.rshd=0
+2025-07-09 15:13:25,586 [3056] INFO: Process started.
+2025-07-09 15:13:25,587 [3056] INFO: ip=192.168.0.23, port=8899
+2025-07-09 15:17:05,870 [16232] INFO: Jul 09 2025 15:17:05 test beginning...
+2025-07-09 15:17:05,874 [16232] INFO: robot.rshd=0
+2025-07-09 15:17:10,905 [16232] INFO: Process started.
+2025-07-09 15:17:10,906 [16232] INFO: ip=192.168.0.23, port=8899
+2025-07-09 15:19:19,728 [9692] INFO: Jul 09 2025 15:19:19 test beginning...
+2025-07-09 15:19:19,730 [9692] INFO: robot.rshd=0
+2025-07-09 15:19:24,770 [9692] INFO: Process started.
+2025-07-09 15:19:24,771 [9692] INFO: ip=192.168.0.23, port=8899
+2025-07-09 15:37:33,974 [14840] INFO: Jul 09 2025 15:37:33 test beginning...
+2025-07-09 15:37:33,976 [14840] INFO: robot.rshd=0
+2025-07-09 15:37:39,013 [14840] INFO: Process started.
+2025-07-09 15:37:39,014 [14840] INFO: ip=192.168.0.23, port=8899
+2025-07-09 15:37:39,016 [14840] ERROR: login failed!
+2025-07-09 15:37:39,017 [14840] ERROR: Failed to connect to server 192.168.0.23:8899.
+2025-07-09 15:37:51,007 [14840] INFO: client_count=0
+2025-07-09 15:37:53,033 [5812] INFO: Jul 09 2025 15:37:53 test beginning...
+2025-07-09 15:37:53,035 [5812] INFO: robot.rshd=0
+2025-07-09 15:37:58,069 [5812] INFO: Process started.
+2025-07-09 15:37:58,070 [5812] INFO: ip=192.168.11.128, port=8899
+2025-07-09 15:45:53,553 [23008] INFO: Jul 09 2025 15:45:53 test beginning...
+2025-07-09 15:45:53,554 [23008] INFO: robot.rshd=0
+2025-07-09 15:45:58,579 [23008] INFO: Process started.
+2025-07-09 15:45:58,579 [23008] INFO: ip=192.168.11.128, port=8899
+2025-07-09 15:48:46,936 [17492] INFO: Jul 09 2025 15:48:46 test beginning...
+2025-07-09 15:48:46,937 [17492] INFO: robot.rshd=0
+2025-07-09 15:48:51,954 [17492] INFO: Process started.
+2025-07-09 15:48:51,954 [17492] INFO: ip=192.168.11.128, port=8899
+2025-07-09 15:50:15,398 [6660] INFO: Jul 09 2025 15:50:15 test beginning...
+2025-07-09 15:50:15,399 [6660] INFO: robot.rshd=0
+2025-07-09 15:50:20,415 [6660] INFO: Process started.
+2025-07-09 15:50:20,415 [6660] INFO: ip=192.168.11.128, port=8899
+2025-07-09 15:52:15,896 [11468] INFO: Jul 09 2025 15:52:15 test beginning...
+2025-07-09 15:52:15,896 [11468] INFO: robot.rshd=0
+2025-07-09 15:52:20,922 [11468] INFO: Process started.
+2025-07-09 15:52:20,922 [11468] INFO: ip=192.168.11.128, port=8899
+2025-07-09 15:58:36,085 [15396] INFO: Jul 09 2025 15:58:36 test beginning...
+2025-07-09 15:58:36,085 [15396] INFO: robot.rshd=0
+2025-07-09 15:58:41,103 [15396] INFO: Process started.
+2025-07-09 15:58:41,103 [15396] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:01:44,544 [1944] INFO: Jul 09 2025 16:01:44 test beginning...
+2025-07-09 16:01:44,544 [1944] INFO: robot.rshd=0
+2025-07-09 16:01:49,558 [1944] INFO: Process started.
+2025-07-09 16:01:49,558 [1944] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:03:41,447 [19744] INFO: Jul 09 2025 16:03:41 test beginning...
+2025-07-09 16:03:41,447 [19744] INFO: robot.rshd=0
+2025-07-09 16:03:46,466 [19744] INFO: Process started.
+2025-07-09 16:03:46,466 [19744] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:07:22,117 [14948] INFO: Jul 09 2025 16:07:22 test beginning...
+2025-07-09 16:07:22,118 [14948] INFO: robot.rshd=0
+2025-07-09 16:07:27,131 [14948] INFO: Process started.
+2025-07-09 16:07:27,131 [14948] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:10:23,741 [17952] INFO: Jul 09 2025 16:10:23 test beginning...
+2025-07-09 16:10:23,742 [17952] INFO: robot.rshd=0
+2025-07-09 16:10:28,757 [17952] INFO: Process started.
+2025-07-09 16:10:28,757 [17952] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:14:15,736 [13912] INFO: Jul 09 2025 16:14:15 test beginning...
+2025-07-09 16:14:15,738 [13912] INFO: robot.rshd=0
+2025-07-09 16:14:20,777 [13912] INFO: Process started.
+2025-07-09 16:14:20,778 [13912] INFO: ip=192.168.0.23, port=8899
+2025-07-09 16:32:05,758 [22996] INFO: Jul 09 2025 16:32:05 test beginning...
+2025-07-09 16:32:05,760 [22996] INFO: robot.rshd=0
+2025-07-09 16:32:10,793 [22996] INFO: Process started.
+2025-07-09 16:32:10,795 [22996] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:39:30,707 [13776] INFO: Jul 09 2025 16:39:30 test beginning...
+2025-07-09 16:39:30,709 [13776] INFO: robot.rshd=0
+2025-07-09 16:39:35,743 [13776] INFO: Process started.
+2025-07-09 16:39:35,744 [13776] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:40:47,251 [2744] INFO: Jul 09 2025 16:40:47 test beginning...
+2025-07-09 16:40:47,252 [2744] INFO: robot.rshd=0
+2025-07-09 16:40:52,271 [2744] INFO: Process started.
+2025-07-09 16:40:52,271 [2744] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:54:28,824 [10608] INFO: Jul 09 2025 16:54:28 test beginning...
+2025-07-09 16:54:28,824 [10608] INFO: robot.rshd=0
+2025-07-09 16:54:33,837 [10608] INFO: Process started.
+2025-07-09 16:54:33,837 [10608] INFO: ip=192.168.11.128, port=8899
+2025-07-09 16:59:13,262 [12468] INFO: Jul 09 2025 16:59:13 test beginning...
+2025-07-09 16:59:13,263 [12468] INFO: robot.rshd=0
+2025-07-09 16:59:18,289 [12468] INFO: Process started.
+2025-07-09 16:59:18,289 [12468] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:06:37,335 [22724] INFO: Jul 09 2025 17:06:37 test beginning...
+2025-07-09 17:06:37,336 [22724] INFO: robot.rshd=0
+2025-07-09 17:06:42,359 [22724] INFO: Process started.
+2025-07-09 17:06:42,359 [22724] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:10:53,837 [4656] INFO: Jul 09 2025 17:10:53 test beginning...
+2025-07-09 17:10:53,838 [4656] INFO: robot.rshd=0
+2025-07-09 17:10:58,863 [4656] INFO: Process started.
+2025-07-09 17:10:58,863 [4656] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:16:55,095 [18280] INFO: Jul 09 2025 17:16:55 test beginning...
+2025-07-09 17:16:55,096 [18280] INFO: robot.rshd=0
+2025-07-09 17:17:00,113 [18280] INFO: Process started.
+2025-07-09 17:17:00,113 [18280] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:19:24,880 [10872] INFO: Jul 09 2025 17:19:24 test beginning...
+2025-07-09 17:19:24,882 [10872] INFO: robot.rshd=0
+2025-07-09 17:19:29,903 [10872] INFO: Process started.
+2025-07-09 17:19:29,903 [10872] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:20:41,684 [5288] INFO: Jul 09 2025 17:20:41 test beginning...
+2025-07-09 17:20:41,685 [5288] INFO: robot.rshd=0
+2025-07-09 17:20:46,725 [5288] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:23:46,476 [15768] INFO: Jul 09 2025 17:23:46 test beginning...
+2025-07-09 17:23:46,477 [15768] INFO: robot.rshd=0
+2025-07-09 17:23:51,498 [15768] INFO: Process started.
+2025-07-09 17:23:51,498 [15768] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:24:38,224 [7952] INFO: Jul 09 2025 17:24:38 test beginning...
+2025-07-09 17:24:38,225 [7952] INFO: robot.rshd=0
+2025-07-09 17:24:43,243 [7952] INFO: Process started.
+2025-07-09 17:24:43,243 [7952] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:25:22,695 [19780] INFO: Jul 09 2025 17:25:22 test beginning...
+2025-07-09 17:25:22,696 [19780] INFO: robot.rshd=0
+2025-07-09 17:25:27,722 [19780] INFO: Process started.
+2025-07-09 17:25:27,722 [19780] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:26:44,128 [5924] INFO: Jul 09 2025 17:26:44 test beginning...
+2025-07-09 17:26:44,128 [5924] INFO: robot.rshd=0
+2025-07-09 17:26:49,146 [5924] INFO: Process started.
+2025-07-09 17:26:49,146 [5924] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:28:14,023 [11696] INFO: Jul 09 2025 17:28:14 test beginning...
+2025-07-09 17:28:14,024 [11696] INFO: robot.rshd=0
+2025-07-09 17:28:19,049 [11696] INFO: Process started.
+2025-07-09 17:28:19,050 [11696] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:29:22,747 [4452] INFO: Jul 09 2025 17:29:22 test beginning...
+2025-07-09 17:29:22,747 [4452] INFO: robot.rshd=0
+2025-07-09 17:29:27,769 [4452] INFO: Process started.
+2025-07-09 17:29:27,774 [4452] INFO: ip=192.168.11.128, port=8899
+2025-07-09 17:31:22,421 [6248] INFO: Jul 09 2025 17:31:22 test beginning...
+2025-07-09 17:31:22,424 [6248] INFO: robot.rshd=0
+2025-07-09 17:31:27,457 [6248] INFO: Process started.
+2025-07-09 17:31:27,458 [6248] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:31:36,864 [6248] ERROR: login failed!
+2025-07-09 17:31:36,866 [6248] ERROR: Failed to connect to server 192.168.0.23:8899.
+2025-07-09 17:31:40,013 [6248] INFO: client_count=0
+2025-07-09 17:31:41,246 [344] INFO: Jul 09 2025 17:31:41 test beginning...
+2025-07-09 17:31:41,249 [344] INFO: robot.rshd=0
+2025-07-09 17:31:46,281 [344] INFO: Process started.
+2025-07-09 17:31:46,281 [344] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:34:46,120 [7280] INFO: Jul 09 2025 17:34:46 test beginning...
+2025-07-09 17:34:46,123 [7280] INFO: robot.rshd=0
+2025-07-09 17:34:51,157 [7280] INFO: Process started.
+2025-07-09 17:34:51,158 [7280] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:35:42,132 [12832] INFO: Jul 09 2025 17:35:42 test beginning...
+2025-07-09 17:35:42,134 [12832] INFO: robot.rshd=0
+2025-07-09 17:35:47,169 [12832] INFO: Process started.
+2025-07-09 17:35:47,170 [12832] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:36:34,150 [21984] INFO: Jul 09 2025 17:36:34 test beginning...
+2025-07-09 17:36:34,152 [21984] INFO: robot.rshd=0
+2025-07-09 17:36:39,187 [21984] INFO: Process started.
+2025-07-09 17:36:39,188 [21984] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:37:35,891 [13092] INFO: Jul 09 2025 17:37:35 test beginning...
+2025-07-09 17:37:35,894 [13092] INFO: robot.rshd=0
+2025-07-09 17:37:40,927 [13092] INFO: Process started.
+2025-07-09 17:37:40,927 [13092] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:39:16,086 [16204] INFO: Jul 09 2025 17:39:16 test beginning...
+2025-07-09 17:39:16,089 [16204] INFO: robot.rshd=0
+2025-07-09 17:39:21,120 [16204] INFO: Process started.
+2025-07-09 17:39:21,122 [16204] INFO: ip=192.168.0.23, port=8899
+2025-07-09 17:40:10,423 [12392] INFO: Jul 09 2025 17:40:10 test beginning...
+2025-07-09 17:40:10,425 [12392] INFO: robot.rshd=0
+2025-07-09 17:40:15,462 [12392] INFO: Process started.
+2025-07-09 17:40:15,463 [12392] INFO: ip=192.168.0.23, port=8899
