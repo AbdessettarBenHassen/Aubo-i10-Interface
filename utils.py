@@ -148,6 +148,8 @@ def stop_move_joint(robot, joint, direction):
     """
     Stop the movement of a specific joint in a specific direction.
     """
+    print(libpyauboi5.get_tool_dynamics_param(robot.rshd))
+    print(libpyauboi5.get_tool_kinematics_param(robot.rshd))
     libpyauboi5.teach_move_stop(robot.rshd)
        
 
@@ -162,6 +164,8 @@ def update_joint_speed_from_slider(value, robot):
     speed_tuple = (speed,) * 6
 
     # Apply to robot
+    robot.set_end_max_line_acc(1.0)
+    robot.set_end_max_line_velc(speed)
     robot.set_joint_maxacc((1.0, 1.0, 1.0, 1.0, 1.0, 1.0))
     robot.set_joint_maxvelc(speed_tuple)
 
@@ -284,15 +288,21 @@ def start_move_cartesian(robot, axis, direction, self):
     :param rotation_step_value: Référence au QLabel affichant la valeur du pas de rotation.
     """
     if(not(self.st)):
-        # Mode continu : utiliser un QTimer pour un mouvement continu
-        if (axis, direction) not in cartesian_timers:
-            timer = QTimer()
-            timer.timeout.connect(
-                lambda: move_cartesian(robot, axis, direction,self.st, self.position_step_value.text(),self. orientation_step_value.text())
-            )
-            timer.start(100)  # Déclenche move_cartesian toutes les 100 ms
-            cartesian_timers[(axis, direction)] = timer
-            print(f"Début du mouvement continu de l'axe {axis} dans la direction {direction}")
+        axe_mapping = {
+        1: TeachMoveMode.MOV_X,
+        2: TeachMoveMode.MOV_Y,
+        3: TeachMoveMode.MOV_Z,
+        4: TeachMoveMode.ROT_X,
+        5: TeachMoveMode.ROT_Y,
+        6: TeachMoveMode.ROT_Z,
+        }
+
+    # Get the correct TeachMoveMode value from joint number
+        joint_mode = axe_mapping.get(axis, TeachMoveMode.NO_TEACH)
+        if(direction == "+"):
+            libpyauboi5.teach_move_start(robot.rshd,joint_mode, True)
+        else:
+            libpyauboi5.teach_move_start(robot.rshd,joint_mode, False)
     else:
         # Mode Step : déplacer d'un seul pas
         move_cartesian(robot, axis, direction, self.st, self.position_step_value.text(),self. orientation_step_value.text())
@@ -304,37 +314,15 @@ def stop_move_cartesian(axis=None, direction=None):
     :param axis: Numéro de l'axe (1: X, 2: Y, 3: Z, 4: RX, 5: RY, 6: RZ).
     :param direction: "+" pour augmenter, "-" pour diminuer.
     """
-    if axis is not None and direction is not None:
-        # Arrêter un mouvement spécifique
-        if (axis, direction) in cartesian_timers:
-            timer = cartesian_timers[(axis, direction)]
-            timer.stop()
-            del cartesian_timers[(axis, direction)]
-            print(f"Stopped moving cartesian axis {axis} in direction {direction}")
-    else:
-        # Arrêter tous les mouvements cartésiens
-        for (ax, dir), timer in list(cartesian_timers.items()):
-            timer.stop()
-            del cartesian_timers[(ax, dir)]
-            print(f"Stopped moving cartesian axis {ax} in direction {dir}")
+    libpyauboi5.teach_move_stop(0)
 
 
-def start_move_to_zero_pose(robot):
-    """
-    Démarre le mouvement vers la position zéro lorsque le bouton est appuyé.
-    """
-    if 'zero_pose_timer' not in timers:
-        timers['zero_pose_timer'] = QTimer()
-        timers['zero_pose_timer'].timeout.connect(lambda: move_to_zero_pose(robot))  # Déplacer vers la position zéro
-        timers['zero_pose_timer'].start(100)  # Démarrer le timer (100 ms)
 
-def stop_move_to_zero_pose():
+def stop_move_to_zero_pose(robot):
     """
     Arrête le mouvement lorsque le bouton est relâché.
     """
-    if 'zero_pose_timer' in timers:
-        timers['zero_pose_timer'].stop()  # Arrêter le timer
-        del timers['zero_pose_timer']  # Supprimer le timer du dictionnaire
+    robot.move_stop()  # Stop all movements
 def move_to_zero_pose(robot):
     """
     Déplace progressivement le robot vers la position zéro.
@@ -348,37 +336,35 @@ def move_to_zero_pose(robot):
 
         # Vérifier si le robot a atteint la position cible
         if all(abs(current_joints[i] - target_joints[i]) < 0.01 for i in range(6)):
-            stop_move_to_zero_pose()  # Arrêter le mouvement
+            stop_move_to_zero_pose(robot)  # Arrêter le mouvement
             return
-
-        # Calculer un pas de mouvement proportionnel
-        step = 0.1  # Pas de mouvement maximal (en radians)
-        new_joints = [
-            current_joints[i] + min(step, abs(target_joints[i] - current_joints[i])) * (1 if target_joints[i] > current_joints[i] else -1)
-            for i in range(6)
-        ]
+     
 
         # Envoyer la nouvelle position au robot
-        robot.move_joint(new_joints)
+        robot.move_joint(target_joints,False)
     except Exception as e:
         logger.error(f"Error moving toward zero pose: {e}")
+def on_reference_changed(robot, value):
+    print(libpyauboi5.get_tool_dynamics_param(robot.rshd))
+    print(libpyauboi5.get_tool_kinematics_param(robot.rshd))
+    print(f"Reference coordinate changed to: {value}")
+    # You can set internal state here, like:
+    if value == "Base":
+        libpyauboi5.set_teach_base_coord(robot.rshd) 
+    elif value == "flange_center":
+        libpyauboi5.set_teach_end_coord(robot.rshd)   
 
 def start_move_to_init_pose(robot):
     """
     Démarre le mouvement vers la position initiale lorsque le bouton est appuyé.
     """
-    if 'init_pose_timer' not in timers:
-        timers['init_pose_timer'] = QTimer()
-        timers['init_pose_timer'].timeout.connect(lambda: move_to_init_pose(robot))  # Déplacer vers la position initiale
-        timers['init_pose_timer'].start(100)  # Démarrer le timer (100 ms)
+    move_to_init_pose(robot)
 
-def stop_move_to_init_pose():
+def stop_move_to_init_pose(robot):
     """
     Arrête le mouvement lorsque le bouton est relâché.
     """
-    if 'init_pose_timer' in timers:
-        timers['init_pose_timer'].stop()  # Arrêter le timer
-        del timers['init_pose_timer']  # Supprimer le timer du dictionnaire
+    robot.move_stop()  # Stop all movements
 
 
 def move_to_init_pose(robot):
@@ -394,18 +380,10 @@ def move_to_init_pose(robot):
 
         # Vérifier si le robot a atteint la position cible
         if all(abs(current_joints[i] - target_joints[i]) < 0.01 for i in range(6)):
-            stop_move_to_init_pose()  # Arrêter le mouvement
+            stop_move_to_init_pose(robot)  # Arrêter le mouvement
             return
-
-        # Calculer un pas de mouvement proportionnel
-        step = 0.1  # Pas de mouvement maximal (en radians)
-        new_joints = [
-            current_joints[i] + min(step, abs(target_joints[i] - current_joints[i])) * (1 if target_joints[i] > current_joints[i] else -1)
-            for i in range(6)
-        ]
-
         # Envoyer la nouvelle position au robot
-        robot.move_joint(new_joints)
+        robot.move_joint(target_joints,False)
     except Exception as e:
         logger.error(f"Error moving toward init pose: {e}")
 

@@ -1201,6 +1201,8 @@ class MainWindow(QMainWindow):
         reference_coord_layout.addWidget(reference_dropdown)
         reference_coord_group.setLayout(reference_coord_layout)
         layout.addWidget(reference_coord_group, 3, 0, 1, 1)
+        reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
+
 
         # Nouveau groupe pour les boutons et le contrôle de vitesse
         buttons_speed_group = QGroupBox()
@@ -1209,10 +1211,10 @@ class MainWindow(QMainWindow):
         # Boutons Init Pose et Zero Pose
         init_pose_button = QPushButton("Init Pose")
         init_pose_button.pressed.connect(partial(utl.start_move_to_init_pose, self.robot))
-        init_pose_button.released.connect(utl.stop_move_to_init_pose)
+        init_pose_button.released.connect(partial(utl.stop_move_to_init_pose, self.robot))
         zero_pose_button = QPushButton("Zero Pose")
-        zero_pose_button.pressed.connect(partial(utl.start_move_to_zero_pose, self.robot))  # Début du mouvement
-        zero_pose_button.released.connect(utl.stop_move_to_zero_pose)
+        zero_pose_button.pressed.connect(partial(utl.move_to_zero_pose, self.robot))  # Début du mouvement
+        zero_pose_button.released.connect(partial(utl.stop_move_to_zero_pose, self.robot))
         buttons_speed_layout.addWidget(init_pose_button)
         buttons_speed_layout.addWidget(zero_pose_button)
 
@@ -2499,7 +2501,7 @@ class MainWindow(QMainWindow):
                 color: black;
             }
         """)
-        # stop_button.clicked.connect(self.stop_loop)  # Connexion du bouton d'arrêt à la méthode stop_loop
+        stop_button.clicked.connect(self.robot.stop)  # Connexion du bouton d'arrêt à la méthode stop_loop
 
         control_layout.addWidget(stop_button)
 

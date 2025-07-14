@@ -6,8 +6,8 @@ from threads import *
 import sys
 from PyQt5.QtCore import QTimer
 
-ip = '192.168.0.23'
-#ip = '192.168.11.129'
+#ip = '192.168.0.23'
+ip = '192.168.11.129'
 
 # Global state
 rt = False  # Toggle between position/orientation control
@@ -76,8 +76,14 @@ def axis_handler(axis_id: int, value: int):
 def hat_handler(hat_id: int, value: tuple):
     print(f"Hat {hat_id} moved to {value}")
 
+  # Replace with the actual name
+
+import inspect
+
 
 def main():
+    #print(dir(libpyauboi5))
+    #help(libpyauboi5)
     # Initialize connection
     robot= utl.robot_connect(ip) 
     print("donedonedone")

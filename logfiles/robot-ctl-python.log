@@ -17820,3 +17820,272 @@
 2025-07-14 13:07:58,976 [20488] INFO: robot.rshd=0
 2025-07-14 13:07:58,977 [20488] INFO: Process started.
 2025-07-14 13:07:58,977 [20488] INFO: ip=192.168.0.23, port=8899
+2025-07-14 13:18:27,815 [27384] INFO: Jul 14 2025 13:18:27 test beginning...
+2025-07-14 13:18:27,824 [27384] INFO: robot.rshd=0
+2025-07-14 13:18:27,825 [27384] INFO: Process started.
+2025-07-14 13:18:27,825 [27384] INFO: ip=192.168.0.23, port=8899
+2025-07-14 13:18:49,006 [27384] INFO: client_count=0
+2025-07-14 13:26:49,878 [11324] INFO: Jul 14 2025 13:26:49 test beginning...
+2025-07-14 13:26:49,886 [11324] INFO: robot.rshd=0
+2025-07-14 13:26:49,887 [11324] INFO: Process started.
+2025-07-14 13:26:49,888 [11324] INFO: ip=192.168.0.23, port=8899
+2025-07-14 13:26:49,890 [11324] ERROR: login failed!
+2025-07-14 13:26:49,891 [11324] ERROR: Failed to connect to server 192.168.0.23:8899.
+2025-07-14 13:26:49,892 [11324] WARNING: RSHD uninitialized or not login!!!
+2025-07-14 13:27:38,805 [2932] INFO: Jul 14 2025 13:27:38 test beginning...
+2025-07-14 13:27:38,813 [2932] INFO: robot.rshd=0
+2025-07-14 13:27:38,814 [2932] INFO: Process started.
+2025-07-14 13:27:38,814 [2932] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:29:53,440 [4416] INFO: Jul 14 2025 13:29:53 test beginning...
+2025-07-14 13:29:53,448 [4416] INFO: robot.rshd=0
+2025-07-14 13:29:53,449 [4416] INFO: Process started.
+2025-07-14 13:29:53,449 [4416] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:31:33,982 [8468] INFO: Jul 14 2025 13:31:33 test beginning...
+2025-07-14 13:31:33,990 [8468] INFO: robot.rshd=0
+2025-07-14 13:31:33,991 [8468] INFO: Process started.
+2025-07-14 13:31:33,991 [8468] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:35:18,382 [27064] INFO: Jul 14 2025 13:35:18 test beginning...
+2025-07-14 13:35:18,391 [27064] INFO: robot.rshd=0
+2025-07-14 13:35:18,391 [27064] INFO: Process started.
+2025-07-14 13:35:18,392 [27064] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:37:14,689 [28160] INFO: Jul 14 2025 13:37:14 test beginning...
+2025-07-14 13:37:14,697 [28160] INFO: robot.rshd=0
+2025-07-14 13:37:14,697 [28160] INFO: Process started.
+2025-07-14 13:37:14,697 [28160] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:37:58,429 [21512] INFO: Jul 14 2025 13:37:58 test beginning...
+2025-07-14 13:37:58,438 [21512] INFO: robot.rshd=0
+2025-07-14 13:37:58,439 [21512] INFO: Process started.
+2025-07-14 13:37:58,440 [21512] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:42:27,385 [10112] INFO: Jul 14 2025 13:42:27 test beginning...
+2025-07-14 13:42:27,394 [10112] INFO: robot.rshd=0
+2025-07-14 13:42:27,395 [10112] INFO: Process started.
+2025-07-14 13:42:27,395 [10112] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:48:19,968 [7668] INFO: Jul 14 2025 13:48:19 test beginning...
+2025-07-14 13:48:19,972 [7668] INFO: robot.rshd=0
+2025-07-14 13:48:19,973 [7668] INFO: Process started.
+2025-07-14 13:48:19,973 [7668] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:49:35,479 [6176] INFO: Jul 14 2025 13:49:35 test beginning...
+2025-07-14 13:49:35,483 [6176] INFO: robot.rshd=0
+2025-07-14 13:49:35,483 [6176] INFO: Process started.
+2025-07-14 13:49:35,484 [6176] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:49:57,753 [6448] INFO: Jul 14 2025 13:49:57 test beginning...
+2025-07-14 13:49:57,756 [6448] INFO: robot.rshd=0
+2025-07-14 13:49:57,756 [6448] INFO: Process started.
+2025-07-14 13:49:57,757 [6448] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:51:24,249 [11672] INFO: Jul 14 2025 13:51:24 test beginning...
+2025-07-14 13:51:24,252 [11672] INFO: robot.rshd=0
+2025-07-14 13:51:24,253 [11672] INFO: Process started.
+2025-07-14 13:51:24,253 [11672] INFO: ip=192.168.11.129, port=8899
+2025-07-14 13:52:29,625 [28228] INFO: Jul 14 2025 13:52:29 test beginning...
+2025-07-14 13:52:29,628 [28228] INFO: robot.rshd=0
+2025-07-14 13:52:29,628 [28228] INFO: Process started.
+2025-07-14 13:52:29,629 [28228] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:07:26,710 [6828] INFO: Jul 14 2025 14:07:26 test beginning...
+2025-07-14 14:07:26,713 [6828] INFO: robot.rshd=0
+2025-07-14 14:07:26,713 [6828] INFO: Process started.
+2025-07-14 14:07:26,714 [6828] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:07:30,931 [6828] ERROR: Error in moving joints with teach mode: name 'target_joints_rad' is not defined
+2025-07-14 14:09:56,803 [6300] INFO: Jul 14 2025 14:09:56 test beginning...
+2025-07-14 14:09:56,807 [6300] INFO: robot.rshd=0
+2025-07-14 14:09:56,808 [6300] INFO: Process started.
+2025-07-14 14:09:56,808 [6300] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:10:24,726 [20956] INFO: Jul 14 2025 14:10:24 test beginning...
+2025-07-14 14:10:24,730 [20956] INFO: robot.rshd=0
+2025-07-14 14:10:24,730 [20956] INFO: Process started.
+2025-07-14 14:10:24,731 [20956] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:10:51,133 [23140] INFO: Jul 14 2025 14:10:51 test beginning...
+2025-07-14 14:10:51,137 [23140] INFO: robot.rshd=0
+2025-07-14 14:10:51,137 [23140] INFO: Process started.
+2025-07-14 14:10:51,137 [23140] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:11:05,408 [24860] INFO: Jul 14 2025 14:11:05 test beginning...
+2025-07-14 14:11:05,412 [24860] INFO: robot.rshd=0
+2025-07-14 14:11:05,412 [24860] INFO: Process started.
+2025-07-14 14:11:05,412 [24860] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:12:21,385 [24860] ERROR: Error moving toward init pose: RobotError type2004 code=21300 msg=move error
+2025-07-14 14:12:28,255 [24860] ERROR: Error moving toward init pose: RobotError type2004 code=21300 msg=move error
+2025-07-14 14:14:39,023 [22804] INFO: Jul 14 2025 14:14:39 test beginning...
+2025-07-14 14:14:39,033 [22804] INFO: robot.rshd=0
+2025-07-14 14:14:39,034 [22804] INFO: Process started.
+2025-07-14 14:14:39,035 [22804] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:15:25,471 [2860] INFO: Jul 14 2025 14:15:25 test beginning...
+2025-07-14 14:15:25,474 [2860] INFO: robot.rshd=0
+2025-07-14 14:15:25,474 [2860] INFO: Process started.
+2025-07-14 14:15:25,475 [2860] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:16:28,893 [23044] INFO: Jul 14 2025 14:16:28 test beginning...
+2025-07-14 14:16:28,896 [23044] INFO: robot.rshd=0
+2025-07-14 14:16:28,897 [23044] INFO: Process started.
+2025-07-14 14:16:28,897 [23044] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:17:23,828 [28092] INFO: Jul 14 2025 14:17:23 test beginning...
+2025-07-14 14:17:23,831 [28092] INFO: robot.rshd=0
+2025-07-14 14:17:23,831 [28092] INFO: Process started.
+2025-07-14 14:17:23,832 [28092] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:17:48,117 [19632] INFO: Jul 14 2025 14:17:48 test beginning...
+2025-07-14 14:17:48,120 [19632] INFO: robot.rshd=0
+2025-07-14 14:17:48,120 [19632] INFO: Process started.
+2025-07-14 14:17:48,121 [19632] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:19:47,433 [8480] INFO: Jul 14 2025 14:19:47 test beginning...
+2025-07-14 14:19:47,436 [8480] INFO: robot.rshd=0
+2025-07-14 14:19:47,437 [8480] INFO: Process started.
+2025-07-14 14:19:47,437 [8480] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:20:58,455 [11800] INFO: Jul 14 2025 14:20:58 test beginning...
+2025-07-14 14:20:58,459 [11800] INFO: robot.rshd=0
+2025-07-14 14:20:58,460 [11800] INFO: Process started.
+2025-07-14 14:20:58,460 [11800] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:21:17,003 [11800] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-14 14:21:26,114 [11800] INFO: Moved cartesian axis 1 in direction +
+2025-07-14 14:21:27,379 [11800] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:21:28,221 [11800] INFO: Moved cartesian axis 2 in direction -
+2025-07-14 14:21:32,301 [11800] INFO: Moved cartesian axis 2 in direction +
+2025-07-14 14:21:33,310 [11800] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:21:34,251 [11800] INFO: Moved cartesian axis 2 in direction -
+2025-07-14 14:21:36,690 [11800] INFO: Moved cartesian axis 4 in direction +
+2025-07-14 14:21:37,894 [11800] INFO: Moved cartesian axis 4 in direction -
+2025-07-14 14:24:21,815 [27568] INFO: Jul 14 2025 14:24:21 test beginning...
+2025-07-14 14:24:21,822 [27568] INFO: robot.rshd=0
+2025-07-14 14:24:21,822 [27568] INFO: Process started.
+2025-07-14 14:24:21,823 [27568] INFO: ip=192.168.0.23, port=8899
+2025-07-14 14:24:35,582 [27568] ERROR: login failed!
+2025-07-14 14:24:35,587 [27568] ERROR: Failed to connect to server 192.168.0.23:8899.
+2025-07-14 14:24:35,590 [27568] WARNING: RSHD uninitialized or not login!!!
+2025-07-14 14:24:47,010 [22836] INFO: Jul 14 2025 14:24:47 test beginning...
+2025-07-14 14:24:47,018 [22836] INFO: robot.rshd=0
+2025-07-14 14:24:47,018 [22836] INFO: Process started.
+2025-07-14 14:24:47,019 [22836] INFO: ip=192.168.0.23, port=8899
+2025-07-14 14:26:48,643 [22836] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-07-14 14:26:53,734 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:26:58,184 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:26:59,365 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:00,256 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:01,036 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:01,785 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:02,512 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:03,342 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:04,130 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:04,884 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:05,602 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:06,320 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:07,043 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:07,771 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:08,579 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:09,154 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:09,611 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:10,075 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:10,681 [22836] INFO: Moved cartesian axis 1 in direction -
+2025-07-14 14:27:20,273 [22836] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-07-14 14:38:22,966 [26560] INFO: Jul 14 2025 14:38:22 test beginning...
+2025-07-14 14:38:22,970 [26560] INFO: robot.rshd=0
+2025-07-14 14:38:22,970 [26560] INFO: Process started.
+2025-07-14 14:38:22,971 [26560] INFO: ip=192.168.0.23, port=8899
+2025-07-14 14:38:46,009 [26560] INFO: client_count=0
+2025-07-14 14:39:05,556 [8368] INFO: Jul 14 2025 14:39:05 test beginning...
+2025-07-14 14:39:05,559 [8368] INFO: robot.rshd=0
+2025-07-14 14:39:05,559 [8368] INFO: Process started.
+2025-07-14 14:39:05,559 [8368] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:39:38,246 [14500] INFO: Jul 14 2025 14:39:38 test beginning...
+2025-07-14 14:39:38,250 [14500] INFO: robot.rshd=0
+2025-07-14 14:39:38,250 [14500] INFO: Process started.
+2025-07-14 14:39:38,251 [14500] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:45:11,673 [8240] INFO: Jul 14 2025 14:45:11 test beginning...
+2025-07-14 14:45:11,676 [8240] INFO: robot.rshd=0
+2025-07-14 14:45:11,676 [8240] INFO: Process started.
+2025-07-14 14:45:11,677 [8240] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:46:16,832 [11548] INFO: Jul 14 2025 14:46:16 test beginning...
+2025-07-14 14:46:16,835 [11548] INFO: robot.rshd=0
+2025-07-14 14:46:16,836 [11548] INFO: Process started.
+2025-07-14 14:46:16,836 [11548] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:48:04,512 [6928] INFO: Jul 14 2025 14:48:04 test beginning...
+2025-07-14 14:48:04,515 [6928] INFO: robot.rshd=0
+2025-07-14 14:48:04,516 [6928] INFO: Process started.
+2025-07-14 14:48:04,516 [6928] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:48:48,546 [21496] INFO: Jul 14 2025 14:48:48 test beginning...
+2025-07-14 14:48:48,549 [21496] INFO: robot.rshd=0
+2025-07-14 14:48:48,550 [21496] INFO: Process started.
+2025-07-14 14:48:48,550 [21496] INFO: ip=192.168.11.129, port=8899
+2025-07-14 14:49:59,158 [26380] INFO: Jul 14 2025 14:49:59 test beginning...
+2025-07-14 14:49:59,161 [26380] INFO: robot.rshd=0
+2025-07-14 14:49:59,161 [26380] INFO: Process started.
+2025-07-14 14:49:59,161 [26380] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:01:16,373 [8796] INFO: Jul 14 2025 15:01:16 test beginning...
+2025-07-14 15:01:16,377 [8796] INFO: robot.rshd=0
+2025-07-14 15:01:16,377 [8796] INFO: Process started.
+2025-07-14 15:01:16,378 [8796] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:36:54,726 [7488] INFO: Jul 14 2025 15:36:54 test beginning...
+2025-07-14 15:36:54,730 [7488] INFO: robot.rshd=0
+2025-07-14 15:36:54,731 [7488] INFO: Process started.
+2025-07-14 15:36:54,731 [7488] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:37:47,799 [4140] INFO: Jul 14 2025 15:37:47 test beginning...
+2025-07-14 15:37:47,804 [4140] INFO: robot.rshd=0
+2025-07-14 15:37:47,804 [4140] INFO: Process started.
+2025-07-14 15:37:47,804 [4140] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:38:21,735 [17148] INFO: Jul 14 2025 15:38:21 test beginning...
+2025-07-14 15:38:21,738 [17148] INFO: robot.rshd=0
+2025-07-14 15:38:21,739 [17148] INFO: Process started.
+2025-07-14 15:38:21,739 [17148] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:39:51,820 [10232] INFO: Jul 14 2025 15:39:51 test beginning...
+2025-07-14 15:39:51,824 [10232] INFO: robot.rshd=0
+2025-07-14 15:39:51,825 [10232] INFO: Process started.
+2025-07-14 15:39:51,825 [10232] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:42:55,319 [10284] INFO: Jul 14 2025 15:42:55 test beginning...
+2025-07-14 15:42:55,323 [10284] INFO: robot.rshd=0
+2025-07-14 15:42:55,323 [10284] INFO: Process started.
+2025-07-14 15:42:55,323 [10284] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:47:24,706 [23488] INFO: Jul 14 2025 15:47:24 test beginning...
+2025-07-14 15:47:24,710 [23488] INFO: robot.rshd=0
+2025-07-14 15:47:24,711 [23488] INFO: Process started.
+2025-07-14 15:47:24,711 [23488] INFO: ip=192.168.11.129, port=8899
+2025-07-14 15:47:51,993 [12672] INFO: Jul 14 2025 15:47:51 test beginning...
+2025-07-14 15:47:51,997 [12672] INFO: robot.rshd=0
+2025-07-14 15:47:51,997 [12672] INFO: Process started.
+2025-07-14 15:47:51,998 [12672] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:05:33,025 [2256] INFO: Jul 14 2025 16:05:33 test beginning...
+2025-07-14 16:05:33,028 [2256] INFO: robot.rshd=0
+2025-07-14 16:05:33,028 [2256] INFO: Process started.
+2025-07-14 16:05:33,028 [2256] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:11:01,492 [23124] INFO: Jul 14 2025 16:11:01 test beginning...
+2025-07-14 16:11:01,496 [23124] INFO: robot.rshd=0
+2025-07-14 16:11:01,496 [23124] INFO: Process started.
+2025-07-14 16:11:01,496 [23124] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:17:24,053 [27664] INFO: Jul 14 2025 16:17:24 test beginning...
+2025-07-14 16:17:24,059 [27664] INFO: robot.rshd=0
+2025-07-14 16:17:24,060 [27664] INFO: Process started.
+2025-07-14 16:17:24,060 [27664] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:17:40,897 [16272] INFO: Jul 14 2025 16:17:40 test beginning...
+2025-07-14 16:17:40,902 [16272] INFO: robot.rshd=0
+2025-07-14 16:17:40,902 [16272] INFO: Process started.
+2025-07-14 16:17:40,902 [16272] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:25:00,727 [27116] INFO: Jul 14 2025 16:25:00 test beginning...
+2025-07-14 16:25:00,731 [27116] INFO: robot.rshd=0
+2025-07-14 16:25:00,732 [27116] INFO: Process started.
+2025-07-14 16:25:00,732 [27116] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:33:45,012 [13600] INFO: Jul 14 2025 16:33:45 test beginning...
+2025-07-14 16:33:45,016 [13600] INFO: robot.rshd=0
+2025-07-14 16:33:45,016 [13600] INFO: Process started.
+2025-07-14 16:33:45,016 [13600] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:36:17,822 [9784] INFO: Jul 14 2025 16:36:17 test beginning...
+2025-07-14 16:36:17,825 [9784] INFO: robot.rshd=0
+2025-07-14 16:36:17,826 [9784] INFO: Process started.
+2025-07-14 16:36:17,826 [9784] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:37:48,343 [18588] INFO: Jul 14 2025 16:37:48 test beginning...
+2025-07-14 16:37:48,346 [18588] INFO: robot.rshd=0
+2025-07-14 16:37:48,347 [18588] INFO: Process started.
+2025-07-14 16:37:48,347 [18588] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:39:40,753 [29604] INFO: Jul 14 2025 16:39:40 test beginning...
+2025-07-14 16:39:40,756 [29604] INFO: robot.rshd=0
+2025-07-14 16:39:40,757 [29604] INFO: Process started.
+2025-07-14 16:39:40,758 [29604] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:41:18,715 [28724] INFO: Jul 14 2025 16:41:18 test beginning...
+2025-07-14 16:41:18,718 [28724] INFO: robot.rshd=0
+2025-07-14 16:41:18,719 [28724] INFO: Process started.
+2025-07-14 16:41:18,719 [28724] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:44:53,995 [21588] INFO: Jul 14 2025 16:44:53 test beginning...
+2025-07-14 16:44:53,999 [21588] INFO: robot.rshd=0
+2025-07-14 16:44:54,000 [21588] INFO: Process started.
+2025-07-14 16:44:54,000 [21588] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:48:57,993 [14560] INFO: Jul 14 2025 16:48:57 test beginning...
+2025-07-14 16:48:57,996 [14560] INFO: robot.rshd=0
+2025-07-14 16:48:57,997 [14560] INFO: Process started.
+2025-07-14 16:48:57,997 [14560] INFO: ip=192.168.11.129, port=8899
+2025-07-14 16:53:26,182 [28828] INFO: Jul 14 2025 16:53:26 test beginning...
+2025-07-14 16:53:26,186 [28828] INFO: robot.rshd=0
+2025-07-14 16:53:26,187 [28828] INFO: Process started.
+2025-07-14 16:53:26,187 [28828] INFO: ip=192.168.11.129, port=8899

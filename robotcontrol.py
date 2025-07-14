@@ -851,7 +851,8 @@ class Auboi5Robot:
         * DESCRIPTION: 设置机械臂末端最大角速度
         * INPUTS:      end_maxacc:末端最大速度，单位(rad/s)
         * OUTPUTS:
-        * RETURNS:     成功返回: RobotError.RobotError_SUCC
+        * RETURNS:     成功返回: 
+        RobotError.RobotError_SUCC
         *              失败返回: 其他
         * NOTES:
         """
