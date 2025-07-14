@@ -1220,8 +1220,8 @@ class MainWindow(QMainWindow):
         speed_layout = QHBoxLayout()
         speed_label = QLabel("Speed:")
         self.speed_slider = QSlider(Qt.Horizontal)
-        self.speed_slider.setMinimum(0)
-        self.speed_slider.setMaximum(100)
+        self.speed_slider.setMinimum(1)
+        self.speed_slider.setMaximum(40)
         self.speed_slider.setValue(50)
         self.speed_slider.valueChanged.connect(lambda value: utl.update_joint_speed_from_slider(value, self.robot))
          # Print to console

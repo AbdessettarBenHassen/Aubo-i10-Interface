@@ -7,7 +7,7 @@ import sys
 from PyQt5.QtCore import QTimer
 
 ip = '192.168.0.23'
-#ip = '192.168.11.128'
+#ip = '192.168.11.129'
 
 # Global state
 rt = False  # Toggle between position/orientation control
@@ -79,8 +79,9 @@ def hat_handler(hat_id: int, value: tuple):
 
 def main():
     # Initialize connection
-    robot, queue = utl.robot_connect(ip)
-    robot.set_arrival_ahead_distance(1)
+    robot= utl.robot_connect(ip) 
+    print("donedonedone")
+    robot.init_profile()
     
     #robot.set_blend_radius(0.05)
 

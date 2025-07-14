@@ -69,11 +69,6 @@ def robot_connect(ip):
 
     try:
         
-        queue = Queue()
-
-        p = Process(target=runWaypoint, args=(queue,))
-        p.start()
-        time.sleep(5)
         logger.info("Process started.")
 
         port = 8899
@@ -81,7 +76,7 @@ def robot_connect(ip):
 
         if result != RobotErrorType.RobotError_SUCC:
             logger.error(f"Failed to connect to server {ip}:{port}.")
-        return robot,queue
+        return robot
     except Exception as e:
         logger.error(f"Error during robot connection: {e}")
         robot.move_stop()
@@ -97,8 +92,30 @@ timers = {}
 
 
 
-
-
+class TeachMoveMode:
+    NO_TEACH = 0
+    JOINT1 = 1
+    JOINT2 = 2
+    JOINT3 = 3
+    JOINT4 = 4
+    JOINT5 = 5
+    JOINT6 = 6
+    MOV_X = 7
+    MOV_Y = 8
+    MOV_Z = 9
+    ROT_X = 10
+    ROT_Y = 11
+    ROT_Z = 12
+def joint_index_to_enum(joint_index):
+    mapping = {
+        0: TeachMoveMode.JOINT1,
+        1: TeachMoveMode.JOINT2,
+        2: TeachMoveMode.JOINT3,
+        3: TeachMoveMode.JOINT4,
+        4: TeachMoveMode.JOINT5,
+        5: TeachMoveMode.JOINT6
+    }
+    return mapping.get(joint_index, TeachMoveMode.NO_TEACH)
 def start_move_joint(robot, joint, direction, self, joint_step_value):
     """
     Démarre le mouvement d'un joint dans une direction spécifique.
@@ -108,17 +125,22 @@ def start_move_joint(robot, joint, direction, self, joint_step_value):
     :param step_mode_checkbox: Référence à la checkbox du mode Step.
     :param joint_step_value: Référence au QLabel affichant la valeur du Joint Step.
     """
+    joint_mapping = {
+        1: TeachMoveMode.JOINT1,
+        2: TeachMoveMode.JOINT2,
+        3: TeachMoveMode.JOINT3,
+        4: TeachMoveMode.JOINT4,
+        5: TeachMoveMode.JOINT5,
+        6: TeachMoveMode.JOINT6
+    }
+
+    # Get the correct TeachMoveMode value from joint number
+    joint_mode = joint_mapping.get(joint, TeachMoveMode.NO_TEACH)
     if(not(self.st)):
-        if (joint, direction) not in timers:
-            timer = QTimer()
-            print(2)
-            timer.timeout.connect(
-                lambda: move_joint(robot, joint, direction, self.st, joint_step_value)
-            )
-            timer.start(100)  # Déclenche move_joint toutes les 100 ms
-            timers[(joint, direction)] = timer
-            
-            print(f"Début du mouvement continu du joint {joint} dans la direction {direction}")
+        if(direction == "+"):
+            libpyauboi5.teach_move_start(robot.rshd,joint_mode, True)
+        else:
+            libpyauboi5.teach_move_start(robot.rshd,joint_mode, False)
     else:
         move_joint(robot, joint, direction, self.st, joint_step_value)
 
@@ -126,22 +148,26 @@ def stop_move_joint(robot, joint, direction):
     """
     Stop the movement of a specific joint in a specific direction.
     """
-   
-    key = (joint, direction)
-    stopped_joints.add(key)  # Flag this movement as stopped
-    
-    if key in timers:
-        timers[key].stop()
-        del timers[key]
-        print(f"Stopped movement of joint {joint} in direction {direction}")
-    
+    libpyauboi5.teach_move_stop(robot.rshd)
+       
 
 def update_joint_speed_from_slider(value, robot):
     global value_from_slider
     value_from_slider = value
-    print(f"Set joint_maxvelc: {value_from_slider}")
+
+    # Scale slider value from 0–100 → 0.5–1.5
+    speed = (value * 1) / 100  # 1.0 = 1.5 - 0.5
+
+    # Set the same speed for all joints
+    speed_tuple = (speed,) * 6
+
+    # Apply to robot
+    robot.set_joint_maxacc((1.0, 1.0, 1.0, 1.0, 1.0, 1.0))
+    robot.set_joint_maxvelc(speed_tuple)
+
 def move_joint(robot, joint, direction, st, joint_step_value):
     global joints
+    robot.set_arrival_ahead_distance(0.459999)
     try:
         # Check if movement was stopped
         if (joint, direction) in stopped_joints:
