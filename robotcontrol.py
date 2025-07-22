@@ -212,7 +212,7 @@ class RobotError(Exception):
 
 class RobotDefaultParameters:
     # 缺省的动力学参数
-    tool_dynamics = {"position": (0.0, 0.0, 0.0), "payload": 1.0, "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
+    tool_dynamics = {"position": (0.0, 0.0, 0.0), "payload": 0.0, "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
 
     # 缺省碰撞等级
     collision_grade = 6
@@ -2425,7 +2425,7 @@ def test_count(test_count):
             #          -25 / 180.0 * pi,  -102 / 180.0 * pi, -116 / 180.0 * pi)
 
 
-
+            print(libpyauboi5.get_tool_kinematics_param(robot.rshd))
 
             while test_count > 0:
                 test_count -= 1
@@ -2448,23 +2448,23 @@ def test_count(test_count):
 
                 #user_coord:用户坐标系
 
-                #user_coord = {'coord_type': RobotCoordType.Robot_World_Coordinate,
-                #       'calibrate_method': RobotCoordCalMethod.CoordCalMethod_xOxy,
-                #      'calibrate_points':
-                #           {"point1": (0.677646,-0.444210,-1.949482,0.024271,-1.569689,-0.865368),
-                #            "point2": (0.185679,-0.172131,-1.572104,0.134987,-1.550332,-1.356998),
-                #            "point3": (0.440514,-0.010024,-1.427280,0.113676,-1.560053,-1.102323)},
-                #       'tool_desc':
-                #           {"pos": (0.0, 0.0, 0.0),
-                #            "ori": (1.0, 0.0, 0.0, 0.0)}
-                #       }
+                user_coord = {'coord_type': RobotCoordType.Robot_World_Coordinate,
+                       'calibrate_method': RobotCoordCalMethod.CoordCalMethod_xOxy,
+                      'calibrate_points':
+                           {"point1": (0.677646,-0.444210,-1.949482,0.024271,-1.569689,-0.865368),
+                            "point2": (0.185679,-0.172131,-1.572104,0.134987,-1.550332,-1.356998),
+                            "point3": (0.440514,-0.010024,-1.427280,0.113676,-1.560053,-1.102323)},
+                       'tool_desc':
+                           {"pos": (0.0, 0.0, 0.0),
+                            "ori": (1.0, 0.0, 0.0, 0.0)}
+                       }
 
                 #末端坐标系：
                 #user_coord = {'coord_type': RobotCoordType.Robot_End_Coordinate}
 
 
                 #切换示教坐标系
-                #libpyauboi5.set_teach_user_coord(handle_move,user_coord)
+                print(libpyauboi5.set_teach_user_coord(handle_move,user_coord))
 
                 #切换成基坐标系
                 libpyauboi5.set_teach_base_coord(handle_move)

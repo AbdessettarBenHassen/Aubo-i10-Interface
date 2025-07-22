@@ -1,0 +1,25 @@
+Table: user
+Columns: ['id', 'name', 'password', 'role_id', 'auto_login']
+Total records: 3
+
+--- Record 1 ---
+id: default
+name: default
+password: c4ca4238a0b923820dcc509a6f75849b
+role_id: 4102ef28e1804986bbe65df933c61222
+auto_login: false
+
+--- Record 2 ---
+id: 1ade1c74f4374d14a8baa94699e17260
+name: admin
+password: c4ca4238a0b923820dcc509a6f75849b
+role_id: 39f2991514c7444db6231d421015eccb
+auto_login: true
+
+--- Record 3 ---
+id: 56334c02a8f24c2080e5ba2b3a8a666a
+name: operator
+password: c4ca4238a0b923820dcc509a6f75849b
+role_id: 4102ef28e1804986bbe65df933c61222
+auto_login: false
+

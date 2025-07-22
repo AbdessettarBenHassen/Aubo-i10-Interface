@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication,QMainWindow,QSpinBox,QDoubleSpinBox,QTreeWidgetItem,QListWidget, QTreeWidget, QDialog,QPushButton,QMessageBox, QStackedWidget, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSlider, QLineEdit, QRadioButton, QGroupBox, QComboBox, QCheckBox, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QFont, QIcon
+import sqlite3
 import sys
 from threads import joint_updater
 from functools import partial
@@ -18,6 +19,15 @@ from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit
 # import threading
 
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+class RobotStatus:
+    # 机械臂当前停止
+    Stopped = 0
+    # 机械臂当前运行
+    Running = 1
+    # 机械臂当前暂停
+    Paused = 2
+    # 机械臂当前恢复
+    Resumed = 3
 class EditSpeedDialog(QDialog):
     def __init__(self, parent=None, current_speed=0.0):
         super().__init__(parent)
@@ -1194,14 +1204,14 @@ class MainWindow(QMainWindow):
         layout.addWidget(orientation_control_group, 2, 2)
 
         # Reference Coord System
-        reference_coord_group = QGroupBox("Reference Coord System")
-        reference_coord_layout = QVBoxLayout()
-        reference_dropdown = QComboBox()
-        reference_dropdown.addItems(["Base", "flange_center", "TCP3", "TCP_1", "TCP_2", "p1"])
-        reference_coord_layout.addWidget(reference_dropdown)
-        reference_coord_group.setLayout(reference_coord_layout)
-        layout.addWidget(reference_coord_group, 3, 0, 1, 1)
-        reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
+        self.reference_coord_group = QGroupBox("Reference Coord System")
+        self.reference_coord_layout = QVBoxLayout()
+        self.reference_dropdown = QComboBox()
+        self.populate_reference_dropdown2()
+        self.reference_coord_layout.addWidget(self.reference_dropdown)
+        self.reference_coord_group.setLayout(self.reference_coord_layout)
+        layout.addWidget(self.reference_coord_group, 3, 0, 1, 1)
+        #self.reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
 
 
         # Nouveau groupe pour les boutons et le contrôle de vitesse
@@ -1235,18 +1245,59 @@ class MainWindow(QMainWindow):
         layout.addWidget(buttons_speed_group, 3, 1, 1, 1)
 
         # Nouveau groupe similaire à Reference Coord System
-        new_reference_coord_group = QGroupBox("flange_center")
-        new_reference_coord_layout = QVBoxLayout()
-        new_reference_dropdown = QComboBox()
-        new_reference_dropdown.addItems(["flange_center", "TCP3", "TCP_1", "TCP_2"])
-        new_reference_coord_layout.addWidget(new_reference_dropdown)
-        new_reference_coord_group.setLayout(new_reference_coord_layout)
-        layout.addWidget(new_reference_coord_group, 3, 2, 1, 1)
+        self.new_reference_coord_group = QGroupBox("Target")
+        self.new_reference_coord_layout = QVBoxLayout()
+        self.new_reference_dropdown = QComboBox()
+        self.populate_reference_dropdown()
+        self.new_reference_coord_layout.addWidget(self.new_reference_dropdown)
+        self.new_reference_coord_group.setLayout(self.new_reference_coord_layout)
+        layout.addWidget(self.new_reference_coord_group, 3, 2, 1, 1)
         page.setLayout(layout)
+        #self.new_reference_dropdown.currentTextChanged.connect(self.update_manipulator_pose)
+        self.reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
+    
 
 
         return page
+    def populate_reference_dropdown2(self):
+        conn = sqlite3.connect('C:/Users/Emna/Desktop/tool_coord_param.db')
+        cursor = conn.cursor()
 
+        # Fetch distinct coord_name values from coord_param table
+        cursor.execute("SELECT DISTINCT coord_name FROM coord_param")
+        rows = cursor.fetchall()
+        conn.close()
+
+        # Extract coord_names into a list
+        coord_names = [row[0] for row in rows]
+
+        # Optionally add fixed items at the start, e.g. "Base" and "flange_center"
+        fixed_items = ["Base", "flange_center"]
+        for item in reversed(fixed_items):
+            coord_names.insert(0, item)
+
+        # Clear existing dropdown items and add new items
+        self.reference_dropdown.clear()
+        self.reference_dropdown.addItems(coord_names)
+
+    def populate_reference_dropdown(self):
+        conn = sqlite3.connect('C:/Users/Emna/Desktop/tool_coord_param.db')
+        cursor = conn.cursor()
+
+        # Fetch distinct kinematics_name values from the table
+        cursor.execute("SELECT DISTINCT kinematics_name FROM tool_kinematics_param")
+        rows = cursor.fetchall()
+        conn.close()
+
+        # Extract just the names into a list
+        tool_names = [row[0] for row in rows]
+
+        # Add a default or fixed first item if you want (e.g., flange_center)
+        tool_names.insert(0, "flange_center")
+
+        # Clear current items and add fetched items
+        self.new_reference_dropdown.clear()
+        self.new_reference_dropdown.addItems(tool_names)
     def update_joint_values(self, joints_radians):
         """
         Met à jour les champs de texte avec les valeurs actuelles des joints en degrés.
@@ -1266,12 +1317,44 @@ class MainWindow(QMainWindow):
         except Exception as e:
             print(f"Erreur lors de la mise à jour des valeurs des joints : {e}")
 
+    def get_tcp_offset(self,tool_name):
+        conn = sqlite3.connect('C:/Users/Emna/Desktop/tool_coord_param.db')
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT end_pos_x, end_pos_y, end_pos_z, end_ori_rx, end_ori_ry, end_ori_rz "
+                    "FROM tool_kinematics_param WHERE kinematics_name = ?", (tool_name,))
+        row = cursor.fetchone()
+        conn.close()
+
+        if row:
+            return {
+                "position": row[:3],  # (x, y, z)
+                "orientation": row[3:]  # (rx, ry, rz)
+            }
+        return None
+    def compute_tcp_pose(self,flange_pose, tcp_offset):
+    # Position addition (vector)
+        tcp_pos = [f + t for f, t in zip(flange_pose["position"], tcp_offset["position"])]
+
+        # Orientation addition (approximate, assuming small rotations)
+        tcp_ori = [f + t for f, t in zip(flange_pose["orientation"], tcp_offset["orientation"])]
+
+        return {
+            "position": tcp_pos,
+            "orientation": tcp_ori
+    }
+    def display_pose(self, pose):
+        for i, label in enumerate(self.pos_labels):
+            label.setText(f"{pose['position'][i]:.6f}")
+        for i, label in enumerate(self.ori_labels):
+            label.setText(f"{pose['orientation'][i]:.6f}")
 
     def update_manipulator_pose(self):
         """
         Met à jour les valeurs de position et d'orientation dans "Manipulator Pose".
         """
-        try:
+        target_name = self.new_reference_dropdown.currentText()
+        if target_name == "flange_center":
             # Récupérer la position et l'orientation actuelles du robot
             current_waypoint = self.robot.get_current_waypoint()
             if current_waypoint is None:
@@ -1294,9 +1377,17 @@ class MainWindow(QMainWindow):
             # Mettre à jour les labels d'orientation (RX, RY, RZ) en degrés
             for i, label in enumerate(self.ori_labels):
                 label.setText(f"{rpy_degrees[i]:.6f}")  # Afficher en degrés avec le symbole °
+            self.current_flange_pose = {
+                "position": pos,
+                "orientation": rpy_radians
+            }
 
-        except Exception as e:
-            print(f"Erreur lors de la mise à jour de la pose du manipulateur : {e}")
+        else :
+            tcp_offset = self.get_tcp_offset(target_name)
+            print(f"TCP Offset for {target_name}: {tcp_offset}")
+            if tcp_offset:
+                tcp_pose = self.compute_tcp_pose(self.current_flange_pose, tcp_offset)
+                self.display_pose(tcp_pose)
 
 
     def update_position_step(self, increment):
@@ -1750,6 +1841,7 @@ class MainWindow(QMainWindow):
         # Stop timer if present (future-proofing)
         if hasattr(self, "timer") and self.timer is not None:
             self.timer.stop()
+        self.robot.robot_shutdown()
         event.accept()
 
     def show_virtual_keyboard(self, target_input):
@@ -2501,9 +2593,10 @@ class MainWindow(QMainWindow):
                 color: black;
             }
         """)
-        stop_button.clicked.connect(self.robot.stop)  # Connexion du bouton d'arrêt à la méthode stop_loop
+        stop_button.clicked.connect(self.stop_robot_motion)
+        control_layout.addWidget(stop_button)  # Connexion du bouton d'arrêt à la méthode stop_loop
 
-        control_layout.addWidget(stop_button)
+            
 
         step_button = QPushButton("Step")
         step_button.clicked.connect(self.on_step_button_clicked)
@@ -2709,6 +2802,10 @@ class MainWindow(QMainWindow):
         """)
 
         return page
+    def stop_robot_motion(self):
+            result = self.robot.move_stop()
+            if result != RobotErrorType.RobotError_SUCC:
+                QMessageBox.critical(self, "Erreur", "Échec de l'arrêt du robot.")
     def load_saved_programs(self):
         """Charge les programmes sauvegardés et la liste globale."""
         if not self.save_dir:
@@ -3254,11 +3351,25 @@ class MainWindow(QMainWindow):
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
         
+        # Trouver l'élément sélectionné
+        selected_item = self.project_tree.currentItem()
+        insert_index = -1  # Par défaut, ajouter à la fin
+
+        if selected_item and selected_item.text(0) != "Project_Program":
+            parent = selected_item.parent() or root
+            insert_index = parent.indexOfChild(selected_item) + 1
+        else:
+            # Si rien n'est sélectionné ou si la racine est sélectionnée, ajouter à la fin
+            parent = root
+            insert_index = parent.childCount()
+
         # Supprimer "Empty" si présent
-        for i in range(root.childCount()):
-            child = root.child(i)
+        for i in range(parent.childCount()):
+            child = parent.child(i)
             if child.text(0) == "Empty":
-                root.removeChild(child)
+                parent.removeChild(child)
+                if insert_index > i:
+                    insert_index -= 1
                 break
         
         # Formater le texte d'affichage
@@ -3267,10 +3378,10 @@ class MainWindow(QMainWindow):
         third_joints_str = ", ".join(map(lambda x: f"{x:.2f}", third_joints))
         move_circle_text = f"Move Circle ({first_joints_str}) -> ({second_joints_str}) -> ({third_joints_str}), Speed: {speed:.2f} mm/s, Acc: {acc:.2f} mm/s²"
         
-        # Ajouter à l'arborescence avec la structure correcte
+        # Ajouter à l'arborescence à l'index spécifié
         new_item = QTreeWidgetItem([move_circle_text])
-        new_item.setData(0, Qt.UserRole, ("Circle", ((first_joints, second_joints, third_joints), speed, acc)))  # Structure ajustée
-        root.addChild(new_item)
+        new_item.setData(0, Qt.UserRole, ("Circle", ((first_joints, second_joints, third_joints), speed, acc)))
+        parent.insertChild(insert_index, new_item)
         root.setExpanded(True)
         self.is_modified = True
         return 0
@@ -3305,15 +3416,30 @@ class MainWindow(QMainWindow):
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
         
-        for i in range(root.childCount()):
-            child = root.child(i)
+        # Trouver l'élément sélectionné
+        selected_item = self.project_tree.currentItem()
+        insert_index = -1  # Par défaut, ajouter à la fin
+
+        if selected_item and selected_item.text(0) != "Project_Program":
+            parent = selected_item.parent() or root
+            insert_index = parent.indexOfChild(selected_item) + 1
+        else:
+            # Si rien n'est sélectionné ou si la racine est sélectionnée, ajouter à la fin
+            parent = root
+            insert_index = parent.childCount()
+        
+        # Supprimer "Empty" si présent
+        for i in range(parent.childCount()):
+            child = parent.child(i)
             if child.text(0) == "Empty":
-                root.removeChild(child)
+                parent.removeChild(child)
+                if insert_index > i:
+                    insert_index -= 1
                 break
         
         new_item = QTreeWidgetItem([move_joint_text])
         new_item.setData(0, Qt.UserRole, ("Joint", (joint_values, joint_speeds, joint_accs)))
-        root.addChild(new_item)
+        parent.insertChild(insert_index, new_item)
         root.setExpanded(True)
         
         return 0
@@ -3324,46 +3450,55 @@ class MainWindow(QMainWindow):
         
         # Handle the case where joints is None or invalid
         if joints is None or not isinstance(joints, (list, tuple)):
-            # Fallback to current joint values from joint_value_displays
             joint_values = [display.text() for display in self.joint_value_displays]
         else:
             try:
-                # Ensure joints contains valid numbers
                 joint_values = [f"{float(j):.6f}" for j in joints]
             except (TypeError, ValueError) as e:
                 print(f"Error formatting joints: {e}. Using current joint values.")
                 joint_values = [display.text() for display in self.joint_value_displays]
         
         # Skip the dialog and set default speed and acceleration values
-        speed = 2000.00  # Default speed in mm/s (as seen in the dialog screenshot)
-        acc = 2000.00    # Default acceleration in mm/s² (as seen in the dialog screenshot)
+        speed = 2000.00  # Default speed in mm/s
+        acc = 2000.00    # Default acceleration in mm/s²
         
-        # Format joint values as a string
         joint_values_str = ", ".join(joint_values)
-        # Include speed and acceleration in the displayed text
         move_line_text = f"Move Line ({joint_values_str}, Speed: {speed:.2f} mm/s, Acc: {acc:.2f} mm/s²)"
         
-        # Add to the project tree
         root = self.project_tree.topLevelItem(0)
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
         
-        # Remove "Empty" item if present
-        for i in range(root.childCount()):
-            child = root.child(i)
+        # Trouver l'élément sélectionné
+        selected_item = self.project_tree.currentItem()
+        insert_index = -1  # Par défaut, ajouter à la fin
+
+        if selected_item and selected_item.text(0) != "Project_Program":
+            parent = selected_item.parent() or root
+            insert_index = parent.indexOfChild(selected_item) + 1
+        else:
+            # Si rien n'est sélectionné ou si la racine est sélectionnée, ajouter à la fin
+            parent = root
+            insert_index = parent.childCount()
+        
+        # Supprimer "Empty" si présent
+        for i in range(parent.childCount()):
+            child = parent.child(i)
             if child.text(0) == "Empty":
-                root.removeChild(child)
+                parent.removeChild(child)
+                if insert_index > i:
+                    insert_index -= 1
                 break
         
-        # Add new "Move Line" item with joint values, speed, and acceleration
         new_item = QTreeWidgetItem([move_line_text])
         new_item.setData(0, Qt.UserRole, ("Line", (joint_values, speed, acc)))
-        root.addChild(new_item)
+        parent.insertChild(insert_index, new_item)
         root.setExpanded(True)
         
         return 0
+
 
     def execute_all_movements(self):
         if not self.check_save_before_execution():
@@ -3384,6 +3519,12 @@ class MainWindow(QMainWindow):
             for i in range(root.childCount()):
                 item = root.child(i)
                 item_text = item.text(0)
+
+                # Mettre en surbrillance l'élément en cours dans l'arborescence
+                self.project_tree.setCurrentItem(item)
+                self.project_tree.scrollToItem(item)
+                QApplication.processEvents()  # Rafraîchir l'interface pour afficher la sélection
+                time.sleep(0.1)  # Petit délai pour que l'opérateur puisse voir la surbrillance
 
                 if item_text == "Arc Start":
                     self.start_arc_process()
@@ -3420,11 +3561,15 @@ class MainWindow(QMainWindow):
                     print(f"⚠️ Type de mouvement non reconnu : '{movement_type}'")
 
             print("✅ Fin de l'exécution du programme.")
+            # Réinitialiser la sélection après l'exécution
+            self.project_tree.clearSelection()
             QMessageBox.information(self, "Succès", "Programme exécuté avec succès !")
 
         except Exception as e:
             print(f"❌ Erreur critique : {str(e)}")
+            self.project_tree.clearSelection()  # Réinitialiser en cas d'erreur
             QMessageBox.critical(self, "Erreur", f"Échec de l'exécution : {str(e)}")
+
     def are_points_collinear(self, joints1, joints2, joints3):
             """
             Vérifie si trois points définis par des angles de joints sont colinéaires.
@@ -3460,169 +3605,201 @@ class MainWindow(QMainWindow):
         Déplace le robot vers les coordonnées spécifiées.
         Utilise les paramètres de vitesse et d'accélération préalablement sauvegardés dans les données.
         """
-        try:
-            # Vérifier l'état du robot
-            robot_state = self.robot.get_robot_state()
-            if robot_state is None:
-                return
+        robot_state = self.robot.get_robot_state()
+        if robot_state is None:
+            return
 
-            mode, data = coordinates
+        mode, data = coordinates
 
             # Initialiser les paramètres de mouvement pour tous les modes
-            result = self.robot.init_profile()
-            if result != RobotErrorType.RobotError_SUCC:
-                return
+        result = self.robot.init_profile()
+        if result != RobotErrorType.RobotError_SUCC:
+            return
 
             # Définir le système de coordonnées de base
-            result = self.robot.set_base_coord()
+        result = self.robot.set_base_coord()
+        if result != RobotErrorType.RobotError_SUCC:
+            return
+
+            # Extraire les valeurs de vitesse et d'accélération des données
+        if mode == "Joint":
+            joint_values, joint_speeds, joint_accs = data
+
+                # Définir les vitesses et accélérations maximales des joints
+            joint_maxvelc = tuple(joint_speeds)  # rad/s
+            joint_maxacc = tuple(joint_accs)     # rad/s²
+
+            result = self.robot.set_joint_maxvelc(joint_maxvelc)
             if result != RobotErrorType.RobotError_SUCC:
                 return
 
-            # Extraire les valeurs de vitesse et d'accélération des données
-            if mode == "Joint":
-                joint_values, joint_speeds, joint_accs = data
+            result = self.robot.set_joint_maxacc(joint_maxacc)
+            if result != RobotErrorType.RobotError_SUCC:
+                return
 
-                # Définir les vitesses et accélérations maximales des joints
-                joint_maxvelc = tuple(joint_speeds)  # rad/s
-                joint_maxacc = tuple(joint_accs)     # rad/s²
-
-                result = self.robot.set_joint_maxvelc(joint_maxvelc)
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
-
-                result = self.robot.set_joint_maxacc(joint_maxacc)
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
-
-            else:
+        else:
                 # Pour "Move Line" et "Move Circle"
-                if mode == "Circle":
-                    (first_values, second_values, third_values), speed, acc = data
-                else:
-                    joint_values, speed, acc = data
+            if mode == "Circle":
+                (first_values, second_values, third_values), speed, acc = data
+            else:
+                joint_values, speed, acc = data
 
                 # Définir les vitesses et accélérations maximales des joints (valeurs par défaut)
-                joint_maxvelc = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5)  # rad/s
-                joint_maxacc = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)    # rad/s²
+            joint_maxvelc = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5)  # rad/s
+            joint_maxacc = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)    # rad/s²
 
-                result = self.robot.set_joint_maxvelc(joint_maxvelc)
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
+            result = self.robot.set_joint_maxvelc(joint_maxvelc)
+            if result != RobotErrorType.RobotError_SUCC:
+                return
 
-                result = self.robot.set_joint_maxacc(joint_maxacc)
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
+            result = self.robot.set_joint_maxacc(joint_maxacc)
+            if result != RobotErrorType.RobotError_SUCC:
+                return
 
                 # Définir la vitesse linéaire maximale (en m/s, donc convertir mm/s en m/s)
-                end_max_line_velc = speed / 1000.0  # Convertir mm/s en m/s
-                result = self.robot.set_end_max_line_velc(end_max_line_velc)
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
+            end_max_line_velc = speed / 1000.0  # Convertir mm/s en m/s
+            result = self.robot.set_end_max_line_velc(end_max_line_velc)
+            if result != RobotErrorType.RobotError_SUCC:
+                return
 
                 # Définir l'accélération linéaire maximale (en m/s², donc convertir mm/s² en m/s²)
-                end_max_line_acc = acc / 1000.0  # Convertir mm/s² en m/s²
-                result = self.robot.set_end_max_line_acc(end_max_line_acc)
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
+            end_max_line_acc = acc / 1000.0  # Convertir mm/s² en m/s²
+            result = self.robot.set_end_max_line_acc(end_max_line_acc)
+            if result != RobotErrorType.RobotError_SUCC:
+                return
 
-            if mode == "Circle":
-                # Extraire les coordonnées
-                (first_values, second_values, third_values), _, _ = data
+        if mode == "Circle":
+            # Extraire les coordonnées
+            (first_values, second_values, third_values), _, _ = data
 
-                result = self.robot.remove_all_waypoint()
-                if result != RobotErrorType.RobotError_SUCC:
-                    return
+            result = self.robot.remove_all_waypoint()
+            if result != RobotErrorType.RobotError_SUCC:
+                return
 
                 # Convertir le premier ensemble en radians
-                first_joints = []
-                for coord in first_values:
-                    try:
-                        coord_float = float(coord)
-                        first_joints.append(math.radians(coord_float))
-                    except (ValueError, TypeError):
-                        return
+            first_joints = []
+            for coord in first_values:
+                try:
+                    coord_float = float(coord)
+                    first_joints.append(math.radians(coord_float))
+                except (ValueError, TypeError):
+                    return
 
                 # Convertir le deuxième ensemble en radians
-                second_joints = []
-                for coord in second_values:
-                    try:
-                        coord_float = float(coord)
-                        second_joints.append(math.radians(coord_float))
-                    except (ValueError, TypeError):
-                        return
+            second_joints = []
+            for coord in second_values:
+                try:
+                    coord_float = float(coord)
+                    second_joints.append(math.radians(coord_float))
+                except (ValueError, TypeError):
+                    return
 
                 # Convertir le troisième ensemble en radians
-                third_joints = []
-                for coord in third_values:
-                    try:
-                        coord_float = float(coord)
-                        third_joints.append(math.radians(coord_float))
-                    except (ValueError, TypeError):
-                        QMessageBox.critical(self, "Erreur", f"Valeur de coordonnée invalide dans le troisième point de passage : {coord}. Doit être un nombre.")
-                        return
-
-                first_joints_tuple = tuple(first_joints)
-                second_joints_tuple = tuple(second_joints)
-                third_joints_tuple = tuple(third_joints)
-
-                print(f"Ajout du premier point de passage : {first_joints_tuple}")
-                print(f"Ajout du deuxième point de passage : {second_joints_tuple}")
-                print(f"Ajout du troisième point de passage : {third_joints_tuple}")
-
-                self.robot.move_joint(first_joints_tuple)
-                self.robot.remove_all_waypoint()
-
-                result = self.robot.add_waypoint(joint_radian=first_joints_tuple)
-                if result != RobotErrorType.RobotError_SUCC:
-                    QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du premier point de passage : {result}")
+            third_joints = []
+            for coord in third_values:
+                try:
+                    coord_float = float(coord)
+                    third_joints.append(math.radians(coord_float))
+                except (ValueError, TypeError):
+                    QMessageBox.critical(self, "Erreur", f"Valeur de coordonnée invalide dans le troisième point de passage : {coord}. Doit être un nombre.")
                     return
 
-                result = self.robot.add_waypoint(joint_radian=second_joints_tuple)
-                if result != RobotErrorType.RobotError_SUCC:
-                    QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du deuxième point de passage : {result}")
-                    return
+            first_joints_tuple = tuple(first_joints)
+            second_joints_tuple = tuple(second_joints)
+            third_joints_tuple = tuple(third_joints)
 
-                result = self.robot.add_waypoint(joint_radian=third_joints_tuple)
-                if result != RobotErrorType.RobotError_SUCC:
-                    QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du troisième point de passage : {result}")
-                    return
+            print(f"Ajout du premier point de passage : {first_joints_tuple}")
+            print(f"Ajout du deuxième point de passage : {second_joints_tuple}")
+            print(f"Ajout du troisième point de passage : {third_joints_tuple}")
 
-                result = self.robot.set_circular_loop_times(1)
-                if result != RobotErrorType.RobotError_SUCC:
-                    QMessageBox.critical(self, "Erreur", f"Échec de la définition du nombre circulaire : {result}")
-                    return
+            self.robot.move_joint(first_joints_tuple)
+            self.robot.remove_all_waypoint()
 
-                print("Exécution de move_track avec ARC_CIR...")
-                result = self.robot.move_track(RobotMoveTrackType.ARC_CIR)
-
-            else:
-                # Pour "Move Joint" et "Move Line"
-                joint_values, _, _ = data
-
-                target_joints = []
-                for coord in joint_values:
-                    try:
-                        coord_float = float(coord)
-                        target_joints.append(math.radians(coord_float))
-                    except (ValueError, TypeError):
-                        QMessageBox.critical(self, "Erreur", f"Valeur de coordonnée invalide : {coord}. Doit être un nombre.")
-                        return
-
-                target_joints_tuple = tuple(target_joints)
-
-                if mode == "Joint":
-                    result = self.robot.move_joint(joint_radian=target_joints_tuple, issync=True)
-                elif mode == "Line":
-                    result = self.robot.move_line(joint_radian=target_joints_tuple)
-                else:
-                    QMessageBox.critical(self, "Erreur", f"Mode non supporté : {mode}")
-                    return
-
+            result = self.robot.add_waypoint(joint_radian=first_joints_tuple)
             if result != RobotErrorType.RobotError_SUCC:
-                QMessageBox.critical(self, "Erreur", f"Échec du mouvement : {result}")
+                QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du premier point de passage : {result}")
+                return
 
-        except Exception as e:
-            QMessageBox.critical(self, "Erreur", f"Échec du mouvement du robot : {str(e)}")
+            result = self.robot.add_waypoint(joint_radian=second_joints_tuple)
+            if result != RobotErrorType.RobotError_SUCC:
+                QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du deuxième point de passage : {result}")
+                return
+
+            result = self.robot.add_waypoint(joint_radian=third_joints_tuple)
+            if result != RobotErrorType.RobotError_SUCC:
+                QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du troisième point de passage : {result}")
+                return
+
+            result = self.robot.set_circular_loop_times(1)
+            if result != RobotErrorType.RobotError_SUCC:
+                QMessageBox.critical(self, "Erreur", f"Échec de la définition du nombre circulaire : {result}")
+                return
+
+            print("Exécution de move_track avec ARC_CIR...")
+            result = self.robot.move_track(RobotMoveTrackType.ARC_CIR)
+
+        else:
+                # Pour "Move Joint" et "Move Line"
+            joint_values, _, _ = data
+
+            target_joints = []
+            for coord in joint_values:
+                try:
+                    coord_float = float(coord)
+                    target_joints.append(math.radians(coord_float))
+                except (ValueError, TypeError):
+                    QMessageBox.critical(self, "Erreur", f"Valeur de coordonnée invalide : {coord}. Doit être un nombre.")
+                    return
+
+            target_joints_tuple = tuple(target_joints)
+
+            if mode == "Joint":
+                result = self.robot.move_joint(joint_radian=target_joints_tuple, issync=False)
+                self.wait_until_motion_complete(target_joints_tuple)
+            elif mode == "Line":
+                result = self.robot.move_line(joint_radian=target_joints_tuple,issync=False)
+                self.wait_until_motion_complete(target_joints_tuple)
+            else:
+                QMessageBox.critical(self, "Erreur", f"Mode non supporté : {mode}")
+                return
+
+        if result != RobotErrorType.RobotError_SUCC:
+            QMessageBox.critical(self, "Erreur", f"Échec du mouvement : {result}")
+    class RobotStatus:
+    # 机械臂当前停止
+        Stopped = 0
+    # 机械臂当前运行
+        Running = 1
+    # 机械臂当前暂停
+        Paused = 2
+    # 机械臂当前恢复
+        Resumed = 3
+    def wait_until_motion_complete(self, target_joints, tolerance=0.01):
+        """
+        Waits until the robot's current joint positions are within a small tolerance of the target.
+        :param target_joints: Target joint positions in radians
+        :param tolerance: Allowed error margin (in radians)
+        """
+        max_wait_time = 30  # seconds
+        start_time = time.time()
+        print("🎯 Target joints:", target_joints)
+
+        while True:
+            current_wp = self.robot.get_current_waypoint()
+            if current_wp is None:
+                continue
+
+            current_joints = current_wp.get("joint")
+            if current_joints is None:
+                continue
+
+            if all(abs(curr - target) <= tolerance for curr, target in zip(current_joints, target_joints)):
+                print("✅ Reached target joints:", current_joints)
+                break
+
+            QApplication.processEvents()
+            time.sleep(0.05)
+
     def on_step_button_clicked(self):
         if not self.check_save_before_execution():
             return
@@ -3719,39 +3896,69 @@ class MainWindow(QMainWindow):
 
     def add_arc_start_to_tree(self):
         """Add an 'Arc Start' item to the project tree."""
+        self.is_modified = True
         selected_item = self.project_tree.currentItem()
-        if not selected_item:
-            selected_item = self.project_tree.topLevelItem(0)  # Default to the root "Project_Program"
+        root = self.project_tree.topLevelItem(0)
+        if not root:
+            root = QTreeWidgetItem(["Project_Program"])
+            self.project_tree.addTopLevelItem(root)
+            root.setExpanded(True)
 
-        # Remove "Empty" item if present
-        for i in range(selected_item.childCount()):
-            if selected_item.child(i).text(0) == "Empty":
-                selected_item.removeChild(selected_item.child(i))
+        # Déterminer l'élément parent et l'index d'insertion
+        if selected_item and selected_item.text(0) != "Project_Program":
+            parent = selected_item.parent() or root
+            insert_index = parent.indexOfChild(selected_item) + 1
+        else:
+            parent = root
+            insert_index = parent.childCount()
+
+        # Supprimer "Empty" si présent
+        for i in range(parent.childCount()):
+            child = parent.child(i)
+            if child.text(0) == "Empty":
+                parent.removeChild(child)
+                if insert_index > i:
+                    insert_index -= 1
                 break
 
-        # Add new "Arc Start" item
+        # Ajouter le nouvel élément "Arc Start"
         arc_start_item = QTreeWidgetItem(["Arc Start"])
-        arc_start_item.setIcon(0, QIcon("tick.png"))  # Use the same icon as other items
-        selected_item.addChild(arc_start_item)
-        selected_item.setExpanded(True)
+        arc_start_item.setIcon(0, QIcon("tick.png"))
+        parent.insertChild(insert_index, arc_start_item)
+        root.setExpanded(True)
 
     def add_arc_end_to_tree(self):
         """Add an 'Arc End' item to the project tree."""
+        self.is_modified = True
         selected_item = self.project_tree.currentItem()
-        if not selected_item:
-            selected_item = self.project_tree.topLevelItem(0)  # Default to the root "Project_Program"
+        root = self.project_tree.topLevelItem(0)
+        if not root:
+            root = QTreeWidgetItem(["Project_Program"])
+            self.project_tree.addTopLevelItem(root)
+            root.setExpanded(True)
 
-        # Remove "Empty" item if present
-        for i in range(selected_item.childCount()):
-            if selected_item.child(i).text(0) == "Empty":
-                selected_item.removeChild(selected_item.child(i))
+        # Déterminer l'élément parent et l'index d'insertion
+        if selected_item and selected_item.text(0) != "Project_Program":
+            parent = selected_item.parent() or root
+            insert_index = parent.indexOfChild(selected_item) + 1
+        else:
+            parent = root
+            insert_index = parent.childCount()
+
+        # Supprimer "Empty" si présent
+        for i in range(parent.childCount()):
+            child = parent.child(i)
+            if child.text(0) == "Empty":
+                parent.removeChild(child)
+                if insert_index > i:
+                    insert_index -= шее
                 break
 
-        # Add new "Arc End" item
+        # Ajouter le nouvel élément "Arc End"
         arc_end_item = QTreeWidgetItem(["Arc End"])
-        arc_end_item.setIcon(0, QIcon("tick.png"))  # Use the same icon as other items
-        selected_item.addChild(arc_end_item)
-        selected_item.setExpanded(True)
+        arc_end_item.setIcon(0, QIcon("tick.png"))
+        parent.insertChild(insert_index, arc_end_item)
+        root.setExpanded(True)
     def on_tree_item_double_clicked(self, item, column):
         item_text = item.text(0)
         movement_data = item.data(0, Qt.UserRole)
@@ -3822,5 +4029,6 @@ class MainWindow(QMainWindow):
         from datetime import datetime
         current_date = datetime.now().strftime("%Y%m%d_%H%M%S")  # Format YYYYMMDD_HHMMSS
         return f"Program_{current_date}"
+    
 
    

@@ -1,0 +1,104 @@
+Table: security_config
+Columns: ['key', 'value']
+Total records: 25
+
+--- Record 1 ---
+key: collision_class
+value: 6
+
+--- Record 2 ---
+key: joint1_speed_limit
+value: 15
+
+--- Record 3 ---
+key: joint2_speed_limit
+value: 15
+
+--- Record 4 ---
+key: joint3_speed_limit
+value: 15
+
+--- Record 5 ---
+key: joint4_speed_limit
+value: 15
+
+--- Record 6 ---
+key: joint5_speed_limit
+value: 15
+
+--- Record 7 ---
+key: joint6_speed_limit
+value: 15
+
+--- Record 8 ---
+key: tcp_speed_limit
+value: 160
+
+--- Record 9 ---
+key: speed_initial_value
+value: 100
+
+--- Record 10 ---
+key: smooth_overshoot_level
+value: 1
+
+--- Record 11 ---
+key: tcp_force
+value: 1
+
+--- Record 12 ---
+key: momentum
+value: 0
+
+--- Record 13 ---
+key: power
+value: 0
+
+--- Record 14 ---
+key: protection_reset
+value: 0
+
+--- Record 15 ---
+key: operating_mode
+value: 0
+
+--- Record 16 ---
+key: joint1_angle_limit
+value: [-174.9,174.9]
+
+--- Record 17 ---
+key: joint2_angle_limit
+value: [-174.9,174.9]
+
+--- Record 18 ---
+key: joint3_angle_limit
+value: [-174.9,174.9]
+
+--- Record 19 ---
+key: joint4_angle_limit
+value: [-174.9,174.9]
+
+--- Record 20 ---
+key: joint5_angle_limit
+value: [-174.9,174.9]
+
+--- Record 21 ---
+key: joint6_angle_limit
+value: [-174.9,174.9]
+
+--- Record 22 ---
+key: joint_limit_enabled
+value: false
+
+--- Record 23 ---
+key: enable_force_control_in_non_stop_state
+value: false
+
+--- Record 24 ---
+key: collision_mode
+value: Stuck
+
+--- Record 25 ---
+key: enable_payload_detect
+value: true
+

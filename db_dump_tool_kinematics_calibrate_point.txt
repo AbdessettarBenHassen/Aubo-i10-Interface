@@ -1,0 +1,39 @@
+Table: tool_kinematics_calibrate_point
+Columns: ['point_uuid', 'kinematics_name', 'point_type', 'point', 'time_stamp']
+Total records: 5
+
+--- Record 1 ---
+point_uuid: d183bc4a7c4a4361860e93a53935041e
+kinematics_name: TCP_2
+point_type: PosCalibrate
+point: -0.022498,-0.481556,0.309492,0.037658,0.774190,0.631462,0.021613,-1.382879,-0.408688,1.172412,0.056047,1.644667,-1.178805
+time_stamp: 2020-07-21 08:55:52
+
+--- Record 2 ---
+point_uuid: a0bfec0f14334ef89df3bda16841c8e7
+kinematics_name: TCP_2
+point_type: PosCalibrate
+point: 0.046411,-0.483451,0.304753,0.069106,-0.738466,-0.664055,0.094460,-1.182774,-0.436873,1.114094,-0.087442,1.345961,-1.069127
+time_stamp: 2020-07-21 08:56:58
+
+--- Record 3 ---
+point_uuid: 2a5426dbd18f48bebd252e4e10050a89
+kinematics_name: TCP_2
+point_type: PosCalibrate
+point: 0.041457,-0.535791,0.300245,0.154764,-0.724166,-0.672031,0.002620,-1.246803,-0.933627,0.223588,-0.696298,1.439873,-1.153499
+time_stamp: 2020-07-21 08:57:50
+
+--- Record 4 ---
+point_uuid: 5a2c0d258b8a40bb80af0619d485e261
+kinematics_name: TCP_2
+point_type: PosCalibrate
+point: -0.085582,-0.538550,0.287919,0.014393,0.788764,0.572094,0.224392,-1.573302,-1.013575,0.153910,-0.658991,1.949660,-1.306801
+time_stamp: 2020-07-21 09:01:36
+
+--- Record 5 ---
+point_uuid: 1a15ae95735249c1bd4bcaffbe4f2784
+kinematics_name: TCP_2
+point_type: PosCalibrate
+point: -0.085054,-0.523303,0.291989,0.054307,0.763131,0.612364,0.199230,-1.572447,-0.773495,0.607062,-0.365237,1.950151,-1.387780
+time_stamp: 2020-07-21 09:03:51
+

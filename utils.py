@@ -148,8 +148,7 @@ def stop_move_joint(robot, joint, direction):
     """
     Stop the movement of a specific joint in a specific direction.
     """
-    print(libpyauboi5.get_tool_dynamics_param(robot.rshd))
-    print(libpyauboi5.get_tool_kinematics_param(robot.rshd))
+
     libpyauboi5.teach_move_stop(robot.rshd)
        
 
@@ -319,6 +318,7 @@ def stop_move_cartesian(axis=None, direction=None):
 
 
 def stop_move_to_zero_pose(robot):
+    print(robot.get_tool_dynamics_param())
     """
     Arrête le mouvement lorsque le bouton est relâché.
     """
@@ -344,15 +344,129 @@ def move_to_zero_pose(robot):
         robot.move_joint(target_joints,False)
     except Exception as e:
         logger.error(f"Error moving toward zero pose: {e}")
+import sqlite3
+
+def fetch_user_coord_from_db(coord_name):
+    db_path = "C:/Users/Emna/Desktop/tool_coord_param.db"
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+
+    # Step 1: Fetch from coord_param
+    cursor.execute("SELECT coord_name, tool_name, coord_calibrate_mathod, coord_point1, coord_point2, coord_point3 FROM coord_param WHERE coord_name = ?", (coord_name,))
+    row = cursor.fetchone()
+    if not row:
+        print(f"[ERROR] No user coord found with name: {coord_name}")
+        conn.close()
+        return None
+
+    coord_name, tool_name, method, point1_str, point2_str, point3_str = row
+
+    def parse_point(p):
+        return tuple(float(x) for x in p.split(",")[:6])  # Only first 6 floats
+
+    # Step 2: Fetch tool pose from tool_kinematics_param by tool_name
+    cursor.execute("""
+        SELECT end_pos_x, end_pos_y, end_pos_z, end_ori_rx, end_ori_ry, end_ori_rz 
+        FROM tool_kinematics_param WHERE kinematics_name = ?
+    """, (tool_name,))
+    tool_row = cursor.fetchone()
+
+    if not tool_row:
+        print(f"[WARNING] No tool kinematics found for tool: {tool_name}, using default pose")
+        tool_pos = (0.0, 0.0, 0.0)
+        tool_ori = (1.0, 0.0, 0.0, 0.0)  # Identity quaternion default
+    else:
+        # Convert RX,RY,RZ Euler angles to quaternion (assuming angles in radians)
+        # If your robot expects quaternion, you'll need to convert Euler to quaternion here.
+        # For now, set ori as (1,0,0,0) or implement conversion if you want
+        tool_pos = tool_row[:3]  # x,y,z
+        # Simple placeholder: convert Euler (rx,ry,rz) to quaternion
+        rx, ry, rz = tool_row[3], tool_row[4], tool_row[5]
+        tool_ori = euler_to_quaternion(rx, ry, rz)
+
+    conn.close()
+
+    user_coord = {
+        'coord_type': RobotCoordType.Robot_World_Coordinate,  # user-defined coord type (update as per your SDK)
+        'calibrate_method': method_mapping(method),
+        'calibrate_points': {
+            "point1": parse_point(point1_str),
+            "point2": parse_point(point2_str),
+            "point3": parse_point(point3_str),
+        },
+        'tool_desc': {
+            'pos': tool_pos,
+            'ori': tool_ori
+        }
+    }
+    return user_coord
+
+def euler_to_quaternion(rx, ry, rz):
+    """
+    Convert Euler angles (rx, ry, rz in radians) to quaternion (x, y, z, w)
+    Note: Robot SDK may expect (w, x, y, z) or (x,y,z,w), adjust accordingly.
+    """
+    import math
+    cy = math.cos(rz * 0.5)
+    sy = math.sin(rz * 0.5)
+    cp = math.cos(ry * 0.5)
+    sp = math.sin(ry * 0.5)
+    cr = math.cos(rx * 0.5)
+    sr = math.sin(rx * 0.5)
+
+    w = cr * cp * cy + sr * sp * sy
+    x = sr * cp * cy - cr * sp * sy
+    y = cr * sp * cy + sr * cp * sy
+    z = cr * cp * sy - sr * sp * cy
+
+    return (w, x, y, z)
+
+
+
+def method_mapping(method_str):
+    """Map string to RobotCoordCalMethod enum value."""
+    mapping = {
+        'xOy': RobotCoordCalMethod.CoordCalMethod_xOy,
+        'yOz': RobotCoordCalMethod.CoordCalMethod_yOz,
+        'zOx': RobotCoordCalMethod.CoordCalMethod_zOx,
+        'xOxy': RobotCoordCalMethod.CoordCalMethod_xOxy,
+        'xOxz': RobotCoordCalMethod.CoordCalMethod_xOxz,
+        'yOyx': RobotCoordCalMethod.CoordCalMethod_yOyx,
+        'yOyz': RobotCoordCalMethod.CoordCalMethod_yOyz,
+        'zOzx': RobotCoordCalMethod.CoordCalMethod_zOzx,
+        'zOzy': RobotCoordCalMethod.CoordCalMethod_zOzy,
+    }
+    return mapping.get(method_str, RobotCoordCalMethod.CoordCalMethod_xOy)  # Default to xOy
+
+def coord_type_mapping(type_str):
+    """Map string to RobotCoordType enum value."""
+    mapping = {
+        'base': RobotCoordType.Robot_Base_Coordinate,
+        'end': RobotCoordType.Robot_End_Coordinate,
+        'user': RobotCoordType.Robot_World_Coordinate,
+    }
+    return mapping.get(type_str.lower(), RobotCoordType.Robot_Base_Coordinate)  # Default to base
+
 def on_reference_changed(robot, value):
-    print(libpyauboi5.get_tool_dynamics_param(robot.rshd))
-    print(libpyauboi5.get_tool_kinematics_param(robot.rshd))
     print(f"Reference coordinate changed to: {value}")
-    # You can set internal state here, like:
+    
     if value == "Base":
-        libpyauboi5.set_teach_base_coord(robot.rshd) 
+        libpyauboi5.set_teach_base_coord(robot.rshd)
     elif value == "flange_center":
-        libpyauboi5.set_teach_end_coord(robot.rshd)   
+        libpyauboi5.set_teach_end_coord(robot.rshd)
+    else:
+        # Assume it's a user coordinate system
+        user_coord = fetch_user_coord_from_db(value)
+        print(user_coord)
+        print(robot.check_user_coord(user_coord))
+        if user_coord:
+                result = libpyauboi5.set_teach_user_coord(robot.rshd, user_coord)
+                if result == RobotErrorType.RobotError_SUCC:
+                    print("User coordinate set successfully.")
+                else:
+                    print("Failed to set user coordinate.")
+
+       
 
 def start_move_to_init_pose(robot):
     """

@@ -6,8 +6,8 @@ from threads import *
 import sys
 from PyQt5.QtCore import QTimer
 
-#ip = '192.168.0.23'
-ip = '192.168.11.129'
+ip = '192.168.0.23'
+#ip = '192.168.11.129'
 
 # Global state
 rt = False  # Toggle between position/orientation control
@@ -81,14 +81,26 @@ def hat_handler(hat_id: int, value: tuple):
 import inspect
 
 
+    
+
 def main():
     #print(dir(libpyauboi5))
     #help(libpyauboi5)
     # Initialize connection
-    robot= utl.robot_connect(ip) 
-    print("donedonedone")
+    robot = utl.robot_connect(ip)
+   
+    if robot is None:
+        print("Failed to connect to robot.")
+        return
+
+    # Call robot_startup with default or static parameters
+    collision_level = 6  # example static value
+    tool_dynamics = {"position": (0.0, 0.0, 0.0), "payload": 5.0, "inertia": (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)}
+    startup_result = robot.robot_startup(6,tool_dynamics)
+    robot.set_tool_dynamics_param(tool_dynamics)
+    print(f"Robot startup result: {startup_result}")
     robot.init_profile()
-    
+    print(robot.get_tool_dynamics_param())
     #robot.set_blend_radius(0.05)
 
     #  if robot:
@@ -102,7 +114,8 @@ def main():
     
     # Setup UI
     app = QApplication(sys.argv)
-    window = MainWindow(robot)    #robot.set_joint_maxacc(joint_maxacc)
+    window = MainWindow(robot) 
+    window.robot=robot   #robot.set_joint_maxacc(joint_maxacc)
     # Create joystick manager
     joystick = JoystickManager(
         axis_threshold=0.1,  # Lower threshold for continuous control

@@ -1,0 +1,60 @@
+Table: system_info
+Columns: ['key', 'value']
+Total records: 14
+
+--- Record 1 ---
+key: ToolName
+value: test
+
+--- Record 2 ---
+key: InitPosition
+value: -0.400319,-0.121499,0.547598,0.000002,0.707108,-0.707105,-0.000002,-0.000003,-0.127267,-1.321122,0.376934,-1.570796,-0.000008
+
+--- Record 3 ---
+key: DefaultProject
+value: None#None
+
+--- Record 4 ---
+key: LockScreenTime
+value: 600
+
+--- Record 5 ---
+key: IsDrawTrack
+value: true
+
+--- Record 6 ---
+key: TrackDuration
+value: 5
+
+--- Record 7 ---
+key: EnablePromptForDisclaimer
+value: false
+
+--- Record 8 ---
+key: IsDisplayLineNumbers
+value: true
+
+--- Record 9 ---
+key: LockScreenEnabled
+value: true
+
+--- Record 10 ---
+key: HoldOnlineProgrammingRefCoordSystemEnabled
+value: false
+
+--- Record 11 ---
+key: CoordName
+value: Base
+
+--- Record 12 ---
+key: AllowExternalReadWriteHoldVariable
+value: false
+
+--- Record 13 ---
+key: AllowExternalReadWritePoseVariable
+value: false
+
+--- Record 14 ---
+key: CheckCommandGroup
+value: true
+
