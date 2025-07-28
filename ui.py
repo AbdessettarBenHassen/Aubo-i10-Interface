@@ -1,16 +1,26 @@
 from PyQt5.QtWidgets import QApplication,QMainWindow,QSpinBox,QDoubleSpinBox,QTreeWidgetItem,QListWidget, QTreeWidget, QDialog,QPushButton,QMessageBox, QStackedWidget, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSlider, QLineEdit, QRadioButton, QGroupBox, QComboBox, QCheckBox, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel, QPushButton
 import sqlite3
 import sys
+from PyQt5.QtWidgets import (
+    QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem,
+    QPushButton, QHeaderView
+)
+from config_dialog import ConfigDialog
+from PyQt5.QtCore import QTime
+
 from threads import joint_updater
 from functools import partial
 import utils as utl 
 from utils import *
 from PyQt5.QtWidgets import QWidget, QPushButton, QVBoxLayout, QGridLayout
 from PyQt5.QtCore import QPoint
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt,QTime
 import json
 import os
+from robot_worker_process import run_move_track_process
+from errorpop import ErrorPopup
 from PyQt5.QtGui import QPixmap,QDoubleValidator
 from clavier import *
 from PyQt5.QtCore import QStandardPaths
@@ -33,7 +43,7 @@ class EditSpeedDialog(QDialog):
         super().__init__(parent)
         self.setWindowTitle("Edit Speed")
         self.setFixedSize(300, 120)
-
+        self.state = 0
         layout = QVBoxLayout()
 
         # Champ pour la vitesse
@@ -469,6 +479,7 @@ class SaveDialog(QDialog):
         """)
         save_button.clicked.connect(self.accept)
         layout.addWidget(save_button)
+        
 
         self.setLayout(layout)
 class WeldingMachineController:
@@ -544,12 +555,69 @@ class WeldingMachineController:
                     return True
                 time.sleep(0.1)
             return False
+class ErrorPopup(QDialog):
+    def __init__(self, error_data,robot=None, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Robot Error Notification")
+        self.robot = robot  # Store robot reference
+        self.resize(700, 300)
 
+        # Create the table
+        self.table = QTableWidget(0, 3)
+        self.table.setHorizontalHeaderLabels(["Time", "Event Type", "Message"])
+
+        # Stretch last column (Message)
+        header = self.table.horizontalHeader()
+        header.setStretchLastSection(True)
+        header.setSectionResizeMode(QHeaderView.Interactive)
+
+        # Main layout
+        layout = QVBoxLayout()
+        layout.addWidget(self.table)
+
+        # Close button
+        close_btn = QPushButton("Close")
+        close_btn.clicked.connect(self.test)
+        layout.addWidget(close_btn)
+
+        self.setLayout(layout)
+
+        # Add initial error notification
+        self.add_notification("Error", error_data)
+    def test(self):
+        """Close the dialog."""
+        self.robot.collision_recover()
+        config = ConfigDialog()
+        if config.exec_() == config.Accepted:
+            tool = config.selected_tool
+            ip = config.selected_ip
+        print("Selected tool:", tool)
+        print("Selected IP:", ip)
+        self.robot = utl.setup_robot(ip, tool)
+        self.close()
+    def add_notification(self, event_type, message):
+        # Convert dict message to string if needed
+        if isinstance(message, dict):
+            message_str = f"Type: {message.get('type', '')}, Code: {message.get('code', '')}, Content: {message.get('content', '')}"
+        else:
+            message_str = str(message)
+
+        # Insert a new row
+        row_position = self.table.rowCount()
+        self.table.insertRow(row_position)
+
+        current_time = QTime.currentTime().toString("HH:mm:ss.zzz")
+        self.table.setItem(row_position, 0, QTableWidgetItem(current_time))
+        self.table.setItem(row_position, 1, QTableWidgetItem(event_type))
+        self.table.setItem(row_position, 2, QTableWidgetItem(message_str))
+
+        # Auto-resize row height
+        self.table.resizeRowsToContents()
 class MainWindow(QMainWindow):
+    robot_error_signal = pyqtSignal(str)
     def __init__(self,robot):
         super().__init__()
-
-        
+        self.worker_process = None
         self.robot = robot
         self.setWindowTitle("Aubo i10 Interface")
         self.setGeometry(100, 100, 1024, 768)
@@ -569,7 +637,6 @@ class MainWindow(QMainWindow):
         self.robot.step_mode_checkbox = self.step_mode_checkbox
         self.current_file = "0"
         self.welding_machine = WeldingMachineController()
-
         joint_updater.add_move_circle_with_positions.connect(self.handle_add_move_circle_with_positions)
         joint_updater.add_move_line_with_position.connect(self.handle_add_move_line_with_position)
         joint_updater.add_move_joint_with_position.connect(self.handle_add_move_joint_with_position)
@@ -578,7 +645,8 @@ class MainWindow(QMainWindow):
         joint_updater.execute_all_movements.connect(self.handle_execute_all_movements)
         joint_updater.request_confirmation.connect(self.handle_request_confirmation)
         
-       
+        
+        
         joint_updater.delete_last_tree_item.connect(self.handle_delete_last_tree_item)
 
                 # Appliquer un style CSS moderne
@@ -671,9 +739,18 @@ class MainWindow(QMainWindow):
         self.add_nav_button("Extensions", self.extensions_page)
         self.add_nav_button("System Info", self.system_info_page)
         self.add_nav_button("About", self.about_page)
-
+        self.error_popup = None
+        self.robot_error_signal.connect(self.show_robot_error_popup)
         joint_updater.joints_updated.connect(self.update_joint_values)
         joint_updater.joints_updated.connect(self.update_manipulator_pose)
+    def show_robot_error_popup(self, error_data):
+        if self.error_popup is None or not self.error_popup.isVisible():
+            self.error_popup = ErrorPopup(error_data, self.robot,self)
+            self.error_popup.show()
+        else:
+            self.error_popup.add_notification("Error", error_data)
+            self.error_popup.raise_()
+            self.error_popup.activateWindow()
     def handle_request_confirmation(self, position, position_number, message):
         """Afficher une fenêtre de confirmation et définir le résultat."""
         from threads import set_confirmation_result
@@ -1211,7 +1288,7 @@ class MainWindow(QMainWindow):
         self.reference_coord_layout.addWidget(self.reference_dropdown)
         self.reference_coord_group.setLayout(self.reference_coord_layout)
         layout.addWidget(self.reference_coord_group, 3, 0, 1, 1)
-        #self.reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
+        self.reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
 
 
         # Nouveau groupe pour les boutons et le contrôle de vitesse
@@ -1234,8 +1311,11 @@ class MainWindow(QMainWindow):
         self.speed_slider = QSlider(Qt.Horizontal)
         self.speed_slider.setMinimum(1)
         self.speed_slider.setMaximum(40)
-        self.speed_slider.setValue(50)
+        self.speed_slider.setValue(20)
+        
         self.speed_slider.valueChanged.connect(lambda value: utl.update_joint_speed_from_slider(value, self.robot))
+        utl.update_joint_speed_from_slider(20, self.robot)
+
          # Print to console
         speed_layout.addWidget(speed_label)
         speed_layout.addWidget(self.speed_slider)
@@ -1253,8 +1333,8 @@ class MainWindow(QMainWindow):
         self.new_reference_coord_group.setLayout(self.new_reference_coord_layout)
         layout.addWidget(self.new_reference_coord_group, 3, 2, 1, 1)
         page.setLayout(layout)
-        #self.new_reference_dropdown.currentTextChanged.connect(self.update_manipulator_pose)
-        self.reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
+        self.new_reference_dropdown.currentTextChanged.connect(self.update_manipulator_pose)
+        #self.reference_dropdown.currentTextChanged.connect(partial(utl.on_reference_changed, self.robot))
     
 
 
@@ -1334,10 +1414,10 @@ class MainWindow(QMainWindow):
         return None
     def compute_tcp_pose(self,flange_pose, tcp_offset):
     # Position addition (vector)
-        tcp_pos = [f + t for f, t in zip(flange_pose["position"], tcp_offset["position"])]
+        tcp_pos = [f - t for f, t in zip(flange_pose["position"], tcp_offset["position"])]
 
         # Orientation addition (approximate, assuming small rotations)
-        tcp_ori = [f + t for f, t in zip(flange_pose["orientation"], tcp_offset["orientation"])]
+        tcp_ori = [f - t for f, t in zip(flange_pose["orientation"], tcp_offset["orientation"])]
 
         return {
             "position": tcp_pos,
@@ -2459,7 +2539,32 @@ class MainWindow(QMainWindow):
         # Layout vertical pour les boutons à gauche de "New Project"
         left_buttons_layout = QVBoxLayout()
         left_buttons_layout.setSpacing(5)
+        insert_position_group = QGroupBox("Insert Mode")
+        insert_position_group.setStyleSheet("""
+            QGroupBox {
+                font-weight: bold;
+                font-size: 10pt;
+                color: black;
+                border: 1px solid gray;
+                border-radius: 5px;
+                margin-top: 6px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                subcontrol-position: top center;
+                padding: 0 3px;
+            }
+        """)
+        insert_position_layout = QVBoxLayout(insert_position_group)
 
+        self.add_before_radio = QRadioButton("Add before")
+        self.add_before_radio.setChecked(True)
+        self.add_after_radio = QRadioButton("Add after")
+
+        insert_position_layout.addWidget(self.add_before_radio)
+        insert_position_layout.addWidget(self.add_after_radio)
+
+        left_buttons_layout.addWidget(insert_position_group)
         # Liste des boutons à gauche
         new_buttons = [
             ("Project", "Manage projects"),
@@ -2548,11 +2653,11 @@ class MainWindow(QMainWindow):
         control_layout = QHBoxLayout()
         control_layout.setSpacing(5)
 
-        start_button = QPushButton("Start")
-        start_button.clicked.connect(self.execute_all_movements)
+        self.start_button = QPushButton("Start")
+        self.start_button.clicked.connect(self.execute_all_movements)
         
-        start_button.setFixedSize(100, 40)
-        start_button.setStyleSheet("""
+        self.start_button.setFixedSize(100, 40)
+        self.start_button.setStyleSheet("""
             QPushButton {
             
                 background-color: #E0E0E0;
@@ -2570,8 +2675,16 @@ class MainWindow(QMainWindow):
                 background-color: #4682B4;
                 color: white;
             }
+            QPushButton:disabled {
+        background-color: #e0e0e0;
+        color: #a0a0a0;
+        border: 2px solid #d0d0d0;
+        border-radius: 8px;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
         """)
-        control_layout.addWidget(start_button)
+        control_layout.addWidget(self.start_button)
 
         stop_button = QPushButton("Stop")
         stop_button.setFixedSize(100, 40)
@@ -2593,9 +2706,30 @@ class MainWindow(QMainWindow):
                 color: black;
             }
         """)
-        stop_button.clicked.connect(self.stop_robot_motion)
+        stop_button.clicked.connect(self.stop_robot_movement)
         control_layout.addWidget(stop_button)  # Connexion du bouton d'arrêt à la méthode stop_loop
-
+        self.pause_button = QPushButton("pause")
+        self.pause_button.setFixedSize(100, 40)
+        self.pause_button.setStyleSheet("""
+            QPushButton {
+                background-color: #4682B4;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                padding: 5px;
+                color: white;
+                font-weight: bold;
+                font-size: 12pt;
+            }
+            QPushButton:hover {
+                background-color: #4169E1;
+            }
+            QPushButton:pressed {
+                background-color: #E0E0E0;
+                color: black;
+            }
+        """)
+        self.pause_button.clicked.connect(self.Pause_robot_movement)
+        control_layout.addWidget(self.pause_button)
             
 
         step_button = QPushButton("Step")
@@ -2802,10 +2936,8 @@ class MainWindow(QMainWindow):
         """)
 
         return page
-    def stop_robot_motion(self):
-            result = self.robot.move_stop()
-            if result != RobotErrorType.RobotError_SUCC:
-                QMessageBox.critical(self, "Erreur", "Échec de l'arrêt du robot.")
+   
+            
     def load_saved_programs(self):
         """Charge les programmes sauvegardés et la liste globale."""
         if not self.save_dir:
@@ -3334,61 +3466,69 @@ class MainWindow(QMainWindow):
         # Remettre "Basic Condition"
         self.right_container_layout.addWidget(self.basic_condition_widget)
     def add_move_circle_to_tree(self, first_joints=None, second_joints=None, third_joints=None, speed=None, acc=None):
-        """Ajouter une commande Move Circle à l'arborescence avec vitesse et accélération."""
+        """Ajouter une commande Move Circle à l'arborescence selon Add before/after."""
         if first_joints is None or second_joints is None or third_joints is None:
             dialog = MoveCircleDialog(self.robot, joint_updater, self)
             if not dialog.exec_():
                 return -1
             first_joints, second_joints, third_joints = dialog.get_waypoints()
-        
-        # Set default speed and acceleration if not provided
-        speed = float(speed) if speed is not None else 2000.00  # Default speed in mm/s
-        acc = float(acc) if acc is not None else 2000.00       # Default acceleration in mm/s²
-        
+
+        # Valeurs par défaut
+        speed = float(speed) if speed is not None else 2000.00
+        acc = float(acc) if acc is not None else 2000.00
+
         root = self.project_tree.topLevelItem(0)
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
-        
-        # Trouver l'élément sélectionné
+
         selected_item = self.project_tree.currentItem()
-        insert_index = -1  # Par défaut, ajouter à la fin
-
-        if selected_item and selected_item.text(0) != "Project_Program":
+        if selected_item and selected_item != root:
             parent = selected_item.parent() or root
-            insert_index = parent.indexOfChild(selected_item) + 1
-        else:
-            # Si rien n'est sélectionné ou si la racine est sélectionnée, ajouter à la fin
-            parent = root
-            insert_index = parent.childCount()
+            insert_index = parent.indexOfChild(selected_item)
 
-        # Supprimer "Empty" si présent
-        for i in range(parent.childCount()):
-            child = parent.child(i)
-            if child.text(0) == "Empty":
-                parent.removeChild(child)
-                if insert_index > i:
-                    insert_index -= 1
-                break
-        
-        # Formater le texte d'affichage
-        first_joints_str = ", ".join(map(lambda x: f"{x:.2f}", first_joints))
-        second_joints_str = ", ".join(map(lambda x: f"{x:.2f}", second_joints))
-        third_joints_str = ", ".join(map(lambda x: f"{x:.2f}", third_joints))
-        move_circle_text = f"Move Circle ({first_joints_str}) -> ({second_joints_str}) -> ({third_joints_str}), Speed: {speed:.2f} mm/s, Acc: {acc:.2f} mm/s²"
-        
-        # Ajouter à l'arborescence à l'index spécifié
+            # Supprimer "Empty" si présent
+            for i in range(parent.childCount()):
+                if parent.child(i).text(0) == "Empty":
+                    parent.removeChild(parent.child(i))
+                    if insert_index > i:
+                        insert_index -= 1
+                    break
+
+            # Insertion selon le choix radio
+            if self.add_before_radio.isChecked():
+                parent.insertChild(insert_index, QTreeWidgetItem([""]))
+                target_index = insert_index
+            else:
+                target_index = insert_index + 1
+        else:
+            parent = root
+            for i in range(root.childCount()):
+                if root.child(i).text(0) == "Empty":
+                    root.takeChild(i)
+                    break
+            target_index = parent.childCount()
+
+        # Texte formaté
+        first_str = ", ".join(map(lambda x: f"{x:.2f}", first_joints))
+        second_str = ", ".join(map(lambda x: f"{x:.2f}", second_joints))
+        third_str = ", ".join(map(lambda x: f"{x:.2f}", third_joints))
+        move_circle_text = f"Move Circle ({first_str}) -> ({second_str}) -> ({third_str}), Speed: {speed:.2f} mm/s, Acc: {acc:.2f} mm/s²"
+
+        # Ajouter à l'arborescence
         new_item = QTreeWidgetItem([move_circle_text])
         new_item.setData(0, Qt.UserRole, ("Circle", ((first_joints, second_joints, third_joints), speed, acc)))
-        parent.insertChild(insert_index, new_item)
+        parent.insertChild(target_index, new_item)
         root.setExpanded(True)
+        self.project_tree.setCurrentItem(new_item)
         self.is_modified = True
         return 0
 
     def add_move_joint_to_tree(self, joints=None):
         self.is_modified = True
-        
+
+        # Préparer les valeurs de joint
         if joints is None or not isinstance(joints, (list, tuple)):
             joint_values = [display.text() for display in self.joint_value_displays]
         else:
@@ -3397,58 +3537,63 @@ class MainWindow(QMainWindow):
             except (TypeError, ValueError) as e:
                 print(f"Error formatting joints: {e}. Using current joint values.")
                 joint_values = [display.text() for display in self.joint_value_displays]
-        
-        # Utiliser des valeurs par défaut sans ouvrir la fenêtre de dialogue
-        radius = 500.0  # Longueur du bras en mm (à ajuster selon votre robot)
-        joint_speeds = [2000.0 / radius] * 6  # Vitesse par défaut 2000 mm/s convertie en rad/s
-        joint_accs = [2000.0 / radius] * 6    # Accélération par défaut 2000 mm/s² convertie en rad/s²
-        
-        # Reconversion pour l'affichage (mm/s)
+
+        radius = 500.0  # mm
+        joint_speeds = [2000.0 / radius] * 6
+        joint_accs = [2000.0 / radius] * 6
         display_speeds = [speed * radius for speed in joint_speeds]
-        
+
         joint_values_str = ", ".join(joint_values)
         speeds_str = ", ".join([f"{speed:.2f}" for speed in display_speeds])
         move_joint_text = f"Move Joint ({joint_values_str}, Speeds: {speeds_str} mm/s)"
-        
+
+        # Création de l'item
+        new_item = QTreeWidgetItem([move_joint_text])
+        new_item.setData(0, Qt.UserRole, ("Joint", (joint_values, joint_speeds, joint_accs)))
+
+        # Gestion de l'arbre
         root = self.project_tree.topLevelItem(0)
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
-        
-        # Trouver l'élément sélectionné
-        selected_item = self.project_tree.currentItem()
-        insert_index = -1  # Par défaut, ajouter à la fin
 
-        if selected_item and selected_item.text(0) != "Project_Program":
+        selected_item = self.project_tree.currentItem()
+        if selected_item and selected_item != root:
             parent = selected_item.parent() or root
-            insert_index = parent.indexOfChild(selected_item) + 1
+            insert_index = parent.indexOfChild(selected_item)
+
+            # Supprimer "Empty" s'il existe
+            for i in range(parent.childCount()):
+                child = parent.child(i)
+                if child.text(0) == "Empty":
+                    parent.removeChild(child)
+                    if insert_index > i:
+                        insert_index -= 1
+                    break
+
+            # Choix avant/après
+            if self.add_before_radio.isChecked():
+                parent.insertChild(insert_index, new_item)
+            else:
+                parent.insertChild(insert_index + 1, new_item)
         else:
-            # Si rien n'est sélectionné ou si la racine est sélectionnée, ajouter à la fin
-            parent = root
-            insert_index = parent.childCount()
-        
-        # Supprimer "Empty" si présent
-        for i in range(parent.childCount()):
-            child = parent.child(i)
-            if child.text(0) == "Empty":
-                parent.removeChild(child)
-                if insert_index > i:
-                    insert_index -= 1
-                break
-        
-        new_item = QTreeWidgetItem([move_joint_text])
-        new_item.setData(0, Qt.UserRole, ("Joint", (joint_values, joint_speeds, joint_accs)))
-        parent.insertChild(insert_index, new_item)
+            # Aucun ou racine sélectionnée
+            # Supprimer "Empty" si présent
+            for i in range(root.childCount()):
+                if root.child(i).text(0) == "Empty":
+                    root.takeChild(i)
+                    break
+            root.addChild(new_item)
+
         root.setExpanded(True)
-        
-        return 0
+        self.project_tree.setCurrentItem(new_item)
 
     def add_move_line_to_tree(self, joints=None):
-        """Ajouter une commande Move Line à l'arborescence sans afficher la fenêtre de vitesse."""
+        """Ajouter une commande Move Line à l'arborescence selon l'option Add before/after."""
         self.is_modified = True
-        
-        # Handle the case where joints is None or invalid
+
+        # Gestion des valeurs de joint
         if joints is None or not isinstance(joints, (list, tuple)):
             joint_values = [display.text() for display in self.joint_value_displays]
         else:
@@ -3457,47 +3602,50 @@ class MainWindow(QMainWindow):
             except (TypeError, ValueError) as e:
                 print(f"Error formatting joints: {e}. Using current joint values.")
                 joint_values = [display.text() for display in self.joint_value_displays]
-        
-        # Skip the dialog and set default speed and acceleration values
-        speed = 2000.00  # Default speed in mm/s
-        acc = 2000.00    # Default acceleration in mm/s²
-        
+
+        # Valeurs par défaut
+        speed = 2000.00
+        acc = 2000.00
         joint_values_str = ", ".join(joint_values)
         move_line_text = f"Move Line ({joint_values_str}, Speed: {speed:.2f} mm/s, Acc: {acc:.2f} mm/s²)"
-        
+
+        new_item = QTreeWidgetItem([move_line_text])
+        new_item.setData(0, Qt.UserRole, ("Line", (joint_values, speed, acc)))
+
         root = self.project_tree.topLevelItem(0)
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
-        
-        # Trouver l'élément sélectionné
-        selected_item = self.project_tree.currentItem()
-        insert_index = -1  # Par défaut, ajouter à la fin
 
-        if selected_item and selected_item.text(0) != "Project_Program":
+        selected_item = self.project_tree.currentItem()
+        if selected_item and selected_item != root:
             parent = selected_item.parent() or root
-            insert_index = parent.indexOfChild(selected_item) + 1
+            insert_index = parent.indexOfChild(selected_item)
+
+            # Supprimer "Empty" si présent
+            for i in range(parent.childCount()):
+                if parent.child(i).text(0) == "Empty":
+                    parent.removeChild(parent.child(i))
+                    if insert_index > i:
+                        insert_index -= 1
+                    break
+
+            # Insertion selon le choix radio
+            if self.add_before_radio.isChecked():
+                parent.insertChild(insert_index, new_item)
+            else:
+                parent.insertChild(insert_index + 1, new_item)
         else:
-            # Si rien n'est sélectionné ou si la racine est sélectionnée, ajouter à la fin
-            parent = root
-            insert_index = parent.childCount()
-        
-        # Supprimer "Empty" si présent
-        for i in range(parent.childCount()):
-            child = parent.child(i)
-            if child.text(0) == "Empty":
-                parent.removeChild(child)
-                if insert_index > i:
-                    insert_index -= 1
-                break
-        
-        new_item = QTreeWidgetItem([move_line_text])
-        new_item.setData(0, Qt.UserRole, ("Line", (joint_values, speed, acc)))
-        parent.insertChild(insert_index, new_item)
+            # Ajout à la fin si aucun élément sélectionné
+            for i in range(root.childCount()):
+                if root.child(i).text(0) == "Empty":
+                    root.takeChild(i)
+                    break
+            root.addChild(new_item)
+
         root.setExpanded(True)
-        
-        return 0
+        self.project_tree.setCurrentItem(new_item)
 
 
     def execute_all_movements(self):
@@ -3534,6 +3682,9 @@ class MainWindow(QMainWindow):
                     self.end_arc_process()
                     in_arc_sequence = False
                     continue
+                elif item_text == "Loop":
+                    print("⚠️ Exécution de la boucle non implémentée.")
+                    continue
 
                 movement_data = item.data(0, Qt.UserRole)
                 if not movement_data:
@@ -3555,20 +3706,20 @@ class MainWindow(QMainWindow):
                             adjusted_coordinates = (movement_type, (joint_values, json_speed, acc))
                     else:
                         adjusted_coordinates = (movement_type, coordinates)
-
+                
                     self.move_robot_to_coordinates(adjusted_coordinates)
                 else:
                     print(f"⚠️ Type de mouvement non reconnu : '{movement_type}'")
 
             print("✅ Fin de l'exécution du programme.")
+            QMessageBox.information(self.project_tree, "Succès", "Le programme a été exécuté avec succès !")
             # Réinitialiser la sélection après l'exécution
             self.project_tree.clearSelection()
-            QMessageBox.information(self, "Succès", "Programme exécuté avec succès !")
 
         except Exception as e:
             print(f"❌ Erreur critique : {str(e)}")
             self.project_tree.clearSelection()  # Réinitialiser en cas d'erreur
-            QMessageBox.critical(self, "Erreur", f"Échec de l'exécution : {str(e)}")
+            
 
     def are_points_collinear(self, joints1, joints2, joints3):
             """
@@ -3599,13 +3750,41 @@ class MainWindow(QMainWindow):
             # Si le produit vectoriel est proche de zéro, les points sont colinéaires
             tolerance = 1e-6
             return all(abs(x) < tolerance for x in cross_product)
-    
+    def start_move_track_process(self, waypoints_data,vel,acc):
+        print('here')
+        print(self.robot.get_robot_state())
+        if(self.robot.get_robot_state() == RobotStatus.Stopped):
+            self.worker_process = Process(target=run_move_track_process, args=(waypoints_data,vel,acc))
+            self.worker_process.start()
+        if(self.robot.get_robot_state() == RobotStatus.Resumed or RobotStatus.Paused):
+            self.robot.move_continue()
+            print("resumed")
+        
+    def stop_robot_movement(self):
+        self.robot.move_stop()  
+        self.start_button.setEnabled(True)
+        self.pause_button.setText("pause") # Réactiver le bouton de démarrage
+         # Terminer le processus de travail après l'exécution
+    def Pause_robot_movement(self):
+        print(self.pause_button.text())
+        if(self.pause_button.text() == "pause"):
+            print("hey")
+            self.pause_button.setText("resume")
+            self.start_button.setDisabled(True)
+            self.robot.move_pause()
+        elif(self.pause_button.text() == "resume"):
+            print("resume")
+            self.robot.move_continue()
+            self.start_button.setEnabled(True) 
+            self.pause_button.setText("pause")
+        
     def move_robot_to_coordinates(self, coordinates):
         """
         Déplace le robot vers les coordonnées spécifiées.
         Utilise les paramètres de vitesse et d'accélération préalablement sauvegardés dans les données.
         """
         robot_state = self.robot.get_robot_state()
+        print("----------------------------",self.robot.get_robot_state())
         if robot_state is None:
             return
 
@@ -3643,18 +3822,6 @@ class MainWindow(QMainWindow):
                 (first_values, second_values, third_values), speed, acc = data
             else:
                 joint_values, speed, acc = data
-
-                # Définir les vitesses et accélérations maximales des joints (valeurs par défaut)
-            joint_maxvelc = (1.5, 1.5, 1.5, 1.5, 1.5, 1.5)  # rad/s
-            joint_maxacc = (1.0, 1.0, 1.0, 1.0, 1.0, 1.0)    # rad/s²
-
-            result = self.robot.set_joint_maxvelc(joint_maxvelc)
-            if result != RobotErrorType.RobotError_SUCC:
-                return
-
-            result = self.robot.set_joint_maxacc(joint_maxacc)
-            if result != RobotErrorType.RobotError_SUCC:
-                return
 
                 # Définir la vitesse linéaire maximale (en m/s, donc convertir mm/s en m/s)
             end_max_line_velc = speed / 1000.0  # Convertir mm/s en m/s
@@ -3711,33 +3878,16 @@ class MainWindow(QMainWindow):
             print(f"Ajout du premier point de passage : {first_joints_tuple}")
             print(f"Ajout du deuxième point de passage : {second_joints_tuple}")
             print(f"Ajout du troisième point de passage : {third_joints_tuple}")
-
-            self.robot.move_joint(first_joints_tuple)
-            self.robot.remove_all_waypoint()
-
-            result = self.robot.add_waypoint(joint_radian=first_joints_tuple)
-            if result != RobotErrorType.RobotError_SUCC:
-                QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du premier point de passage : {result}")
-                return
-
-            result = self.robot.add_waypoint(joint_radian=second_joints_tuple)
-            if result != RobotErrorType.RobotError_SUCC:
-                QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du deuxième point de passage : {result}")
-                return
-
-            result = self.robot.add_waypoint(joint_radian=third_joints_tuple)
-            if result != RobotErrorType.RobotError_SUCC:
-                QMessageBox.critical(self, "Erreur", f"Échec de l'ajout du troisième point de passage : {result}")
-                return
-
-            result = self.robot.set_circular_loop_times(1)
-            if result != RobotErrorType.RobotError_SUCC:
-                QMessageBox.critical(self, "Erreur", f"Échec de la définition du nombre circulaire : {result}")
-                return
-
-            print("Exécution de move_track avec ARC_CIR...")
-            result = self.robot.move_track(RobotMoveTrackType.ARC_CIR)
-
+           
+        
+            self.waypoints_data = (first_joints_tuple, second_joints_tuple, third_joints_tuple)
+            print("----------------------------",self.robot.get_robot_state())
+            self.start_move_track_process(self.waypoints_data,end_max_line_velc,end_max_line_acc)
+            self.wait_until_circular_motion_complete(self.waypoints_data, tolerance=0.05)
+            print("finished")
+            self.worker_process.kill()   
+            
+            
         else:
                 # Pour "Move Joint" et "Move Line"
             joint_values, _, _ = data
@@ -3754,9 +3904,11 @@ class MainWindow(QMainWindow):
             target_joints_tuple = tuple(target_joints)
 
             if mode == "Joint":
+                self.robot.move_stop()
                 result = self.robot.move_joint(joint_radian=target_joints_tuple, issync=False)
                 self.wait_until_motion_complete(target_joints_tuple)
             elif mode == "Line":
+                self.robot.move_stop()
                 result = self.robot.move_line(joint_radian=target_joints_tuple,issync=False)
                 self.wait_until_motion_complete(target_joints_tuple)
             else:
@@ -3774,6 +3926,48 @@ class MainWindow(QMainWindow):
         Paused = 2
     # 机械臂当前恢复
         Resumed = 3
+    def wait_until_circular_motion_complete(self, waypoints, tolerance=0.03, timeout=50):
+        """
+        Waits until the robot moves through all waypoints and returns to the first one (circular motion complete).
+        """
+        visited = [False] * len(waypoints)
+        start_time = time.time()
+
+        print("🎯 Starting circular motion monitoring...")
+
+        while time.time() - start_time < timeout:
+            current_wp = self.robot.get_current_waypoint()
+            if not current_wp:
+                continue
+
+            current_joints = current_wp.get("joint")
+            if not current_joints:
+                continue
+
+            for i, target_joints in enumerate(waypoints):
+                diffs = [abs(curr - target) for curr, target in zip(current_joints, target_joints)]
+                #print(f"WP{i+1} diff: {diffs}")  # Debugging
+                if not visited[i] and sum(d <= tolerance for d in diffs) >= 4:
+                    visited[i] = True
+                    print(f"✅ Reached waypoint {i + 1}: {target_joints}")
+
+            # Condition to finish: all points visited OR returned to WP1 after WP2
+            if all(visited):
+                if all(abs(curr - target) <= tolerance for curr, target in zip(current_joints, waypoints[0])):
+                    print("🏁 Full circle completed. Back at start.")
+                    return True
+
+            # Backup: check if robot stopped
+
+            QApplication.processEvents()
+            time.sleep(0.05)
+
+        print("⏰ Timeout reached without completing circular motion.")
+        return False
+
+
+
+
     def wait_until_motion_complete(self, target_joints, tolerance=0.01):
         """
         Waits until the robot's current joint positions are within a small tolerance of the target.
@@ -3799,7 +3993,7 @@ class MainWindow(QMainWindow):
 
             QApplication.processEvents()
             time.sleep(0.05)
-
+    
     def on_step_button_clicked(self):
         if not self.check_save_before_execution():
             return
@@ -3895,70 +4089,90 @@ class MainWindow(QMainWindow):
             print(f"Erreur lors de la sauvegarde de la liste des programmes : {e}")
 
     def add_arc_start_to_tree(self):
-        """Add an 'Arc Start' item to the project tree."""
+        """Ajouter un élément 'Arc Start' à l'arborescence selon Add before/after."""
         self.is_modified = True
         selected_item = self.project_tree.currentItem()
         root = self.project_tree.topLevelItem(0)
+
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
 
-        # Déterminer l'élément parent et l'index d'insertion
-        if selected_item and selected_item.text(0) != "Project_Program":
+        if selected_item and selected_item != root:
             parent = selected_item.parent() or root
-            insert_index = parent.indexOfChild(selected_item) + 1
+            insert_index = parent.indexOfChild(selected_item)
+
+            # Supprimer "Empty" si présent
+            for i in range(parent.childCount()):
+                if parent.child(i).text(0) == "Empty":
+                    parent.removeChild(parent.child(i))
+                    if insert_index > i:
+                        insert_index -= 1
+                    break
+
+            # Insertion selon le choix
+            if self.add_before_radio.isChecked():
+                target_index = insert_index
+            else:
+                target_index = insert_index + 1
         else:
             parent = root
-            insert_index = parent.childCount()
+            for i in range(root.childCount()):
+                if root.child(i).text(0) == "Empty":
+                    root.takeChild(i)
+                    break
+            target_index = parent.childCount()
 
-        # Supprimer "Empty" si présent
-        for i in range(parent.childCount()):
-            child = parent.child(i)
-            if child.text(0) == "Empty":
-                parent.removeChild(child)
-                if insert_index > i:
-                    insert_index -= 1
-                break
-
-        # Ajouter le nouvel élément "Arc Start"
+        # Créer l'élément Arc Start
         arc_start_item = QTreeWidgetItem(["Arc Start"])
         arc_start_item.setIcon(0, QIcon("tick.png"))
-        parent.insertChild(insert_index, arc_start_item)
+        parent.insertChild(target_index, arc_start_item)
         root.setExpanded(True)
+        self.project_tree.setCurrentItem(arc_start_item)
 
     def add_arc_end_to_tree(self):
-        """Add an 'Arc End' item to the project tree."""
+        """Ajouter un élément 'Arc End' à l'arborescence selon Add before/after."""
         self.is_modified = True
         selected_item = self.project_tree.currentItem()
         root = self.project_tree.topLevelItem(0)
+
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
 
-        # Déterminer l'élément parent et l'index d'insertion
-        if selected_item and selected_item.text(0) != "Project_Program":
+        if selected_item and selected_item != root:
             parent = selected_item.parent() or root
-            insert_index = parent.indexOfChild(selected_item) + 1
+            insert_index = parent.indexOfChild(selected_item)
+
+            # Supprimer "Empty" si présent
+            for i in range(parent.childCount()):
+                if parent.child(i).text(0) == "Empty":
+                    parent.removeChild(parent.child(i))
+                    if insert_index > i:
+                        insert_index -= 1
+                    break
+
+            # Insertion selon le choix
+            if self.add_before_radio.isChecked():
+                target_index = insert_index
+            else:
+                target_index = insert_index + 1
         else:
             parent = root
-            insert_index = parent.childCount()
+            for i in range(root.childCount()):
+                if root.child(i).text(0) == "Empty":
+                    root.takeChild(i)
+                    break
+            target_index = parent.childCount()
 
-        # Supprimer "Empty" si présent
-        for i in range(parent.childCount()):
-            child = parent.child(i)
-            if child.text(0) == "Empty":
-                parent.removeChild(child)
-                if insert_index > i:
-                    insert_index -= шее
-                break
-
-        # Ajouter le nouvel élément "Arc End"
+        # Créer l'élément Arc End
         arc_end_item = QTreeWidgetItem(["Arc End"])
         arc_end_item.setIcon(0, QIcon("tick.png"))
-        parent.insertChild(insert_index, arc_end_item)
+        parent.insertChild(target_index, arc_end_item)
         root.setExpanded(True)
+        self.project_tree.setCurrentItem(arc_end_item)
     def on_tree_item_double_clicked(self, item, column):
         item_text = item.text(0)
         movement_data = item.data(0, Qt.UserRole)

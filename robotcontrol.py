@@ -463,20 +463,31 @@ class Auboi5Robot:
         """
         return time.strftime("%b %d %Y %H:%M:%S", time.localtime(time.time()))
 
+    import sys
+
+    
+
     def robot_event_callback(self, event):
-        """"
-        * FUNCTION:    robot_event_callback
-        * DESCRIPTION: 机械臂事件
-        * INPUTS:      无输入
-        * OUTPUTS:
-        * RETURNS:     系统事件回调函数
-        * NOTES:
-        """
-        print("event={0}".format(event))
+        print(f"⚠️ Robot Event Received: {event}")
+        print("oh lala")
+        from PyQt5.QtCore import QTimer
         if event['type'] not in RobotEventType.NoError:
             self.last_error = RobotError(event['type'], event['code'], event['content'])
-        else:
-            self.last_event = RobotEvent(event['type'], event['code'], event['content'])
+            print(f"❌ Robot error occurred: {self.last_error}")
+            
+            # Debugging: Check if UI is set
+            if hasattr(self, 'ui_ref'):
+                print(f"ui_ref: {self.ui_ref}")
+                if self.ui_ref:
+                    print("📬 Triggering popup from UI...")
+                    self.ui_ref.robot_error_signal.emit(str(self.last_error))
+                else:
+                    print("❗ ui_ref is None.")
+            else:
+                print("❗ self has no ui_ref attribute.")
+
+
+
 
     @staticmethod
     def raise_error(error_type, error_code, error_msg):
@@ -491,18 +502,15 @@ class Auboi5Robot:
         raise RobotError(error_type, error_code, error_msg)
 
     def check_event(self):
-        """"
-        * FUNCTION:    check_event
-        * DESCRIPTION: 检查机械臂是否发生异常事件
-        * INPUTS:      input
-        * OUTPUTS:     output
-        * RETURNS:     void
-        * NOTES:       如果接收到的是异常事件，则函数抛出异常事件
+        """
+        Checks for any robot event errors but does not raise — lets UI handle it.
         """
         if self.last_error.error_type != RobotErrorType.RobotError_SUCC:
-            raise self.last_error
+            #print("⚠️ Robot error detected, passing to UI handler.")
+            return self.last_error  # return it instead of raising
         if self.rshd == -1 or not self.connected:
             self.raise_error(RobotErrorType.RobotError_NoLink, 0, "no socket link")
+
 
     @staticmethod
     def initialize():
@@ -653,6 +661,7 @@ class Auboi5Robot:
         if self.rshd >= 0 and self.connected:
             self.set_robot_event_callback(self.robot_event_callback)
             return RobotErrorType.RobotError_SUCC
+            print("i am here")
         else:
             logger.warn("RSHD uninitialized or not login!!!")
             return RobotErrorType.RobotError_NotLogin
@@ -2421,17 +2430,18 @@ def test_count(test_count):
             # 设置关节最大加速度
             #robot.set_joint_maxvelc((0.5, 0.5, 0.5, 0.5, 0.5, 0.5))
 
-            #joint1 = (32 / 180.0 * pi,  1.9 / 180.0 * pi, -89 / 180.0 * pi,
-            #          -25 / 180.0 * pi,  -102 / 180.0 * pi, -116 / 180.0 * pi)
+            joint1 = (32 / 180.0 * pi,  1.9 / 180.0 * pi, -89 / 180.0 * pi,
+                    -25 / 180.0 * pi,  -102 / 180.0 * pi, -116 / 180.0 * pi)
 
 
             print(libpyauboi5.get_tool_kinematics_param(robot.rshd))
 
             while test_count > 0:
                 test_count -= 1
-
-
-                #libpyauboi5.move_joint(handle_move, joint1)
+                print(robot.get_robot_state())
+                robot.move_pause()
+                print(robot.get_robot_state())
+                
 
                     #JOINT1 = 1
                     #JOINT2 = 2
@@ -2467,27 +2477,27 @@ def test_count(test_count):
                 print(libpyauboi5.set_teach_user_coord(handle_move,user_coord))
 
                 #切换成基坐标系
-                libpyauboi5.set_teach_base_coord(handle_move)
+                #libpyauboi5.set_teach_base_coord(handle_move)
 
                 #切换末端坐标系：
                 #libpyauboi5.set_teach_end_coord(handle_move)
 
 
                 #沿着Z轴正方向示教
-                libpyauboi5.teach_move_start(handle_move,3,1)
+                #libpyauboi5.teach_move_start(handle_move,3,1)
                 
                 time.sleep(3)
 
-                libpyauboi5.teach_move_stop(handle_move)
+                #libpyauboi5.teach_move_stop(handle_move)
 
                 time.sleep(3)
                 
                 #沿着Z轴负方向示教
-                libpyauboi5.teach_move_start(handle_move,3,0)
+                #libpyauboi5.teach_move_start(handle_move,3,0)
                 
                 time.sleep(3)
 
-                libpyauboi5.teach_move_stop(handle_move)
+                #libpyauboi5.teach_move_stop(handle_move)
 
                 time.sleep(3)
 

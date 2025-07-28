@@ -5,6 +5,8 @@ import math
 from robotcontrol import RobotIOType
 from robotcontrol import RobotUserIoName
 from PyQt5.QtCore import QObject, pyqtSignal, QTimer
+from errorpop import ErrorPopup
+  # adjust the import if you moved it
 
 class JointUpdater(QObject):
     joints_updated = pyqtSignal(list)
@@ -60,9 +62,11 @@ def set_confirmation_result(result):
 def get_robot_current_position(robot, window, coords=None):
     global joints, pos, ori, click_state, first_joints, second_joints, third_joints, confirmation_result, awaiting_confirmation
     current_coordinate = robot.get_current_waypoint()
+   
     joints = current_coordinate["joint"]
     ori = current_coordinate["ori"]
     pos = current_coordinate["pos"]
+    
     
     joint_updater.joints_updated.emit(joints)  # Émettre les nouvelles valeurs des joints
     

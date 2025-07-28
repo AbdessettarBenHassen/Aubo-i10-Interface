@@ -4,12 +4,12 @@ import main as mn
 import threads as th  # Importez le module threads pour accéder à th.joints
 import math
 import logging
+from robot_db import get_full_tool_data
 
 logger = logging.getLogger('main.robotcontrol')
 timers = {}
 cartesian_timers = {}
 stopped_joints = set()
-
 def radian_to_degree(radians):
         """
         Convert radians to degrees.
@@ -86,6 +86,39 @@ def robot_connect(ip):
 logger = logging.getLogger('main.robotcontrol')
 
 
+# utils.py
+def setup_robot(ip, tool_name):
+    robot = robot_connect(ip)
+    print("done")
+    if robot is None:
+        return None, None
+
+    tool_data = get_full_tool_data(tool_name)
+    dynamics = tool_data['dynamics']
+
+    # Build tool_dynamics dict in the expected format
+    tool_dynamics = {
+        "position": (
+            dynamics.get('gravity_center_x', 0.0),
+            dynamics.get('gravity_center_y', 0.0),
+            dynamics.get('gravity_center_z', 0.0)
+        ),
+        "payload": dynamics.get('payload', 0.0),
+        "inertia": (
+            dynamics.get('inertia_xx', 0.0),
+            dynamics.get('inertia_yy', 0.0),
+            dynamics.get('inertia_zz', 0.0),
+            dynamics.get('inertia_xy', 0.0),
+            dynamics.get('inertia_xz', 0.0),
+            dynamics.get('inertia_yz', 0.0)
+        )
+    }
+
+    # Use this tool_dynamics for robot startup and setting tool params
+    robot.robot_startup(6, tool_dynamics)
+    robot.init_profile()
+
+    return robot, tool_dynamics
 
 # Dictionnaire pour stocker les timers
 timers = {}
@@ -414,7 +447,7 @@ def euler_to_quaternion(rx, ry, rz):
     cr = math.cos(rx * 0.5)
     sr = math.sin(rx * 0.5)
 
-    w = cr * cp * cy + sr * sp * sy
+    w = -1
     x = sr * cp * cy - cr * sp * sy
     y = cr * sp * cy + sr * cp * sy
     z = cr * cp * sy - sr * sp * cy
