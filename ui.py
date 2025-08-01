@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QApplication,QMainWindow,QSpinBox,QDoubleSpinBox,QTreeWidgetItem,QListWidget, QTreeWidget, QDialog,QPushButton,QMessageBox, QStackedWidget, QWidget, QVBoxLayout, QLabel, QGridLayout, QHBoxLayout, QSlider, QLineEdit, QRadioButton, QGroupBox, QComboBox, QCheckBox, QSpacerItem, QSizePolicy
 from PyQt5.QtGui import QFont, QIcon
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel, QPushButton
+from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel, QPushButton, QInputDialog
 import sqlite3
 import sys
 from PyQt5.QtWidgets import (
@@ -536,7 +536,7 @@ class WeldingMachineController:
             self.current = float(current)
             robot.set_board_io_status(RobotIOType.User_AO, RobotUserIoName.user_ao_00, current)
             print(f"Courant défini à {self.current:.1f} A")
-
+    
 
     def set_voltage(self, robot,voltage):
         """Définir la tension de soudage."""
@@ -548,20 +548,19 @@ class WeldingMachineController:
     def detect_arc(self,robot, timeout):
             start_time = time.time()
             while time.time() - start_time < timeout:
-                current = self.get_current()
-                robot.set_board_io_status(RobotIOType.User_DI, RobotUserIoName.user_di_00, timeout)
-
-                if current > 5.0:  # Adjust threshold based on your machine
+                detection=robot.get_board_io_status(RobotIOType.User_DI, RobotUserIoName.user_di_00)
+                if detection :  # Adjust threshold based on your machine
                     return True
                 time.sleep(0.1)
             return False
 class ErrorPopup(QDialog):
-    def __init__(self, error_data,robot=None, parent=None):
+    def __init__(self, error_data,robot=None,ip=None, tooltest=None, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Robot Error Notification")
         self.robot = robot  # Store robot reference
         self.resize(700, 300)
-
+        self.ip = ip
+        self.tooltest = tooltest
         # Create the table
         self.table = QTableWidget(0, 3)
         self.table.setHorizontalHeaderLabels(["Time", "Event Type", "Message"])
@@ -574,7 +573,7 @@ class ErrorPopup(QDialog):
         # Main layout
         layout = QVBoxLayout()
         layout.addWidget(self.table)
-
+        
         # Close button
         close_btn = QPushButton("Close")
         close_btn.clicked.connect(self.test)
@@ -587,13 +586,9 @@ class ErrorPopup(QDialog):
     def test(self):
         """Close the dialog."""
         self.robot.collision_recover()
-        config = ConfigDialog()
-        if config.exec_() == config.Accepted:
-            tool = config.selected_tool
-            ip = config.selected_ip
-        print("Selected tool:", tool)
-        print("Selected IP:", ip)
-        self.robot = utl.setup_robot(ip, tool)
+        print("selected tooltest:", self.tooltest)
+        print("Selected IP:", self.ip)
+        self.robot = utl.setup_robot(self.ip, self.tooltest)
         self.close()
     def add_notification(self, event_type, message):
         # Convert dict message to string if needed
@@ -615,11 +610,18 @@ class ErrorPopup(QDialog):
         self.table.resizeRowsToContents()
 class MainWindow(QMainWindow):
     robot_error_signal = pyqtSignal(str)
-    def __init__(self,robot):
+    def __init__(self, robot, ip=None, tooltest=None, parent=None):
+        self.ip = ip
+        self.tooltest = tooltest
+        
         super().__init__()
+        self.setWindowIcon(QIcon("C:/Users/Emna/Downloads/lgo.jpeg"))
+        self.arc_detected=False
+        self.stop_requested = False
         self.worker_process = None
         self.robot = robot
-        self.setWindowTitle("Aubo i10 Interface")
+        self.in_arc_sequence = False
+        self.setWindowTitle("TuniBot - Aubo i10 Interface -")
         self.setGeometry(100, 100, 1024, 768)
         self.joint_value_displays = []  # Liste pour stocker les QLineEdit des joints
         self.joint_value_labels = [] 
@@ -645,7 +647,7 @@ class MainWindow(QMainWindow):
         joint_updater.execute_all_movements.connect(self.handle_execute_all_movements)
         joint_updater.request_confirmation.connect(self.handle_request_confirmation)
         
-        
+        self.seconds = 0
         
         joint_updater.delete_last_tree_item.connect(self.handle_delete_last_tree_item)
 
@@ -723,14 +725,15 @@ class MainWindow(QMainWindow):
         self.extensions_page = self.create_extensions_page()
         self.system_info_page = self.create_page("System Info")
         self.about_page = self.create_page("About")
-        
+        self.init_system_info_page()
         self.pages.addWidget(self.robot_teaching_page)
         self.pages.addWidget(self.programming_page)
         self.pages.addWidget(self.settings_page)
         self.pages.addWidget(self.extensions_page)
         self.pages.addWidget(self.system_info_page)
         self.pages.addWidget(self.about_page)
-
+        self.system_info_banner = self.create_system_info_banner()
+        self.main_layout.addLayout(self.system_info_banner)
 
         # Ajouter les boutons de navigation
         self.add_nav_button("Robot Teaching", self.robot_teaching_page)
@@ -743,9 +746,99 @@ class MainWindow(QMainWindow):
         self.robot_error_signal.connect(self.show_robot_error_popup)
         joint_updater.joints_updated.connect(self.update_joint_values)
         joint_updater.joints_updated.connect(self.update_manipulator_pose)
+    def init_system_info_page(self):
+        layout = self.system_info_page.layout()
+
+        if layout is None:
+            layout = QVBoxLayout()
+            self.system_info_page.setLayout(layout)
+
+        # Clear old widgets if necessary
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        # Get static robot information
+        rshd = self.robot.rshd
+        connected = self.robot.connected
+        client_count = Auboi5Robot._Auboi5Robot__client_count
+
+        # Create labels
+        layout.addWidget(QLabel(f"RSHD Handle: {rshd}"))
+        layout.addWidget(QLabel(f"Connected: {connected}"))
+        layout.addWidget(QLabel(f"Client Count: {client_count}"))
+
+        # Time label (dynamic)
+        self.time_label = QLabel()
+        layout.addWidget(self.time_label)
+
+        # Set up a timer to update the time every second
+        self.time_timer = QTimer(self)
+        self.time_timer.timeout.connect(self.update_local_time)
+        self.time_timer.start(1000)  # update every 1000 ms (1 second)
+
+        # Call immediately to avoid delay
+        self.update_local_time()
+    def create_system_info_banner(self):
+        banner_layout = QHBoxLayout()
+
+        # Create labels
+        self.connected_label = QLabel()
+        self.time_label = QLabel()
+        self.rshd_label = QLabel()
+    
+
+        # Style all labels the same way
+        label_style = """
+            QLabel {
+                color: #444;
+                font-family: 'Segoe UI', 'Arial', sans-serif;
+                font-size: 10pt;
+                font-weight: normal;
+            }
+        """
+        for label in [self.connected_label, self.time_label, self.rshd_label]:
+            label.setStyleSheet(label_style)
+
+        # Use spacer items and stretch for responsiveness
+        banner_layout.addWidget(self.connected_label)
+        banner_layout.addStretch(1)
+
+        banner_layout.addWidget(self.time_label)
+        banner_layout.addStretch(1)
+
+        banner_layout.addWidget(self.rshd_label)
+        banner_layout.addStretch(1)
+
+
+        # Real-time clock timer
+        self.time_timer = QTimer(self)
+        self.time_timer.timeout.connect(self.update_local_time)
+        self.time_timer.start(1000)
+
+        # Initial update
+        self.update_local_time()
+        self.update_system_info()
+
+        return banner_layout
+
+    def update_local_time(self):
+        local_time = self.robot.get_local_time()
+        self.time_label.setText(f"Local Time: {local_time}")
+    def update_system_info(self):
+        self.connected_label.setText("🟢 Connected" if self.robot.connected else "🔴 Disconnected")
+        self.rshd_label.setText(f"🔧 RSHD: {self.robot.rshd}")
+
+
+
+
     def show_robot_error_popup(self, error_data):
         if self.error_popup is None or not self.error_popup.isVisible():
-            self.error_popup = ErrorPopup(error_data, self.robot,self)
+            self.error_popup = ErrorPopup(error_data, self.robot,self.ip,self.tooltest,self)
+            if(self.in_arc_sequence):
+                self.end_arc_process()
             self.error_popup.show()
         else:
             self.error_popup.add_notification("Error", error_data)
@@ -2017,7 +2110,9 @@ class MainWindow(QMainWindow):
             test_value = float(self.test_input_right.text())
             if self.curve2_slope is not None and self.curve2_intercept is not None:
                 result = self.curve2_slope * test_value + self.curve2_intercept
-                self.test_button_right.setText(f"Résultat: {result:.2f} V")
+                self.test_button_right.setText(f"tttt: {result:.2f} V")
+                self.welding_machine.set_current(self.robot,test_value)
+                self.welding_machine.set_voltage(self.robot,result)
             else:
                 self.test_button_right.setText("Pente non définie")
         except ValueError:
@@ -2351,29 +2446,7 @@ class MainWindow(QMainWindow):
             self.welding_machine.set_voltage(self.robot,weld_voltage)
             time.sleep(0.2)
 
-            # # Step 4: Wait for arc detection with retry mechanism
-            # print(f"Step 4: Waiting for arc detection for {arc_detect_time} seconds")
-            # max_attempts = 3
-            # attempt = 1
-            # arc_detected = False
-            # while attempt <= max_attempts and not arc_detected:
-            #     print(f"Arc detection attempt {attempt}/{max_attempts}")
-            #     arc_detected = self.welding_machine.detect_arc(arc_detect_time / max_attempts)  # Split time across attempts
-            #     if not arc_detected:
-            #         print(f"Arc detection failed on attempt {attempt}")
-            #         if attempt < max_attempts:
-            #             print("Retrying with slightly increased current and voltage...")
-            #             starting_current *= 1.1  # Increase by 10%
-            #             starting_voltage *= 1.1  # Increase by 10%
-            #             self.welding_machine.set_current(starting_current)
-            #             self.welding_machine.set_voltage(starting_voltage)
-            #             print(f"Adjusted to current {starting_current:.1f} A and voltage {starting_voltage:.1f} V")
-            #             time.sleep(0.5)  # Small delay before retry
-            #     attempt += 1
-
-            # if not arc_detected:
-            #     raise Exception("Arc detection failed after multiple attempts!")
-
+                
             # Update displays with possibly adjusted values
             self.param_displays["Arc Starting Current"].setText(f"{starting_current:.1f} A")
             self.param_displays["Arc Starting Voltage"].setText(f"{starting_voltage:.1f} V")
@@ -2384,7 +2457,7 @@ class MainWindow(QMainWindow):
             # self.welding_machine.set_voltage(weld_voltage)
 
             # QMessageBox.information(self, "Success", "Arc started successfully!")
-
+            print("ARCSTART Sequence completed successfully.")
         except Exception as e:
             print(f"Error during arc start process: {e}")
             # Cleanup in case of error
@@ -2395,7 +2468,7 @@ class MainWindow(QMainWindow):
             self.param_displays["Gas Detect Signal"].setText("Yxx: OFF")
             self.param_displays["Arc Starting Signal"].setText("Yxx: OFF")
             self.param_displays["Arc Detect Signal"].setText("Xxx: OFF")
-            QMessageBox.critical(self, "Error", f"Arc start failed: {str(e)}")
+
 
     def end_arc_process(self):
         """Handle the full arc end sequence using saved parameters from JSON and interface."""
@@ -2486,11 +2559,11 @@ class MainWindow(QMainWindow):
             print(f"Arc ending with current {ending_current} A and voltage {ending_voltage} V for {arc_ending_time} seconds")
             time.sleep(arc_ending_time)
 
-            # Step 2: Prevent stick phase
-            # self.welding_machine.set_current(remove_stick_current)
-            # self.welding_machine.set_voltage(remove_stick_voltage)
-            # print(f"Preventing stick with current {remove_stick_current} A and voltage {remove_stick_voltage} V for {proof_stick_time} seconds")
-            # time.sleep(proof_stick_time)
+             #Step 2: Prevent stick phase
+            self.welding_machine.set_current(self.robot,remove_stick_current)
+            self.welding_machine.set_voltage(self.robot,remove_stick_voltage)
+            print(f"Preventing stick with current {remove_stick_current} A and voltage {remove_stick_voltage} V for {proof_stick_time} seconds")
+            time.sleep(proof_stick_time)
 
             # # Step 3: Disable arc signal with error delay
             self.welding_machine.set_arc_signal(self.robot,False)
@@ -2709,6 +2782,29 @@ class MainWindow(QMainWindow):
         stop_button.clicked.connect(self.stop_robot_movement)
         control_layout.addWidget(stop_button)  # Connexion du bouton d'arrêt à la méthode stop_loop
         self.pause_button = QPushButton("pause")
+        control_layout.addWidget(stop_button)  # Connexion du bouton d'arrêt à la méthode stop_loop
+        stop_button_1 = QPushButton("Stop loop")
+        stop_button_1.setFixedSize(100, 40)
+        stop_button_1.setStyleSheet("""
+            QPushButton {
+                background-color: #4682B4;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                padding: 5px;
+                color: white;
+                font-weight: bold;
+                font-size: 12pt;
+            }
+            QPushButton:hover {
+                background-color: #4169E1;
+            }
+            QPushButton:pressed {
+                background-color: #E0E0E0;
+                color: black;
+            }
+        """)
+        stop_button_1.clicked.connect(self.stop_loop_robot_motion)
+        control_layout.addWidget(stop_button_1)
         self.pause_button.setFixedSize(100, 40)
         self.pause_button.setStyleSheet("""
             QPushButton {
@@ -2843,7 +2939,7 @@ class MainWindow(QMainWindow):
 
         basic_condition_buttons = [
             ("Loop", "Create a loop structure"),
-            # ("Break", "Break out of a loop"),
+            ("Break", "Break out of a loop"),
             # ("Continue", "Skip to the next iteration"),
             ("arc_start", "Add an if condition"),
             ("arc_end", "Add an else-if condition"),
@@ -2853,7 +2949,7 @@ class MainWindow(QMainWindow):
             # ("Default", "Add a default case"),
             # ("Set", "Set a variable or value"),
             # ("Wait", "Add a delay"),
-            # ("Timer", "Set a timer"),
+            ("timer", "Set a timer"),
             # ("Line Comment", "Add a single-line comment"),
             # ("Block Comment", "Add a block comment"),
             # ("Goto", "Jump to a label"),
@@ -2903,7 +2999,6 @@ class MainWindow(QMainWindow):
                         btn.clicked.connect(self.add_arc_start_to_tree)
                     elif btn_text == "arc_end":
                         btn.clicked.connect(self.add_arc_end_to_tree)
-
                     else:
                         btn.clicked.connect(lambda checked, text=btn_text: self.add_to_project_tree(text))
                     group_layout.addWidget(btn)
@@ -2972,7 +3067,14 @@ class MainWindow(QMainWindow):
                     except (json.JSONDecodeError, IOError) as e:
                         print(f"Erreur lors du chargement de '{filename}' : {e}")
 
-
+    def stop_loop_robot_motion(self):
+        """Demande l'arrêt à la fin de la boucle en cours."""
+        try:
+            self.stop_requested = True  # ← Signale qu'on veut sortir à la fin de la boucle
+            print("🛑 Arrêt demandé : en attente du prochain 'Break' pour sortir.")
+            # QMessageBox.information(self, "Information", "Le robot s'arrêtera à la fin de la boucle en cours.")
+        except Exception as e:
+            print(f"Erreur dans stop_robot_motion : {e}")
 
     def show_save_section(self):
         # Nettoyer le conteneur de droite
@@ -3330,24 +3432,78 @@ class MainWindow(QMainWindow):
 
 
     def add_to_project_tree(self, text):
-        self.is_modified = True  # Marquer comme modifié
+        self.is_modified = True
         root = self.project_tree.topLevelItem(0)
+
         if not root:
             root = QTreeWidgetItem(["Project_Program"])
             self.project_tree.addTopLevelItem(root)
             root.setExpanded(True)
 
-        # Supprimer "Empty" si présent
-        for i in range(root.childCount()):
-            child = root.child(i)
-            if child.text(0) == "Empty":
-                root.removeChild(child)
-                break
+        selected_item = self.project_tree.currentItem()
+        if selected_item and selected_item != root:
+            parent = selected_item.parent() or root
+            insert_index = parent.indexOfChild(selected_item)
 
-        # Ajouter le nouvel élément
-        new_item = QTreeWidgetItem([text])
-        root.addChild(new_item)
+            # Supprimer "Empty" si présent
+            for i in range(parent.childCount()):
+                if parent.child(i).text(0) == "Empty":
+                    parent.removeChild(parent.child(i))
+                    if insert_index > i:
+                        insert_index -= 1
+                    break
+
+            # Choix position d’insertion
+            if self.add_before_radio.isChecked():
+                target_index = insert_index
+            else:
+                target_index = insert_index + 1
+        else:
+            parent = root
+            # Supprimer "Empty" si présent au niveau racine
+            for i in range(root.childCount()):
+                if root.child(i).text(0) == "Empty":
+                    root.removeChild(root.child(i))
+                    break
+            target_index = parent.childCount()
+
+        # Création de l’élément
+        if text == "Loop":
+            options = ["Définir un nombre", "Loop (∞)", "Loop (until Stop)"]
+            choice, ok = QInputDialog.getItem(self, "Type de boucle", "Choisir le type :", options, 0, False)
+            if not ok:
+                return
+
+            if choice == "Définir un nombre":
+                count, ok2 = QInputDialog.getInt(self, "Nombre de répétitions", "Combien de fois répéter ?", 2, 1, 100, 1)
+                if not ok2:
+                    return
+                item_text = f"Loop (x{count})"
+                new_item = QTreeWidgetItem([item_text])
+                new_item.setData(0, Qt.UserRole, ("Loop", count))
+            elif choice == "Loop (∞)":
+                new_item = QTreeWidgetItem(["Loop (∞)"])
+                new_item.setData(0, Qt.UserRole, ("LoopInfinite", None))
+            elif choice == "Loop (until Stop)":
+                new_item = QTreeWidgetItem(["Loop (until Stop)"])
+                new_item.setData(0, Qt.UserRole, ("LoopUntilStop", None))
+        else:
+            if text == "timer":
+                self.seconds, ok = QInputDialog.getInt(self, "Timer", "Pause (en secondes) :", 1, 1, 60, 1)
+                print(f"Timer set to {self.seconds} seconds")
+                if not ok:
+                    return
+                item_text = f"timer ({self.seconds}s)"
+                new_item = QTreeWidgetItem([item_text])
+                new_item.setData(0, Qt.UserRole, ("timer", self.seconds))
+            else:
+                new_item = QTreeWidgetItem([text])
+                new_item.setData(0, Qt.UserRole, (text, None))
+
+        # Insertion finale
+        parent.insertChild(target_index, new_item)
         root.setExpanded(True)
+        self.project_tree.setCurrentItem(new_item)  
 
     def on_tree_item_clicked(self, item, column):
         if item.text(column) in ["Project_Program", "Empty"]:
@@ -3646,79 +3802,152 @@ class MainWindow(QMainWindow):
 
         root.setExpanded(True)
         self.project_tree.setCurrentItem(new_item)
-
-
     def execute_all_movements(self):
         if not self.check_save_before_execution():
             return
+        print("🟢 Lancement de l'exécution du programme...")
 
+        # ✅ Initialize all execution states
+        self.current_execution_index = 0
+        self.execution_root = self.project_tree.topLevelItem(0)
+        self.loop_stack = []
+        self.stop_requested = False
+
+        self.execute_from_index(0)  # Start execution
+
+    def resume_after_timer(self):
+        print("⏱️ Reprise après temporisation")
+        self.execute_from_index(self.current_execution_index)
+
+
+    def execute_from_index(self, i):
         try:
-            root = self.project_tree.topLevelItem(0)
+            root = self.execution_root
             if not root or root.childCount() == 0:
                 QMessageBox.warning(self, "Avertissement", "Aucun programme à exécuter dans l'arborescence !")
                 return
 
-            print("Début de l'exécution du programme...")
-
             file_number = str(self.current_file)
-            json_speed = float(self.file_parameters[file_number].get("speed", 2000.00))  # Par défaut 2000 mm/s
+            json_speed = float(self.file_parameters[file_number].get("speed", 2000.00))
+            self.in_arc_sequence = False
+            loop_stack = self.loop_stack  # already initialized
+            self.stop_requested = getattr(self, "stop_requested", False)
 
-            in_arc_sequence = False
-            for i in range(root.childCount()):
+            while i < root.childCount():
                 item = root.child(i)
                 item_text = item.text(0)
+                movement_data = item.data(0, Qt.UserRole)
+                action_type, action_value = (movement_data if movement_data else (item_text, None))
 
-                # Mettre en surbrillance l'élément en cours dans l'arborescence
+                # UI Feedback
                 self.project_tree.setCurrentItem(item)
                 self.project_tree.scrollToItem(item)
-                QApplication.processEvents()  # Rafraîchir l'interface pour afficher la sélection
-                time.sleep(0.1)  # Petit délai pour que l'opérateur puisse voir la surbrillance
-
+                QApplication.processEvents()
+                time.sleep(0.1)
                 if item_text == "Arc Start":
+                    print(self.speed_input.text(), " speed_input.text()")
+                    if(self.speed_input.text() == "0"):
+                        QMessageBox.critical(self, "Avertissement", "Veuillez définir une vitesse Dans Settings")
+                        return
                     self.start_arc_process()
-                    in_arc_sequence = True
+                    self.in_arc_sequence = True
+                    print("🔵 Début de la séquence d'arc")
+                    i += 1
                     continue
+                    
+
                 elif item_text == "Arc End":
                     self.end_arc_process()
-                    in_arc_sequence = False
+                    self.in_arc_sequence = False
+                    i += 1
                     continue
-                elif item_text == "Loop":
-                    print("⚠️ Exécution de la boucle non implémentée.")
+                # === LOOP HANDLING ===
+                if action_type in ["Loop", "LoopInfinite", "LoopUntilStop"]:
+                    loop_stack.append({
+                        "start": i + 1,
+                        "repeat": action_value if action_type == "Loop" else None,
+                        "current": 0,
+                        "type": action_type
+                    })
+                    i += 1
                     continue
 
-                movement_data = item.data(0, Qt.UserRole)
+                elif item_text == "Break":
+                    if loop_stack:
+                        loop = loop_stack[-1]
+                        loop["current"] += 1
+                        if loop["type"] == "LoopUntilStop":
+                            if self.stop_requested:
+                                print("🛑 Arrêt demandé : sortie de Loop (until Stop)")
+                                break
+                            else:
+                                i = loop["start"]
+                                continue
+                        elif loop["type"] == "LoopInfinite":
+                            if self.stop_requested:
+                                print("🟡 Stop demandé mais on continue Loop (∞)")
+                            i = loop["start"]
+                            continue
+                        elif loop["type"] == "Loop":
+                            if loop["current"] < loop["repeat"]:
+                                i = loop["start"]
+                            else:
+                                loop_stack.pop()
+                                i += 1
+                            continue
+
+                # === TIMER PAUSE BLOCK ✅ ===
+                elif action_type == "timer":
+                    self.current_execution_index = i + 1  # resume from next step
+                    print(f"⏳ Pause de {action_value} seconde(s)")
+                    QTimer.singleShot(int(action_value) * 1000, self.resume_after_timer)
+                    return  # Exit current execution loop
+
+                # === ARC LOGIC ===
+                
+
+                # === MOVEMENT EXECUTION ===
                 if not movement_data:
+                    i += 1
                     continue
-
                 movement_type, coordinates = movement_data
+                print(f"🔄 Exécution de l'élément {i}: {item_text} ({movement_type})")
                 if movement_type in ["Joint", "Line", "Circle"]:
-                    if in_arc_sequence:
+                    if self.in_arc_sequence:
                         if movement_type == "Joint":
+                            print("Jointhere")
                             joint_values, joint_speeds, joint_accs = coordinates
-                            radius = 500.0  # Même valeur que ci-dessus
-                            adjusted_speeds = [(json_speed / radius)] * len(joint_speeds)  # Convertir mm/s en rad/s
+                            radius = 500.0
+                            adjusted_speeds = [(json_speed / radius)] * len(joint_speeds)
                             adjusted_coordinates = (movement_type, (joint_values, adjusted_speeds, joint_accs))
                         elif movement_type == "Circle":
-                            (first_values, second_values, third_values), speed, acc = coordinates
-                            adjusted_coordinates = (movement_type, ((first_values, second_values, third_values), json_speed, acc))
+                            (first, second, third), speed, acc = coordinates
+                            adjusted_coordinates = (movement_type, ((first, second, third), json_speed, acc))
                         else:  # Line
                             joint_values, speed, acc = coordinates
                             adjusted_coordinates = (movement_type, (joint_values, json_speed, acc))
                     else:
                         adjusted_coordinates = (movement_type, coordinates)
-                
+
                     self.move_robot_to_coordinates(adjusted_coordinates)
+                    print("moving")
                 else:
                     print(f"⚠️ Type de mouvement non reconnu : '{movement_type}'")
 
+                i += 1
+
+            # === END EXECUTION ===
             print("✅ Fin de l'exécution du programme.")
-            QMessageBox.information(self.project_tree, "Succès", "Le programme a été exécuté avec succès !")
-            # Réinitialiser la sélection après l'exécution
             self.project_tree.clearSelection()
+            QMessageBox.information(self, "Succès", "Programme exécuté avec succès !")
+            self.stop_requested = False
+            self.loop_stack = []
 
         except Exception as e:
             print(f"❌ Erreur critique : {str(e)}")
-            self.project_tree.clearSelection()  # Réinitialiser en cas d'erreur
+            self.project_tree.clearSelection()
+            QMessageBox.critical(self, "Erreur", f"Échec de l'exécution : {str(e)}")
+
             
 
     def are_points_collinear(self, joints1, joints2, joints3):
@@ -3761,7 +3990,9 @@ class MainWindow(QMainWindow):
             print("resumed")
         
     def stop_robot_movement(self):
-        self.robot.move_stop()  
+        self.robot.move_stop() 
+        if(self.in_arc_sequence):
+            self.end_arc_process()
         self.start_button.setEnabled(True)
         self.pause_button.setText("pause") # Réactiver le bouton de démarrage
          # Terminer le processus de travail après l'exécution
@@ -3799,7 +4030,6 @@ class MainWindow(QMainWindow):
         result = self.robot.set_base_coord()
         if result != RobotErrorType.RobotError_SUCC:
             return
-
             # Extraire les valeurs de vitesse et d'accélération des données
         if mode == "Joint":
             joint_values, joint_speeds, joint_accs = data
@@ -3834,7 +4064,7 @@ class MainWindow(QMainWindow):
             result = self.robot.set_end_max_line_acc(end_max_line_acc)
             if result != RobotErrorType.RobotError_SUCC:
                 return
-
+        
         if mode == "Circle":
             # Extraire les coordonnées
             (first_values, second_values, third_values), _, _ = data
@@ -4177,33 +4407,53 @@ class MainWindow(QMainWindow):
         item_text = item.text(0)
         movement_data = item.data(0, Qt.UserRole)
 
+        if item_text.startswith("Loop"):
+            options = ["Définir un nombre", "Loop (∞)", "Loop (until Stop)"]
+            choice, ok = QInputDialog.getItem(self, "Modifier la boucle", "Choisir le type :", options, 0, False)
+            if not ok:
+                return
+
+            if choice == "Définir un nombre":
+                count, ok2 = QInputDialog.getInt(self, "Nombre de répétitions", "Combien de fois répéter ?", 2, 1, 100, 1)
+                if ok2:
+                    item.setText(0, f"Loop (x{count})")
+                    item.setData(0, Qt.UserRole, ("Loop", count))
+            elif choice == "Loop (∞)":
+                item.setText(0, "Loop (∞)")
+                item.setData(0, Qt.UserRole, ("LoopInfinite", None))
+            elif choice == "Loop (until Stop)":
+                item.setText(0, "Loop (until Stop)")
+                item.setData(0, Qt.UserRole, ("LoopUntilStop", None))
+            return
+
+        # Gérer les modifications de vitesse pour les mouvements
         if not movement_data:
             return
 
         movement_type, coordinates = movement_data
-
         if movement_type not in ["Line", "Circle", "Joint"]:
             return
 
-        radius = 500.0  # Même valeur que ci-dessus
+        # Modifier la vitesse du mouvement
+        radius = 500.0
         if movement_type == "Circle":
             (first_values, second_values, third_values), speed, acc = coordinates
             first_values = [float(val) if isinstance(val, str) else val for val in first_values]
             second_values = [float(val) if isinstance(val, str) else val for val in second_values]
             third_values = [float(val) if isinstance(val, str) else val for val in third_values]
-            speed = float(speed) if isinstance(speed, str) else speed
-            acc = float(acc) if isinstance(acc, str) else acc
+            speed = float(speed)
+            acc = float(acc)
         elif movement_type == "Line":
             joint_values, speed, acc = coordinates
             joint_values = [float(val) if isinstance(val, str) else val for val in joint_values]
-            speed = float(speed) if isinstance(speed, str) else speed
-            acc = float(acc) if isinstance(acc, str) else acc
+            speed = float(speed)
+            acc = float(acc)
         else:  # Move Joint
             joint_values, joint_speeds, joint_accs = coordinates
             joint_values = [float(val) if isinstance(val, str) else val for val in joint_values]
             joint_speeds = [float(val) if isinstance(val, str) else val for val in joint_speeds]
             joint_accs = [float(val) if isinstance(val, str) else val for val in joint_accs]
-            speed = joint_speeds[0] * radius  # Convertir rad/s en mm/s pour l'affichage
+            speed = joint_speeds[0] * radius  # Convertir rad/s en mm/s
 
         dialog = EditSpeedDialog(self, current_speed=speed)
         if dialog.exec_():
@@ -4214,30 +4464,30 @@ class MainWindow(QMainWindow):
             elif movement_type == "Line":
                 new_coordinates = (joint_values, new_speed, acc)
             else:  # Move Joint
-                new_joint_speeds = [new_speed / radius] * len(joint_speeds)  # Convertir mm/s en rad/s
+                new_joint_speeds = [new_speed / radius] * len(joint_speeds)
                 new_coordinates = (joint_values, new_joint_speeds, joint_accs)
 
             item.setData(0, Qt.UserRole, (movement_type, new_coordinates))
 
             try:
                 if movement_type == "Circle":
-                    first_joints_str = ", ".join(map(lambda x: f"{x:.2f}", first_values))
-                    second_joints_str = ", ".join(map(lambda x: f"{x:.2f}", second_values))
-                    third_joints_str = ", ".join(map(lambda x: f"{x:.2f}", third_values))
-                    item.setText(0, f"Move Circle ({first_joints_str}) -> ({second_joints_str}) -> ({third_joints_str}), Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²")
+                    item.setText(0, f"Move Circle ({', '.join(f'{x:.2f}' for x in first_values)}) -> "
+                                    f"({', '.join(f'{x:.2f}' for x in second_values)}) -> "
+                                    f"({', '.join(f'{x:.2f}' for x in third_values)}), "
+                                    f"Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²")
                 elif movement_type == "Line":
-                    joint_values_str = ", ".join(map(lambda x: f"{x:.2f}", joint_values))
-                    item.setText(0, f"Move Line ({joint_values_str}, Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²)")
+                    item.setText(0, f"Move Line ({', '.join(f'{x:.2f}' for x in joint_values)}, "
+                                    f"Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²)")
                 else:  # Move Joint
                     speeds_str = ", ".join([f"{new_speed:.2f}" for _ in range(len(joint_speeds))])
-                    joint_values_str = ", ".join(map(lambda x: f"{x:.2f}", joint_values))
-                    item.setText(0, f"Move Joint ({joint_values_str}, Speeds: {speeds_str} mm/s)")
+                    item.setText(0, f"Move Joint ({', '.join(f'{x:.2f}' for x in joint_values)}, "
+                                    f"Speeds: {speeds_str} mm/s)")
             except Exception as e:
                 print(f"Erreur lors de la mise à jour du texte : {e}")
                 return
 
             self.is_modified = True
-            print(f"Vitesse modifiée pour '{movement_type}' : {new_speed} mm/s")
+            print(f"✅ Vitesse modifiée pour '{movement_type}' : {new_speed:.2f} mm/s")
     def generate_program_name_with_date(self):
         """Génère un nom de programme basé sur la date et l'heure actuelles (format : Program_YYYYMMDD_HHMMSS)."""
         from datetime import datetime

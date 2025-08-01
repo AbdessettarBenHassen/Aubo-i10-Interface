@@ -1,12 +1,12 @@
 from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QVBoxLayout, QLineEdit, QPushButton
 from robot_db import fetch_all_tool_names, get_full_tool_data
-
+from PyQt5.QtGui import QFont, QIcon
 class ConfigDialog(QDialog):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Robot Init Form")
+        self.setWindowTitle("TuniBot - Robot Initilize -")
         self.resize(500, 400)
-
+        self.setWindowIcon(QIcon("C:/Users/Emna/Downloads/lgo.jpeg"))
         self.tool_combo = QComboBox()
         self.tool_combo.addItems(fetch_all_tool_names())
         self.tool_combo.currentTextChanged.connect(self.update_display)

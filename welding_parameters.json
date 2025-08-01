@@ -25,6 +25,7 @@
             "reserve": "0.800",
             "wire_fb": "0.100",
             "arc_in_advance": "0.000",
+            "speed": "0.000",
             "comment": ""
         }
     }

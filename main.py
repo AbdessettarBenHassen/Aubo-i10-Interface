@@ -9,7 +9,8 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QTimer
 
 #ip = '192.168.0.23'
-ip = '192.168.11.129'
+ip = ''
+tooltest = ""
 robot = None
 window = None
 movement_active = False
@@ -67,20 +68,20 @@ def main():
 
     config = ConfigDialog()
     if config.exec_() == config.Accepted:
-        tool = config.selected_tool
+        tooltest = config.selected_tool
         ip = config.selected_ip
-        print("Selected tool:", tool)
+        print("Selected tool:", tooltest)
         print("Selected IP:", ip)
 
     global robot
-    robot, tool_dynamics = utl.setup_robot(ip, tool)
+    robot, tool_dynamics = utl.setup_robot(ip, tooltest)
      # Make sure `window` is your main window object
     if robot is None:
         print("Connection failed.")
         sys.exit()
     update_joint_speed_from_slider(50, robot) 
     global window
-    window = MainWindow(robot)
+    window = MainWindow(robot, ip=ip, tooltest=tooltest)
     window.robot = robot
     robot.ui_ref = window  # ✅ Assign UI reference BEFORE enabling event
     robot.enable_robot_event()  # ✅ Now it's safe
