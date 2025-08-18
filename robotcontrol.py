@@ -316,6 +316,7 @@ class RobotUserIoName:
     user_ai_02 = "VI2"
     user_ai_03 = "VI3"
 
+    
     user_ao_00 = "VO0"
     user_ao_01 = "VO1"
     user_ao_02 = "VO2"
@@ -468,8 +469,6 @@ class Auboi5Robot:
     
 
     def robot_event_callback(self, event):
-        print(f"⚠️ Robot Event Received: {event}")
-        print("oh lala")
         from PyQt5.QtCore import QTimer
         if event['type'] not in RobotEventType.NoError:
             self.last_error = RobotError(event['type'], event['code'], event['content'])
@@ -2534,7 +2533,6 @@ if __name__ == '__main__':
         test_count(1)        
 
         logger.info("test completed")
-
 
 
 

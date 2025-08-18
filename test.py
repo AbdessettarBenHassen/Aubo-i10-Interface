@@ -48,7 +48,7 @@ def dump_table(cursor, table):
     print(f"\nAll records dumped to db_dump_{table}.txt\n")
 
 def main():
-    db_path = 'C:/Users/Emna/Desktop/tool_coord_param.db'
+    db_path = 'C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db'
     tables = ['tool_dynamics_param', 'tool_kinematics_calibrate_point', 'tool_kinematics_param', 'tool_param', 'coord_param',]
 
     conn = sqlite3.connect(db_path)

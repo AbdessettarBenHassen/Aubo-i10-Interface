@@ -7,6 +7,11 @@ from PyQt5.QtWidgets import (
     QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem,
     QPushButton, QHeaderView
 )
+from PyQt5.QtWidgets import (
+    QWidget, QVBoxLayout, QHBoxLayout, QFormLayout, QLabel, QDoubleSpinBox,
+    QCheckBox, QLineEdit, QComboBox, QPushButton, QTabWidget, QGroupBox,
+    QApplication
+)
 from config_dialog import ConfigDialog
 from PyQt5.QtCore import QTime
 
@@ -527,7 +532,6 @@ class WeldingMachineController:
     #     flow_time = time or self.current_settings['gas_postflow_time']
     #     return self.set_gas(False, flow_time)
     def set_arc_signal(self, robot,state):
-        # Code pour activer/désactiver le signal d'arc
         robot.set_board_io_status(RobotIOType.User_DO, RobotUserIoName.user_do_00, state)
 
         
@@ -545,14 +549,11 @@ class WeldingMachineController:
 
         print(f"Tension définie à {self.voltage:.1f} V")
 
-    def detect_arc(self,robot, timeout):
-            start_time = time.time()
-            while time.time() - start_time < timeout:
-                detection=robot.get_board_io_status(RobotIOType.User_DI, RobotUserIoName.user_di_00)
-                if detection :  # Adjust threshold based on your machine
-                    return True
-                time.sleep(0.1)
-            return False
+    def detect_arc(self,robot): 
+        detection=robot.get_board_io_status(RobotIOType.User_DI, RobotUserIoName.user_di_12)
+        return detection
+    def feeding_wire(self,robot,state): 
+        robot.set_board_io_status(RobotIOType.User_DO, RobotUserIoName.user_do_05,state)
 class ErrorPopup(QDialog):
     def __init__(self, error_data,robot=None,ip=None, tooltest=None, parent=None):
         super().__init__(parent)
@@ -612,13 +613,15 @@ class MainWindow(QMainWindow):
     robot_error_signal = pyqtSignal(str)
     def __init__(self, robot, ip=None, tooltest=None, parent=None):
         self.ip = ip
+        self.while_arc_pause=False
         self.tooltest = tooltest
-        
+        self.result_queue = Queue()
         super().__init__()
         self.setWindowIcon(QIcon("C:/Users/Emna/Downloads/lgo.jpeg"))
-        self.arc_detected=False
+        self.arc_detected=True
         self.stop_requested = False
         self.worker_process = None
+        self.arcstart = None
         self.robot = robot
         self.in_arc_sequence = False
         self.setWindowTitle("TuniBot - Aubo i10 Interface -")
@@ -648,7 +651,7 @@ class MainWindow(QMainWindow):
         joint_updater.request_confirmation.connect(self.handle_request_confirmation)
         
         self.seconds = 0
-        
+        self.inmovement=False       
         joint_updater.delete_last_tree_item.connect(self.handle_delete_last_tree_item)
 
                 # Appliquer un style CSS moderne
@@ -717,7 +720,7 @@ class MainWindow(QMainWindow):
 
         self.pages = QStackedWidget()
         self.main_layout.addWidget(self.pages)
-
+        self.resumed = True
         # Création des pages
         self.robot_teaching_page = self.create_robot_teaching_page()
         self.programming_page = self.create_programming_page() # Page vide pour Programming
@@ -746,6 +749,7 @@ class MainWindow(QMainWindow):
         self.robot_error_signal.connect(self.show_robot_error_popup)
         joint_updater.joints_updated.connect(self.update_joint_values)
         joint_updater.joints_updated.connect(self.update_manipulator_pose)
+        self.checked = False
     def init_system_info_page(self):
         layout = self.system_info_page.layout()
 
@@ -837,8 +841,13 @@ class MainWindow(QMainWindow):
     def show_robot_error_popup(self, error_data):
         if self.error_popup is None or not self.error_popup.isVisible():
             self.error_popup = ErrorPopup(error_data, self.robot,self.ip,self.tooltest,self)
-            if(self.in_arc_sequence):
-                self.end_arc_process()
+            self.welding_machine.set_current(self.robot, 0)
+            self.welding_machine.set_voltage(self.robot, 0)
+            self.welding_machine.set_gas(self.robot, False)
+            self.robot.move_pause()
+            self.welding_machine.set_arc_signal(self.robot, False)
+            self.checked = True
+            self.while_arc_pause=True
             self.error_popup.show()
         else:
             self.error_popup.add_notification("Error", error_data)
@@ -1433,7 +1442,7 @@ class MainWindow(QMainWindow):
 
         return page
     def populate_reference_dropdown2(self):
-        conn = sqlite3.connect('C:/Users/Emna/Desktop/tool_coord_param.db')
+        conn = sqlite3.connect('C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db')
         cursor = conn.cursor()
 
         # Fetch distinct coord_name values from coord_param table
@@ -1454,7 +1463,7 @@ class MainWindow(QMainWindow):
         self.reference_dropdown.addItems(coord_names)
 
     def populate_reference_dropdown(self):
-        conn = sqlite3.connect('C:/Users/Emna/Desktop/tool_coord_param.db')
+        conn = sqlite3.connect('C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db')
         cursor = conn.cursor()
 
         # Fetch distinct kinematics_name values from the table
@@ -1491,7 +1500,7 @@ class MainWindow(QMainWindow):
             print(f"Erreur lors de la mise à jour des valeurs des joints : {e}")
 
     def get_tcp_offset(self,tool_name):
-        conn = sqlite3.connect('C:/Users/Emna/Desktop/tool_coord_param.db')
+        conn = sqlite3.connect('C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db')
         cursor = conn.cursor()
 
         cursor.execute("SELECT end_pos_x, end_pos_y, end_pos_z, end_ori_rx, end_ori_ry, end_ori_rz "
@@ -1658,7 +1667,7 @@ class MainWindow(QMainWindow):
             logger.info("Step Mode désactivé. Pas de déplacement désactivés.")
 
 
- 
+
     def create_settings_page(self):
         page = QWidget()
         layout = QVBoxLayout()
@@ -1873,6 +1882,17 @@ class MainWindow(QMainWindow):
         page.setLayout(layout)
         return page
 
+
+    # Helper function to replace your add_param method for better uniform inputs:
+    def add_param_widget(self, default_value, suffix):
+        line_edit = QLineEdit(default_value)
+        line_edit.setFixedWidth(80)
+        if suffix:
+            line_edit.setPlaceholderText(suffix)
+        line_edit.mousePressEvent = lambda event: self.show_virtual_keyboard(line_edit)
+        return line_edit
+
+
     def on_file_changed(self, new_file_num):
         """Changement de fichier avec sauvegarde automatique"""
         # Sauvegarde le commentaire actuel avant de changer de fichier
@@ -2066,17 +2086,7 @@ class MainWindow(QMainWindow):
             # Appeler calculate_voltage_from_current même en cas d'erreur pour mettre à jour l'affichage
             self.calculate_voltage_from_current()
 
-    def calculate_test_value_left(self):
-        try:
-            test_value = float(self.test_input_left.text())
-            if self.curve_slope is not None and self.curve_intercept is not None:
-                result = self.curve_slope * test_value + self.curve_intercept
-                self.test_button_left.setText(f"Résultat: {result:.2f} V")
-            else:
-                self.test_button_left.setText("Pente non définie")
-        except ValueError:
-            self.test_button_left.setText("Valeur de test invalide")
-
+    
     def calculate_curve2_slope(self):
         try:
             x3 = float(self.x_value3.text())
@@ -2104,15 +2114,31 @@ class MainWindow(QMainWindow):
             self.curve2_intercept = None
             self.save_global_values()
             self.calculate_voltage_from_current()
+    def calculate_test_value_left(self):
+        #self.welding_machine.feeding_wire(self.robot,True)
+        print("robot")
+        print(self.welding_machine.detect_arc(self.robot))
+        try:
+            test_value = float(self.test_input_left.text())
+            if self.curve2_slope is not None and self.curve2_intercept is not None:
+                result = self.curve2_slope * test_value + self.curve2_intercept       
+                self.test_button_right.setText(f"tttt: {result:.2f} V")
+                self.welding_machine.set_current(self.robot,result)
+                self.welding_machine.set_voltage(self.robot,test_value)
+            else:
+                self.test_button_right.setText("Pente non définie")
+        except ValueError:
+            self.test_button_right.setText("Valeur de test invalide")
 
     def calculate_test_value_right(self):
+        self.welding_machine.feeding_wire(self.robot,False)
         try:
             test_value = float(self.test_input_right.text())
             if self.curve2_slope is not None and self.curve2_intercept is not None:
                 result = self.curve2_slope * test_value + self.curve2_intercept
                 self.test_button_right.setText(f"tttt: {result:.2f} V")
-                self.welding_machine.set_current(self.robot,test_value)
                 self.welding_machine.set_voltage(self.robot,result)
+                
             else:
                 self.test_button_right.setText("Pente non définie")
         except ValueError:
@@ -2333,6 +2359,7 @@ class MainWindow(QMainWindow):
             return {"error": str(e)}
 
     def start_arc_process(self):
+        self.arc_detected = False
         """Handle the full arc start sequence using saved parameters from JSON and interface."""
         try:
             # Load parameters from the JSON file for current and voltage
@@ -2438,15 +2465,18 @@ class MainWindow(QMainWindow):
             print(f"Step 3: Applying arc starting current {starting_current} A and voltage {starting_voltage} V for {arc_starting_time} seconds")
             self.welding_machine.set_current(self.robot,starting_current)
             self.welding_machine.set_voltage(self.robot,starting_voltage)
+            print("before sTARTED WELDING")
+            print(self.welding_machine.detect_arc(self.robot))
             self.welding_machine.set_arc_signal(self.robot,True)
+           
             time.sleep(arc_starting_time)
             print(f"Step 5: Transitioning to main welding with current {weld_current} A and voltage {weld_voltage} V")
             self.welding_machine.set_current(self.robot,weld_current)
             
             self.welding_machine.set_voltage(self.robot,weld_voltage)
             time.sleep(0.2)
-
-                
+            print("after sTARTED WELDING")
+            print(self.welding_machine.detect_arc(self.robot))
             # Update displays with possibly adjusted values
             self.param_displays["Arc Starting Current"].setText(f"{starting_current:.1f} A")
             self.param_displays["Arc Starting Voltage"].setText(f"{starting_voltage:.1f} V")
@@ -2471,6 +2501,7 @@ class MainWindow(QMainWindow):
 
 
     def end_arc_process(self):
+       
         """Handle the full arc end sequence using saved parameters from JSON and interface."""
         try:
             # Load parameters from the JSON file for current and voltage
@@ -3802,6 +3833,7 @@ class MainWindow(QMainWindow):
 
         root.setExpanded(True)
         self.project_tree.setCurrentItem(new_item)
+
     def execute_all_movements(self):
         if not self.check_save_before_execution():
             return
@@ -3819,26 +3851,23 @@ class MainWindow(QMainWindow):
         print("⏱️ Reprise après temporisation")
         self.execute_from_index(self.current_execution_index)
 
-
+    
     def execute_from_index(self, i):
         try:
             root = self.execution_root
             if not root or root.childCount() == 0:
                 QMessageBox.warning(self, "Avertissement", "Aucun programme à exécuter dans l'arborescence !")
                 return
-
             file_number = str(self.current_file)
             json_speed = float(self.file_parameters[file_number].get("speed", 2000.00))
             self.in_arc_sequence = False
             loop_stack = self.loop_stack  # already initialized
             self.stop_requested = getattr(self, "stop_requested", False)
-
             while i < root.childCount():
                 item = root.child(i)
                 item_text = item.text(0)
                 movement_data = item.data(0, Qt.UserRole)
                 action_type, action_value = (movement_data if movement_data else (item_text, None))
-
                 # UI Feedback
                 self.project_tree.setCurrentItem(item)
                 self.project_tree.scrollToItem(item)
@@ -3846,16 +3875,28 @@ class MainWindow(QMainWindow):
                 time.sleep(0.1)
                 if item_text == "Arc Start":
                     print(self.speed_input.text(), " speed_input.text()")
-                    if(self.speed_input.text() == "0"):
+                    if(self.speed_input.text() == "0.000"):
                         QMessageBox.critical(self, "Avertissement", "Veuillez définir une vitesse Dans Settings")
                         return
                     self.start_arc_process()
                     self.in_arc_sequence = True
+                    start_time = time.time()
+                    while time.time() - start_time < 2:
+                        if self.welding_machine.detect_arc(self.robot) == 1.0:
+                            print("Arc detected successfully.")
+                            self.arc_detected = True
+                            break
+                    if not self.arc_detected:
+                        print("Arc failed to start within 2 seconds. Stopping.")
+                        self.welding_machine.set_current(self.robot,0)
+                        self.welding_machine.set_voltage(self.robot,0)
+                        self.welding_machine.set_gas(self.robot,False)
+                        self.welding_machine.set_arc_signal(self.robot,False)
+                        QMessageBox.critical(self, "Avertissement", "Arc_notdetected") 
+                        return   
                     print("🔵 Début de la séquence d'arc")
                     i += 1
                     continue
-                    
-
                 elif item_text == "Arc End":
                     self.end_arc_process()
                     self.in_arc_sequence = False
@@ -3983,31 +4024,67 @@ class MainWindow(QMainWindow):
         print('here')
         print(self.robot.get_robot_state())
         if(self.robot.get_robot_state() == RobotStatus.Stopped):
-            self.worker_process = Process(target=run_move_track_process, args=(waypoints_data,vel,acc))
+            self.worker_process = Process(target=run_move_track_process, args=(waypoints_data,vel,acc,self.ip))
             self.worker_process.start()
         if(self.robot.get_robot_state() == RobotStatus.Resumed or RobotStatus.Paused):
             self.robot.move_continue()
             print("resumed")
         
     def stop_robot_movement(self):
-        self.robot.move_stop() 
+        self.robot.move_stop()
         if(self.in_arc_sequence):
-            self.end_arc_process()
+            self.welding_machine.set_current(self.robot,0)
+            self.welding_machine.set_voltage(self.robot,0)
+            self.welding_machine.set_gas(self.robot,False)
+            self.welding_machine.set_arc_signal(self.robot,False)
+            self.checked=True
+            self.in_arc_sequence=False
         self.start_button.setEnabled(True)
-        self.pause_button.setText("pause") # Réactiver le bouton de démarrage
+        self.pause_button.setText("pause")
+         # Réactiver le bouton de démarrage
          # Terminer le processus de travail après l'exécution
     def Pause_robot_movement(self):
         print(self.pause_button.text())
+        self.robot.move_pause()
         if(self.pause_button.text() == "pause"):
             print("hey")
             self.pause_button.setText("resume")
             self.start_button.setDisabled(True)
-            self.robot.move_pause()
+            if(self.in_arc_sequence):
+                self.checked=True
+                self.welding_machine.set_current(self.robot,0)
+                self.welding_machine.set_voltage(self.robot,0)
+                self.welding_machine.set_gas(self.robot,False)
+                self.welding_machine.set_arc_signal(self.robot,False)
         elif(self.pause_button.text() == "resume"):
             print("resume")
-            self.robot.move_continue()
-            self.start_button.setEnabled(True) 
-            self.pause_button.setText("pause")
+            if(self.while_arc_pause == True and self.in_arc_sequence == True):
+                self.start_arc_process()
+                start_time = time.time()
+                while time.time() - start_time < 2:
+                    if self.welding_machine.detect_arc(self.robot) == 1.0:
+                        print("ooooo resume done")
+                        self.checked=False
+                        self.robot.move_continue()
+                        self.start_button.setEnabled(True) 
+                        self.pause_button.setText("pause")
+                        self.arc_detected=True
+                        self.while_arc_pause = False
+                        break
+                if not self.arc_detected:
+                    print("Arc failed to start within 2 seconds. Stopping.")
+                    self.welding_machine.set_current(self.robot,0)
+                    self.welding_machine.set_voltage(self.robot,0)
+                    self.welding_machine.set_gas(self.robot,False)
+                    self.welding_machine.set_arc_signal(self.robot,False)
+                    QMessageBox.critical(self, "Avertissement", "Arc_notdetectedafteresume") 
+                    return   
+            else:
+                self.checked=False
+                self.robot.move_continue()
+                self.start_button.setEnabled(True) 
+                self.pause_button.setText("pause")
+                
         
     def move_robot_to_coordinates(self, coordinates):
         """
@@ -4134,11 +4211,16 @@ class MainWindow(QMainWindow):
             target_joints_tuple = tuple(target_joints)
 
             if mode == "Joint":
-                self.robot.move_stop()
+                if (self.in_arc_sequence==False and self.robot.get_robot_state() != RobotStatus.Resumed or RobotStatus.Paused):
+                    print("helpmeeejoint")
+                    self.robot.move_stop()
                 result = self.robot.move_joint(joint_radian=target_joints_tuple, issync=False)
                 self.wait_until_motion_complete(target_joints_tuple)
+                        
             elif mode == "Line":
-                self.robot.move_stop()
+                if (self.in_arc_sequence==False and self.robot.get_robot_state() != RobotStatus.Resumed or RobotStatus.Paused):
+                    print("helpmeeeline")
+                    self.robot.move_stop()
                 result = self.robot.move_line(joint_radian=target_joints_tuple,issync=False)
                 self.wait_until_motion_complete(target_joints_tuple)
             else:
@@ -4165,7 +4247,20 @@ class MainWindow(QMainWindow):
 
         print("🎯 Starting circular motion monitoring...")
 
-        while time.time() - start_time < timeout:
+        while time.time() - start_time < timeout: 
+            arc_status = self.welding_machine.detect_arc(self.robot)
+            print("arcstatus = ",arc_status)
+            if arc_status != 1.0 and self.checked == False and self.in_arc_sequence == True:
+                print("❌ Arc lost during welding!")
+                self.welding_machine.set_current(self.robot, 0)
+                self.welding_machine.set_voltage(self.robot, 0)
+                self.welding_machine.set_gas(self.robot, False)
+                self.robot.move_pause()
+                self.welding_machine.set_arc_signal(self.robot, False)
+                QMessageBox.critical(self, "Avertissement", "Arc lost during welding!")
+                self.checked = True
+                self.while_arc_pause=True
+                continue
             current_wp = self.robot.get_current_waypoint()
             if not current_wp:
                 continue
@@ -4204,11 +4299,20 @@ class MainWindow(QMainWindow):
         :param target_joints: Target joint positions in radians
         :param tolerance: Allowed error margin (in radians)
         """
-        max_wait_time = 30  # seconds
-        start_time = time.time()
+        self.checked=False
+        self.inmovement = True
         print("🎯 Target joints:", target_joints)
 
         while True:
+            arc_status = self.welding_machine.detect_arc(self.robot)
+            if arc_status != 1.0 and self.checked == False and self.in_arc_sequence == True:
+                print("arcstatus = ",arc_status)
+                print("❌ Arc lost during welding!")
+                self.while_arc_pause=True  
+                self.Pause_robot_movement()
+                QMessageBox.critical(self, "Avertissement", "Arc lost during welding!")
+                self.checked = True             
+                continue
             current_wp = self.robot.get_current_waypoint()
             if current_wp is None:
                 continue

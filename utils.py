@@ -380,7 +380,7 @@ def move_to_zero_pose(robot):
 import sqlite3
 
 def fetch_user_coord_from_db(coord_name):
-    db_path = "C:/Users/Emna/Desktop/tool_coord_param.db"
+    db_path = "C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 

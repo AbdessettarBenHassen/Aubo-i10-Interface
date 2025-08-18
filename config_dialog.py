@@ -12,7 +12,7 @@ class ConfigDialog(QDialog):
         self.tool_combo.currentTextChanged.connect(self.update_display)
 
         self.ip_combo = QComboBox()
-        self.ip_combo.addItems(["192.168.11.129", "192.168.0.23"])
+        self.ip_combo.addItems(["192.168.23.129", "192.168.0.23"])
 
         self.info_label = QLabel("Tool info here...")
 

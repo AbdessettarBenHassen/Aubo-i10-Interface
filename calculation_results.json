@@ -1,16 +1,16 @@
 {
     "curve2": {
-        "weld_A": 1.853896103896104,
-        "remove_stick_A": 1.3422077922077922,
-        "starting_A": 3.133116883116883,
-        "arc_ending_A": 1.0863636363636364,
-        "equation": "y = 0.026x + 0.063"
+        "weld_A": 1.620860927152318,
+        "remove_stick_A": 1.3658940397350994,
+        "starting_A": 2.130794701986755,
+        "arc_ending_A": 1.3658940397350994,
+        "equation": "y = 0.025x + 0.091"
     },
     "curve1": {
-        "weld_V": 4.507,
-        "arc_ending_V": 4.441333333333333,
-        "remove_stick_V": 5.623333333333333,
-        "starting_V": 4.3888,
-        "equation": "y = 0.131x + 4.310"
+        "weld_V": 5.683333333333334,
+        "arc_ending_V": 5.176333333333333,
+        "remove_stick_V": 5.12,
+        "starting_V": 5.1876,
+        "equation": "y = 0.113x + 5.120"
     }
 }

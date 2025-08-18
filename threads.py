@@ -193,15 +193,7 @@ def get_robot_current_position(robot, window, coords=None):
         user_di_states[1] = 0
 
     # Gérer user_di_05 pour Arc Start
-    if len(user_di_states) > 5 and user_di_states[5] == 1 and not awaiting_confirmation:  # user_di_05
-        print("Tentative d'ajout d'Arc Start via user_di_05")
-        confirmed = confirm_position(robot, [], 0)  # Pas de position, juste confirmation
-        if confirmed:
-            print("Arc Start confirmé")
-            joint_updater.add_arc_start.emit()
-        else:
-            print("Ajout d'Arc Start annulé.")
-        user_di_states[5] = 0
+   
 
     # Gérer user_di_06 pour Arc End
     if len(user_di_states) > 6 and user_di_states[6] == 1 and not awaiting_confirmation:  # user_di_06

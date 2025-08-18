@@ -1,12 +1,13 @@
 from ui import *
 import utils as utl 
+from multiprocessing import Process, Queue
 import robotcontrol as mim
 from joystick import JoystickManager
 from threads import *
 from config_dialog import ConfigDialog
 import sys
-from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QApplication,QProgressDialog
+from PyQt5.QtCore import QTimer,Qt, QThread, pyqtSignal
 
 #ip = '192.168.0.23'
 ip = ''
@@ -63,41 +64,189 @@ def show_robot_error_popup(message):
         msg_box.setInformativeText(message)
         msg_box.setStandardButtons(QMessageBox.Ok)
         msg_box.exec_()
-def main():
-    app = QApplication(sys.argv)
+import sys
+import socket
+from multiprocessing import Process, Queue
+from PyQt5.QtWidgets import QApplication, QProgressDialog, QMessageBox
+from PyQt5.QtCore import Qt, QTimer
 
-    config = ConfigDialog()
-    if config.exec_() == config.Accepted:
-        tooltest = config.selected_tool
-        ip = config.selected_ip
-        print("Selected tool:", tooltest)
-        print("Selected IP:", ip)
 
-    global robot
-    robot, tool_dynamics = utl.setup_robot(ip, tooltest)
-     # Make sure `window` is your main window object
-    if robot is None:
-        print("Connection failed.")
-        sys.exit()
-    update_joint_speed_from_slider(50, robot) 
-    global window
-    window = MainWindow(robot, ip=ip, tooltest=tooltest)
-    window.robot = robot
-    robot.ui_ref = window  # ✅ Assign UI reference BEFORE enabling event
-    robot.enable_robot_event()  # ✅ Now it's safe
-    joystick = JoystickManager(
-        axis_threshold=0.1,
-        button_callback=button_handler,
-        axis_callback=axis_handler,
-        hat_callback=hat_handler
-    )
-    joystick.start()
+# Process function: only check socket reachability
+def check_robot_reachable(ip, queue, port=8899, timeout=5000):
+    try:
+        with socket.create_connection((ip, port), timeout=timeout):
+            queue.put(True)
+    except Exception as e:
+        print(f"[Connection Test Error] {e}")
+        queue.put(False)
 
-    timer = QTimer(window)
-    timer.timeout.connect(lambda: get_robot_current_position(robot, window))
-    timer.start(100)
-    window.show()
-    app.exec_()
+class AppController:
+    def __init__(self):
+        self.app = QApplication(sys.argv)
+        self.config = ConfigDialog()
+        self.loading = None
+        self.process = None
+        self.queue = None
+        self.connection_timer = None  # add this!
+        self.position_timer = None
+
+    def start(self):
+        self.show_config()
+        sys.exit(self.app.exec_())
+
+    def show_config(self):
+        if self.config.exec_() == self.config.Accepted:
+            self.start_connection()
+        else:
+            sys.exit()
+
+    def start_connection(self):
+        self.tooltest = self.config.selected_tool
+        self.ip = self.config.selected_ip
+
+        # Show loading dialog
+        self.loading = QProgressDialog("Connecting to robot...", None, 0, 0)
+        self.loading.setWindowModality(Qt.ApplicationModal)
+        self.loading.setCancelButton(None)
+        self.loading.setMinimumDuration(0)
+        self.loading.setWindowTitle("Please wait")
+        self.loading.setMinimumWidth(300)
+        self.loading.show()
+
+        # Start process to check if robot is reachable
+        self.queue = Queue()
+        self.process = Process(target=check_robot_reachable, args=(self.ip, self.queue))
+        self.process.start()
+
+        # Poll for process result
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.check_process_result)
+        self.timer.start(100)
+
+    def check_process_result(self):
+        if not self.queue.empty():
+            reachable = self.queue.get()
+            self.timer.stop()
+            self.process.join()
+            self.loading.close()
+
+            if not reachable:
+                QMessageBox.critical(None, "Error", "Connection failed. Please try again.")
+                self.show_config()
+                return
+
+            try:
+                robot, tool_dynamics = utl.setup_robot(self.ip, self.tooltest)
+            except Exception as e:
+                QMessageBox.critical(None, "Error", f"Robot setup failed: {e}")
+                self.show_config()
+                return
+
+            update_joint_speed_from_slider(50, robot)
+
+            global window
+            window = MainWindow(robot, ip=self.ip, tooltest=self.tooltest)
+            window.robot = robot
+            robot.ui_ref = window
+            robot.enable_robot_event()
+
+            joystick = JoystickManager(
+                axis_threshold=0.1,
+                button_callback=button_handler,
+                axis_callback=axis_handler,
+                hat_callback=hat_handler
+            )
+            joystick.start()
+
+            # Use a dict to hold the robot reference so we can update it on reconnect
+            self.robot_container = {"robot": robot}
+
+            self.start_position_timer(window)
+
+            window.show()
+
+    def start_position_timer(self, window):
+        self.timer = QTimer(window)
+
+        def safe_get_position():
+            try:
+                get_robot_current_position(self.robot_container["robot"], window)
+            except Exception as e:
+                print(f"[Position Error] {e}")
+                self.timer.stop()
+                self.reconnect_robot(window)
+
+        self.timer.timeout.connect(safe_get_position)
+        self.timer.start(100)
+
+    def reconnect_robot(self, window):
+        # Show reconnect loading dialog
+        self.loading = QProgressDialog("Reconnecting to robot...", None, 0, 0)
+        self.loading.setWindowModality(Qt.ApplicationModal)
+        self.loading.setCancelButton(None)
+        self.loading.setMinimumDuration(0)
+        self.loading.setWindowTitle("Please wait")
+        self.loading.setMinimumWidth(300)
+        self.loading.show()
+
+        self.queue = Queue()
+        self.process = Process(target=check_robot_reachable, args=(self.ip, self.queue))
+        self.process.start()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(lambda: self.finish_reconnect(window))
+        self.timer.start(100)
+
+    def finish_reconnect(self, old_window):
+        if not self.queue.empty():
+            reachable = self.queue.get()
+
+            if self.connection_timer is not None:
+                self.connection_timer.stop()
+                self.connection_timer.deleteLater()
+                self.connection_timer = None
+
+            self.process.join()
+            self.loading.close()
+
+            if not reachable:
+                QMessageBox.critical(None, "Error", "Reconnection failed. Please try again.")
+                self.show_config()
+                return
+
+            try:
+                robot, tool_dynamics = utl.setup_robot(self.ip, self.tooltest)
+                self.robot_container["robot"] = robot
+            except Exception as e:
+                QMessageBox.critical(None, "Error", f"Reconnect failed: {e}")
+                self.show_config()
+                return
+
+            update_joint_speed_from_slider(50, robot)
+
+            # Close old window cleanly
+            old_window.close()
+
+            # Create a new main window fresh with the new robot instance
+            global window
+            window = MainWindow(robot, ip=self.ip, tooltest=self.tooltest)
+            window.robot = robot
+            robot.ui_ref = window
+            robot.enable_robot_event()
+
+            joystick = JoystickManager(
+                axis_threshold=0.1,
+                button_callback=button_handler,
+                axis_callback=axis_handler,
+                hat_callback=hat_handler
+            )
+            joystick.start()
+
+            # Restart position timer with new window
+            self.start_position_timer(window)
+            window.show()
 
 if __name__ == "__main__":
-    main()
+    controller = AppController()
+    controller.start()
+
