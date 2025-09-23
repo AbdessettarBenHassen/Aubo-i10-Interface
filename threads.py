@@ -2,8 +2,8 @@ import threading
 import main as mn
 import time
 import math
-from robotcontrol import RobotIOType
-from robotcontrol import RobotUserIoName
+from robot_bridge_client import RobotIOType
+from robot_bridge_client import RobotUserIoName
 from PyQt5.QtCore import QObject, pyqtSignal, QTimer
 from errorpop import ErrorPopup
   # adjust the import if you moved it

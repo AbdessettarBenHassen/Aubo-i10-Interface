@@ -3,6 +3,7 @@ from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem, QLabel, QPushButton, QInputDialog
 import sqlite3
 import sys
+from multiprocessing import Process
 from PyQt5.QtWidgets import (
     QDialog, QVBoxLayout, QTableWidget, QTableWidgetItem,
     QPushButton, QHeaderView
@@ -33,7 +34,162 @@ from courbe import *
 from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox 
 # import threading
 
-from PyQt5.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QPushButton, QMessageBox
+class StepInputDialog(QDialog):
+    def __init__(self, parent=None, current_value=0.0, unit="mm", min_value=0.1, max_value=10.0):
+        super().__init__(parent)
+        self.setWindowTitle("Set Step Value")
+        self.setFixedSize(300, 300)  # Augmenter la taille pour accommoder le clavier numérique
+
+        self.current_value = str(current_value)
+        self.unit = unit
+        self.min_value = min_value
+        self.max_value = max_value
+
+        layout = QVBoxLayout()
+
+        # Affichage de la valeur actuelle (non éditable)
+        input_layout = QHBoxLayout()
+        self.display_label = QLabel(f"Value ({unit}):")
+        self.display = QLabel(self.current_value)
+        self.display.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.display.setStyleSheet("""
+            QLabel {
+                border: 1px solid #A9A9A9;
+                border-radius: 3px;
+                background-color: white;
+                padding: 5px;
+                font-size: 14pt;
+            }
+        """)
+        input_layout.addWidget(self.display_label)
+        input_layout.addWidget(self.display)
+        layout.addLayout(input_layout)
+
+        # Clavier numérique
+        keypad_layout = QGridLayout()
+        buttons = [
+            ['7', '8', '9'],
+            ['4', '5', '6'],
+            ['1', '2', '3'],
+            ['0', '.', '←']  # ← pour backspace, pas de '-' car les steps sont positifs
+        ]
+
+        for row, keys in enumerate(buttons):
+            for col, key in enumerate(keys):
+                btn = QPushButton(key)
+                btn.setFixedSize(50, 50)
+                btn.setStyleSheet("""
+                    QPushButton {
+                        background-color: #808080; /* Gris plus foncé */
+                        border: 1px solid #A9A9A9;
+                        border-radius: 5px;
+                        font-size: 14pt;
+                        color: white;
+                    }
+                    QPushButton:hover {
+                        background-color: #666666; /* Gris encore plus foncé au survol */
+                    }
+                    QPushButton:pressed {
+                        background-color: #4C4C4C; /* Gris très foncé au clic */
+                    }
+                """)
+                if key == '←':
+                    btn.clicked.connect(self.on_backspace)
+                else:
+                    btn.clicked.connect(partial(self.on_key_pressed, key))
+                keypad_layout.addWidget(btn, row, col)
+
+        # Bouton Clear (C)
+        clear_btn = QPushButton('C')
+        clear_btn.setFixedSize(50, 50)
+        clear_btn.setStyleSheet("""
+            QPushButton {
+                background-color: #FF6347;
+                color: white;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                font-size: 14pt;
+            }
+            QPushButton:hover {
+                background-color: #FF4500;
+            }
+            QPushButton:pressed {
+                background-color: #FF0000;
+            }
+        """)
+        clear_btn.clicked.connect(self.clear_display)
+        keypad_layout.addWidget(clear_btn, 3, 2)
+
+        layout.addLayout(keypad_layout)
+
+        # Boutons OK et Cancel
+        button_layout = QHBoxLayout()
+        ok_button = QPushButton("OK")
+        ok_button.clicked.connect(self.accept)
+        ok_button.setStyleSheet("""
+            QPushButton {
+                background-color: #32CD32; /* Vert */
+                color: white;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                padding: 5px;
+                font-weight: bold;
+                font-size: 11pt;
+            }
+            QPushButton:hover {
+                background-color: #2E8B57; /* Vert foncé au survol */
+            }
+            QPushButton:pressed {
+                background-color: #228B22; /* Vert encore plus foncé au clic */
+            }
+        """)
+        cancel_button = QPushButton("Cancel")
+        cancel_button.clicked.connect(self.reject)
+        cancel_button.setStyleSheet("""
+            QPushButton {
+                background-color: #FF4500; /* Rouge */
+                color: white;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                padding: 5px;
+                font-weight: bold;
+                font-size: 11pt;
+            }
+            QPushButton:hover {
+                background-color: #FF6347; /* Rouge clair au survol */
+            }
+            QPushButton:pressed {
+                background-color: #FF0000; /* Rouge foncé au clic */
+            }
+        """)
+        button_layout.addWidget(ok_button)
+        button_layout.addWidget(cancel_button)
+        layout.addLayout(button_layout)
+
+        self.setLayout(layout)
+
+    def on_key_pressed(self, key):
+        current_text = self.display.text()
+        if key == '.' and '.' in current_text:
+            return  # Éviter plusieurs points décimaux
+        self.display.setText(current_text + key)
+
+    def on_backspace(self):
+        current_text = self.display.text()
+        if current_text:
+            self.display.setText(current_text[:-1])
+        if not self.display.text():
+            self.display.setText('0')
+
+    def clear_display(self):
+        self.display.setText('0')
+
+    def get_value(self):
+        try:
+            value = float(self.display.text())
+            return max(self.min_value, min(self.max_value, value))
+        except ValueError:
+            return 0.0
 class RobotStatus:
     # 机械臂当前停止
     Stopped = 0
@@ -44,11 +200,12 @@ class RobotStatus:
     # 机械臂当前恢复
     Resumed = 3
 class EditSpeedDialog(QDialog):
-    def __init__(self, parent=None, current_speed=0.0):
+    def __init__(self, parent=None, current_speed=0.0, item=None):
         super().__init__(parent)
         self.setWindowTitle("Edit Speed")
         self.setFixedSize(300, 120)
         self.state = 0
+        self.item = item  # Reference to the tree item
         layout = QVBoxLayout()
 
         # Champ pour la vitesse
@@ -71,8 +228,30 @@ class EditSpeedDialog(QDialog):
         speed_layout.addWidget(self.speed_spinbox)
         layout.addLayout(speed_layout)
 
-        # Boutons OK et Annuler
+        # Boutons OK, Cancel, and Update Pos
         button_layout = QHBoxLayout()
+        self.update_pos_button = QPushButton("Update Pos")
+        self.update_pos_button.clicked.connect(self.update_position)
+        self.update_pos_button.setStyleSheet("""
+            QPushButton {
+                background-color: #E0E0E0;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                padding: 5px;
+                color: black;
+                font-weight: bold;
+                font-size: 11pt;
+            }
+            QPushButton:hover {
+                background-color: #B0C4DE;
+            }
+            QPushButton:pressed {
+                background-color: #4682B4;
+                color: white;
+            }
+        """)
+        button_layout.addWidget(self.update_pos_button)
+
         ok_button = QPushButton("OK")
         ok_button.clicked.connect(self.accept)
         ok_button.setStyleSheet("""
@@ -120,6 +299,10 @@ class EditSpeedDialog(QDialog):
 
     def get_speed(self):
         return self.speed_spinbox.value()
+
+    def update_position(self):
+        if self.parent() and self.item:
+            self.parent().on_update_position_clicked(self.item)  # Pass the item to update
 class SpeedAccDialog(QDialog):
     def __init__(self, parent=None, speed_data=None):
         super().__init__(parent)
@@ -208,7 +391,7 @@ class JointSpeedAccDialog(QDialog):
         # Affichage des vitesses en mm/s
         self.speed_display_label = QLabel("Speed(mm/s): 2000.0,2000.0,2000.0,2000.0,2000.0,2000.0")
         layout.addWidget(self.speed_display_label)
-
+        
         # Affichage des accélérations en mm/s²
         self.acc_display_label = QLabel("Acc(mm/s²): 2000.0,2000.0,2000.0,2000.0,2000.0,2000.0")
         layout.addWidget(self.acc_display_label)
@@ -538,14 +721,14 @@ class WeldingMachineController:
     def set_current(self,robot, current):
             """Définir le* courant de soudage."""
             self.current = float(current)
-            robot.set_board_io_status(RobotIOType.User_AO, RobotUserIoName.user_ao_00, current)
+            robot.set_board_io_status(RobotIOType.User_AO, RobotUserIoName.user_ao_01, current)
             print(f"Courant défini à {self.current:.1f} A")
     
 
     def set_voltage(self, robot,voltage):
         """Définir la tension de soudage."""
         self.voltage = float(voltage)
-        robot.set_board_io_status(RobotIOType.User_AO, RobotUserIoName.user_ao_01, voltage)
+        robot.set_board_io_status(RobotIOType.User_AO, RobotUserIoName.user_ao_00, voltage)
 
         print(f"Tension définie à {self.voltage:.1f} V")
 
@@ -565,7 +748,7 @@ class ErrorPopup(QDialog):
         # Create the table
         self.table = QTableWidget(0, 3)
         self.table.setHorizontalHeaderLabels(["Time", "Event Type", "Message"])
-
+        
         # Stretch last column (Message)
         header = self.table.horizontalHeader()
         header.setStretchLastSection(True)
@@ -609,23 +792,43 @@ class ErrorPopup(QDialog):
 
         # Auto-resize row height
         self.table.resizeRowsToContents()
+CONFIG_FILE = os.path.expanduser("~/.robot_config.json")
+def load_config():
+    try:
+        with open(CONFIG_FILE, "r") as f:
+            return json.load(f)
+    except Exception:
+        return {"ip": "127.0.0.1", "tool": ""}
 class MainWindow(QMainWindow):
     robot_error_signal = pyqtSignal(str)
     def __init__(self, robot, ip=None, tooltest=None, parent=None):
-        self.ip = ip
+        self.ip = ip # fallback only
+        print("storuqgqin",self.ip)
+        
+        self.timer_remaining = None
+        self.timer = QTimer()
+        self.timer.setSingleShot(True)
+        self.timer.timeout.connect(self.resume_after_timer)
+        self.timer_is_paused = False
         self.while_arc_pause=False
         self.tooltest = tooltest
-        self.result_queue = Queue()
         super().__init__()
-        self.setWindowIcon(QIcon("C:/Users/Emna/Downloads/lgo.jpeg"))
-        self.arc_detected=True
+        self.setWindowIcon(QIcon("C:/Users/abdes/Downloads/Logo.jpeg"))
+        self.setWindowTitle("TuniBot - Aubo i10 Interface")
+        self.setFixedSize(1024, 840) 
+        self.arc_detected=False
         self.stop_requested = False
         self.worker_process = None
         self.arcstart = None
         self.robot = robot
+        if hasattr(self.robot, 'set_ui_ref'):
+            self.robot.set_ui_ref(self)
+            print("🔗 UI reference set for bridge client")
+        
+        # Note: UI reference is set via robot.set_ui_ref() in main.py
+        # Bridge server events are handled through socket communication
         self.in_arc_sequence = False
-        self.setWindowTitle("TuniBot - Aubo i10 Interface -")
-        self.setGeometry(100, 100, 1024, 768)
+        
         self.joint_value_displays = []  # Liste pour stocker les QLineEdit des joints
         self.joint_value_labels = [] 
         self.step_mode_checkbox = QCheckBox("Step Mode")
@@ -654,7 +857,7 @@ class MainWindow(QMainWindow):
         self.inmovement=False       
         joint_updater.delete_last_tree_item.connect(self.handle_delete_last_tree_item)
 
-                # Appliquer un style CSS moderne
+                # Appliquer un style CSS moderneui_ref is None.
         self.setStyleSheet("""
             QWidget {
                 font-family: 'Arial';
@@ -737,7 +940,7 @@ class MainWindow(QMainWindow):
         self.pages.addWidget(self.about_page)
         self.system_info_banner = self.create_system_info_banner()
         self.main_layout.addLayout(self.system_info_banner)
-
+        self.after_urgence = False
         # Ajouter les boutons de navigation
         self.add_nav_button("Robot Teaching", self.robot_teaching_page)
         self.add_nav_button("Programming", self.programming_page)
@@ -749,7 +952,13 @@ class MainWindow(QMainWindow):
         self.robot_error_signal.connect(self.show_robot_error_popup)
         joint_updater.joints_updated.connect(self.update_joint_values)
         joint_updater.joints_updated.connect(self.update_manipulator_pose)
+        
+        # Event checking is handled by the robot's event polling thread
+        
         self.checked = False
+        
+        # Show the window after all UI components are set up
+        self.show()
     def init_system_info_page(self):
         layout = self.system_info_page.layout()
 
@@ -838,14 +1047,21 @@ class MainWindow(QMainWindow):
 
 
 
+    # Event checking is now handled by the robot's event polling thread
+    
     def show_robot_error_popup(self, error_data):
+        # Parse error_data if it's a JSON string
+        if isinstance(error_data, str):
+            try:
+                error_data = json.loads(error_data)
+            except (json.JSONDecodeError, ValueError):
+                # If it's not valid JSON, use it as is
+                pass
+        
         if self.error_popup is None or not self.error_popup.isVisible():
+            self.Pause_robotnotebutton_movement()
+            self.after_urgence = True
             self.error_popup = ErrorPopup(error_data, self.robot,self.ip,self.tooltest,self)
-            self.welding_machine.set_current(self.robot, 0)
-            self.welding_machine.set_voltage(self.robot, 0)
-            self.welding_machine.set_gas(self.robot, False)
-            self.robot.move_pause()
-            self.welding_machine.set_arc_signal(self.robot, False)
             self.checked = True
             self.while_arc_pause=True
             self.error_popup.show()
@@ -1151,6 +1367,23 @@ class MainWindow(QMainWindow):
     
     def add_nav_button(self, name, page):
         button = QPushButton(name)
+        button.setFixedSize(140, 35)
+        button.setStyleSheet("""
+            QPushButton {
+                background-color: #2E86C1;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            QPushButton:hover {
+                background-color: #2472A4;
+            }
+            QPushButton:pressed {
+                background-color: #1B4F72;
+            }
+        """)
         button.clicked.connect(lambda: self.pages.setCurrentWidget(page))
         self.nav_buttons.addWidget(button)
 
@@ -1200,12 +1433,29 @@ class MainWindow(QMainWindow):
         directions = ["X+", "X-", "Y+", "Y-", "Z+", "Z-"]
         for i, direction in enumerate(directions):
             btn = QPushButton(direction)
+            btn.setFixedSize(60, 40)
+            btn.setStyleSheet("""
+                QPushButton {
+                    background-color: #2E86C1;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+                QPushButton:hover {
+                    background-color: #2472A4;
+                }
+                QPushButton:pressed {
+                    background-color: #1B4F72;
+                }
+            """)
             axis = (i // 2) + 1  # 1: X, 2: Y, 3: Z
             xx=self.position_step_value
             btn.pressed.connect(
                 partial(utl.start_move_cartesian, self.robot, axis, "+" if i % 2 == 0 else "-",self)
             )
-            btn.released.connect(utl.stop_move_cartesian)
+            btn.released.connect(partial(utl.stop_move_cartesian, self.robot, self))
             position_control_layout.addWidget(btn, i // 2, i % 2)
         position_control_group.setLayout(position_control_layout)
         layout.addWidget(position_control_group, 0, 2)  # Déplacé à la colonne 2
@@ -1244,38 +1494,104 @@ class MainWindow(QMainWindow):
         # Position Step
         position_step_label = QLabel("Position Step:")
         self.position_step_value = QLabel(f"{self.position_step:.1f} mm")
+        self.position_step_value.setFixedSize(80, 25)
+        self.position_step_value.setStyleSheet("""
+            QLabel {
+                border: 1px solid #A9A9A9;
+                border-radius: 3px;
+                background-color: white;
+                padding: 3px;
+                font-size: 11px;
+                text-align: center;
+            }
+        """)
         position_step_controls = QHBoxLayout()
         self.position_step_minus = QPushButton("-")
+        self.position_step_minus.setFixedSize(30, 25)
         self.position_step_plus = QPushButton("+")
+        self.position_step_plus.setFixedSize(30, 25)
         position_step_controls.addWidget(self.position_step_minus)
         position_step_controls.addWidget(self.position_step_value)
         position_step_controls.addWidget(self.position_step_plus)
+        self.position_step_value.mouseDoubleClickEvent = lambda event: self.open_step_dialog(self.position_step_value, "Position", "mm", self.position_step_min, self.position_step_max)
         step_mode_layout.addWidget(position_step_label)
         step_mode_layout.addLayout(position_step_controls)
 
         # Orientation Step
         orientation_step_label = QLabel("Orientation Step:")
         self.orientation_step_value = QLabel(f"{self.orientation_step:.1f} deg")
+        self.orientation_step_value.setFixedSize(80, 25)
+        self.orientation_step_value.setStyleSheet("""
+            QLabel {
+                border: 1px solid #A9A9A9;
+                border-radius: 3px;
+                background-color: white;
+                padding: 3px;
+                font-size: 11px;
+                text-align: center;
+            }
+        """)
         orientation_step_controls = QHBoxLayout()
         self.orientation_step_minus = QPushButton("-")
+        self.orientation_step_minus.setFixedSize(30, 25)
         self.orientation_step_plus = QPushButton("+")
+        self.orientation_step_plus.setFixedSize(30, 25)
         orientation_step_controls.addWidget(self.orientation_step_minus)
         orientation_step_controls.addWidget(self.orientation_step_value)
         orientation_step_controls.addWidget(self.orientation_step_plus)
+        self.orientation_step_value.mouseDoubleClickEvent = lambda event: self.open_step_dialog(self.orientation_step_value, "Position", "mm", self.orientation_step_min, self.orientation_step_max)
         step_mode_layout.addWidget(orientation_step_label)
         step_mode_layout.addLayout(orientation_step_controls)
 
         # Joint Step
         joint_step_label = QLabel("Joint Step:")
         self.joint_step_value = QLabel(f"{self.joint_step:.1f} deg")
+        self.joint_step_value.setFixedSize(80, 25)
+        self.joint_step_value.setStyleSheet("""
+            QLabel {
+                border: 1px solid #A9A9A9;
+                border-radius: 3px;
+                background-color: white;
+                padding: 3px;
+                font-size: 11px;
+                text-align: center;
+            }
+        """)
         joint_step_controls = QHBoxLayout()
         self.joint_step_minus = QPushButton("-")
+        self.joint_step_minus.setFixedSize(30, 25)
         self.joint_step_plus = QPushButton("+")
+        self.joint_step_plus.setFixedSize(30, 25)
         joint_step_controls.addWidget(self.joint_step_minus)
         joint_step_controls.addWidget(self.joint_step_value)
         joint_step_controls.addWidget(self.joint_step_plus)
+        self.joint_step_value.mouseDoubleClickEvent = lambda event: self.open_step_dialog(self.joint_step_value, "Position", "mm", self.joint_step_min, self.joint_step_max)
         step_mode_layout.addWidget(joint_step_label)
         step_mode_layout.addLayout(joint_step_controls)
+
+        # Style the step control buttons
+        step_button_style = """
+            QPushButton {
+                background-color: #2E86C1;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                font-weight: bold;
+                font-size: 11px;
+            }
+            QPushButton:hover {
+                background-color: #2472A4;
+            }
+            QPushButton:pressed {
+                background-color: #1B4F72;
+            }
+        """
+        self.position_step_plus.setStyleSheet(step_button_style)
+        self.position_step_minus.setStyleSheet(step_button_style)
+        self.orientation_step_plus.setStyleSheet(step_button_style)
+        self.orientation_step_minus.setStyleSheet(step_button_style)
+        self.joint_step_plus.setStyleSheet(step_button_style)
+        self.joint_step_minus.setStyleSheet(step_button_style)
 
         # Connecter les boutons aux fonctions
         self.position_step_plus.clicked.connect(lambda: self.update_position_step(True))  # Bouton +
@@ -1302,11 +1618,33 @@ class MainWindow(QMainWindow):
         # Joint Control (déplacé à droite)
         joint_control_group = QGroupBox("Joint Control (deg)")
         joint_control_layout = QGridLayout()
+        joint_control_layout.setSpacing(10)
         for i in range(6):
             label = QLabel(f"Joint {i+1}:")
             decrease_btn = QPushButton("-")
+            decrease_btn.setFixedSize(30, 25)
             increase_btn = QPushButton("+")
+            increase_btn.setFixedSize(30, 25)
 
+            # Style the buttons
+            button_style = """
+                QPushButton {
+                    background-color: #2E86C1;
+                    color: white;
+                    border: none;
+                    border-radius: 3px;
+                    font-weight: bold;
+                    font-size: 11px;
+                }
+                QPushButton:hover {
+                    background-color: #2472A4;
+                }
+                QPushButton:pressed {
+                    background-color: #1B4F72;
+                }
+            """
+            decrease_btn.setStyleSheet(button_style)
+            increase_btn.setStyleSheet(button_style)
             
             # En mode continu, utiliser le signal "pressed" pour un mouvement continu
             increase_btn.pressed.connect(
@@ -1325,10 +1663,18 @@ class MainWindow(QMainWindow):
                 partial(utl.stop_move_joint, self.robot, i + 1, "-")
             )
 
-
- 
             value_display = QLineEdit()
             value_display.setReadOnly(True)
+            value_display.setFixedSize(100, 25)
+            value_display.setStyleSheet("""
+                QLineEdit {
+                    border: 1px solid #A9A9A9;
+                    border-radius: 3px;
+                    background-color: white;
+                    padding: 3px;
+                    font-size: 11px;
+                }
+            """)
             self.joint_value_displays.append(value_display)
             joint_control_layout.addWidget(label, i, 0)
             joint_control_layout.addWidget(decrease_btn, i, 1)
@@ -1371,13 +1717,30 @@ class MainWindow(QMainWindow):
         orientation_directions = ["RX+", "RX-", "RY+", "RY-", "RZ+", "RZ-"]
         for i, direction in enumerate(orientation_directions):
             btn = QPushButton(direction)
+            btn.setFixedSize(60, 40)
+            btn.setStyleSheet("""
+                QPushButton {
+                    background-color: #2E86C1;
+                    color: white;
+                    border: none;
+                    border-radius: 5px;
+                    font-weight: bold;
+                    font-size: 12px;
+                }
+                QPushButton:hover {
+                    background-color: #2472A4;
+                }
+                QPushButton:pressed {
+                    background-color: #1B4F72;
+                }
+            """)
             axis = (i // 2) + 4  # 4: RX, 5: RY, 6: RZ
             yy=self.orientation_step_value
 
             btn.pressed.connect(
                 partial(utl.start_move_cartesian, self.robot, axis, "+" if i % 2 == 0 else "-", self)
             )
-            btn.released.connect(utl.stop_move_cartesian)
+            btn.released.connect(partial(utl.stop_move_cartesian, self.robot, self))
             orientation_control_layout.addWidget(btn, i // 2, i % 2)
         orientation_control_group.setLayout(orientation_control_layout)
         layout.addWidget(orientation_control_group, 2, 2)
@@ -1386,6 +1749,24 @@ class MainWindow(QMainWindow):
         self.reference_coord_group = QGroupBox("Reference Coord System")
         self.reference_coord_layout = QVBoxLayout()
         self.reference_dropdown = QComboBox()
+        self.reference_dropdown.setFixedSize(150, 30)
+        self.reference_dropdown.setStyleSheet("""
+            QComboBox {
+                border: 1px solid #A9A9A9;
+                border-radius: 3px;
+                background-color: white;
+                padding: 5px;
+                font-size: 11px;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 20px;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border: none;
+            }
+        """)
         self.populate_reference_dropdown2()
         self.reference_coord_layout.addWidget(self.reference_dropdown)
         self.reference_coord_group.setLayout(self.reference_coord_layout)
@@ -1399,9 +1780,43 @@ class MainWindow(QMainWindow):
 
         # Boutons Init Pose et Zero Pose
         init_pose_button = QPushButton("Init Pose")
+        init_pose_button.setFixedSize(120, 35)
+        init_pose_button.setStyleSheet("""
+            QPushButton {
+                background-color: #2E86C1;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            QPushButton:hover {
+                background-color: #2472A4;
+            }
+            QPushButton:pressed {
+                background-color: #1B4F72;
+            }
+        """)
         init_pose_button.pressed.connect(partial(utl.start_move_to_init_pose, self.robot))
         init_pose_button.released.connect(partial(utl.stop_move_to_init_pose, self.robot))
         zero_pose_button = QPushButton("Zero Pose")
+        zero_pose_button.setFixedSize(120, 35)
+        zero_pose_button.setStyleSheet("""
+            QPushButton {
+                background-color: #2E86C1;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            QPushButton:hover {
+                background-color: #2472A4;
+            }
+            QPushButton:pressed {
+                background-color: #1B4F72;
+            }
+        """)
         zero_pose_button.pressed.connect(partial(utl.move_to_zero_pose, self.robot))  # Début du mouvement
         zero_pose_button.released.connect(partial(utl.stop_move_to_zero_pose, self.robot))
         buttons_speed_layout.addWidget(init_pose_button)
@@ -1414,6 +1829,21 @@ class MainWindow(QMainWindow):
         self.speed_slider.setMinimum(1)
         self.speed_slider.setMaximum(40)
         self.speed_slider.setValue(20)
+        self.speed_slider.setFixedSize(150, 25)
+        self.speed_slider.setStyleSheet("""
+            QSlider::groove:horizontal {
+                height: 6px;
+                background-color: #D6DBDF;
+                border-radius: 3px;
+            }
+            QSlider::handle:horizontal {
+                background-color: #2E86C1;
+                width: 16px;
+                height: 16px;
+                margin: -5px 0;
+                border-radius: 8px;
+            }
+        """)
         
         self.speed_slider.valueChanged.connect(lambda value: utl.update_joint_speed_from_slider(value, self.robot))
         utl.update_joint_speed_from_slider(20, self.robot)
@@ -1430,6 +1860,24 @@ class MainWindow(QMainWindow):
         self.new_reference_coord_group = QGroupBox("Target")
         self.new_reference_coord_layout = QVBoxLayout()
         self.new_reference_dropdown = QComboBox()
+        self.new_reference_dropdown.setFixedSize(150, 30)
+        self.new_reference_dropdown.setStyleSheet("""
+            QComboBox {
+                border: 1px solid #A9A9A9;
+                border-radius: 3px;
+                background-color: white;
+                padding: 5px;
+                font-size: 11px;
+            }
+            QComboBox::drop-down {
+                border: none;
+                width: 20px;
+            }
+            QComboBox::down-arrow {
+                image: none;
+                border: none;
+            }
+        """)
         self.populate_reference_dropdown()
         self.new_reference_coord_layout.addWidget(self.new_reference_dropdown)
         self.new_reference_coord_group.setLayout(self.new_reference_coord_layout)
@@ -1442,7 +1890,7 @@ class MainWindow(QMainWindow):
 
         return page
     def populate_reference_dropdown2(self):
-        conn = sqlite3.connect('C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db')
+        conn = sqlite3.connect('/root/AuboRobotWorkSpace/teachpendant/share/teachpendant/database/tool_coord_param.db')
         cursor = conn.cursor()
 
         # Fetch distinct coord_name values from coord_param table
@@ -1463,7 +1911,7 @@ class MainWindow(QMainWindow):
         self.reference_dropdown.addItems(coord_names)
 
     def populate_reference_dropdown(self):
-        conn = sqlite3.connect('C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db')
+        conn = sqlite3.connect('/root/AuboRobotWorkSpace/teachpendant/share/teachpendant/database/tool_coord_param.db')
         cursor = conn.cursor()
 
         # Fetch distinct kinematics_name values from the table
@@ -1498,9 +1946,25 @@ class MainWindow(QMainWindow):
 
         except Exception as e:
             print(f"Erreur lors de la mise à jour des valeurs des joints : {e}")
-
+    def open_step_dialog(self, label, step_type, unit, min_value, max_value):
+            current_value = float(label.text().split()[0])
+            dialog = StepInputDialog(self, current_value, unit, min_value, max_value)
+            if dialog.exec_():
+                new_value = dialog.get_value()
+                if new_value >= min_value and new_value <= max_value:
+                    if step_type == "Position":
+                        self.position_step = new_value
+                        label.setText(f"{new_value:.1f} mm")
+                    elif step_type == "Orientation":
+                        self.orientation_step = new_value
+                        label.setText(f"{new_value:.1f} deg")
+                    elif step_type == "Joint":
+                        self.joint_step = new_value
+                        label.setText(f"{new_value:.1f} deg")
+                else:
+                    QMessageBox.warning(self, "Invalid Input", f"Please enter a value between {min_value} and {max_value} {unit}.")
     def get_tcp_offset(self,tool_name):
-        conn = sqlite3.connect('C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db')
+        conn = sqlite3.connect('/root/AuboRobotWorkSpace/teachpendant/share/teachpendant/database/tool_coord_param.db')
         cursor = conn.cursor()
 
         cursor.execute("SELECT end_pos_x, end_pos_y, end_pos_z, end_ori_rx, end_ori_ry, end_ori_rz "
@@ -2028,14 +2492,26 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         print("Window is closing, cleaning up...")
-        # Stop joystick thread if present
-        if hasattr(self, "joystick") and self.joystick is not None:
-            self.joystick.stop()
-        # Stop timer if present (future-proofing)
-        if hasattr(self, "timer") and self.timer is not None:
-            self.timer.stop()
-        self.robot.robot_shutdown()
-        event.accept()
+
+        try:
+        # safely shutdown robot
+            if self.robot:
+                self.robot.robot_shutdown()
+        except Exception as e:
+            print(f"[Robot Shutdown Error] {e}")
+
+        try:
+            # stop the bridge process
+            from main import stop_bridge   # import it safely
+            stop_bridge()
+            print("[Bridge] Closed")
+        except Exception as e:
+            print(f"[Bridge Stop Error in closeEvent] {e}")
+
+        event.accept()     # accept window close
+        QApplication.quit()
+
+        
 
     def show_virtual_keyboard(self, target_input):
         # Fermer le clavier existant s'il est ouvert
@@ -2062,12 +2538,17 @@ class MainWindow(QMainWindow):
             x2 = float(self.x_value2.text())
             y1 = float(self.y_value2.text())
             y2 = float(self.y_value1.text())
-            
+            print("x1",x1)
+            print("x2",x2)
+            print("y1",y1)
+            print("y2",y2)
+
             if  x2<=x1 or y2<=y1:
                 self.a_ponte_right_value.setText("Pente: Indéfinie")
                 self.curve_slope = None
                 self.curve_intercept = None
             else:
+                self.a_ponte_right_value.setText("true")
                 self.curve_slope = (y2 - y1) / (x2 - x1)
                 self.curve_intercept = y1 - self.curve_slope * x1
                 # self.a_ponte_right_value.setText(f"A: {self.curve_slope:.10g}, b: {self.curve_intercept:.10g}") 
@@ -2120,11 +2601,10 @@ class MainWindow(QMainWindow):
         print(self.welding_machine.detect_arc(self.robot))
         try:
             test_value = float(self.test_input_left.text())
-            if self.curve2_slope is not None and self.curve2_intercept is not None:
-                result = self.curve2_slope * test_value + self.curve2_intercept       
+            if self.curve_slope is not None and self.curve_intercept is not None:
+                result = self.curve_slope * test_value + self.curve_intercept       
                 self.test_button_right.setText(f"tttt: {result:.2f} V")
-                self.welding_machine.set_current(self.robot,result)
-                self.welding_machine.set_voltage(self.robot,test_value)
+                self.welding_machine.set_voltage(self.robot,result)
             else:
                 self.test_button_right.setText("Pente non définie")
         except ValueError:
@@ -2137,7 +2617,7 @@ class MainWindow(QMainWindow):
             if self.curve2_slope is not None and self.curve2_intercept is not None:
                 result = self.curve2_slope * test_value + self.curve2_intercept
                 self.test_button_right.setText(f"tttt: {result:.2f} V")
-                self.welding_machine.set_voltage(self.robot,result)
+                self.welding_machine.set_current(self.robot,result)
                 
             else:
                 self.test_button_right.setText("Pente non définie")
@@ -2465,18 +2945,37 @@ class MainWindow(QMainWindow):
             print(f"Step 3: Applying arc starting current {starting_current} A and voltage {starting_voltage} V for {arc_starting_time} seconds")
             self.welding_machine.set_current(self.robot,starting_current)
             self.welding_machine.set_voltage(self.robot,starting_voltage)
-            print("before sTARTED WELDING")
-            print(self.welding_machine.detect_arc(self.robot))
             self.welding_machine.set_arc_signal(self.robot,True)
-           
             time.sleep(arc_starting_time)
             print(f"Step 5: Transitioning to main welding with current {weld_current} A and voltage {weld_voltage} V")
             self.welding_machine.set_current(self.robot,weld_current)
             
             self.welding_machine.set_voltage(self.robot,weld_voltage)
             time.sleep(0.2)
-            print("after sTARTED WELDING")
-            print(self.welding_machine.detect_arc(self.robot))
+
+            # # Step 4: Wait for arc detection with retry mechanism
+            # print(f"Step 4: Waiting for arc detection for {arc_detect_time} seconds")
+            # max_attempts = 3
+            # attempt = 1
+            # arc_detected = False
+            # while attempt <= max_attempts and not arc_detected:
+            #     print(f"Arc detection attempt {attempt}/{max_attempts}")
+            #     arc_detected = self.welding_machine.detect_arc(arc_detect_time / max_attempts)  # Split time across attempts
+            #     if not arc_detected:
+            #         print(f"Arc detection failed on attempt {attempt}")
+            #         if attempt < max_attempts:
+            #             print("Retrying with slightly increased current and voltage...")
+            #             starting_current *= 1.1  # Increase by 10%
+            #             starting_voltage *= 1.1  # Increase by 10%
+            #             self.welding_machine.set_current(starting_current)
+            #             self.welding_machine.set_voltage(starting_voltage)
+            #             print(f"Adjusted to current {starting_current:.1f} A and voltage {starting_voltage:.1f} V")
+            #             time.sleep(0.5)  # Small delay before retry
+            #     attempt += 1
+
+            # if not arc_detected:
+            #     raise Exception("Arc detection failed after multiple attempts!")
+
             # Update displays with possibly adjusted values
             self.param_displays["Arc Starting Current"].setText(f"{starting_current:.1f} A")
             self.param_displays["Arc Starting Voltage"].setText(f"{starting_voltage:.1f} V")
@@ -2487,7 +2986,7 @@ class MainWindow(QMainWindow):
             # self.welding_machine.set_voltage(weld_voltage)
 
             # QMessageBox.information(self, "Success", "Arc started successfully!")
-            print("ARCSTART Sequence completed successfully.")
+
         except Exception as e:
             print(f"Error during arc start process: {e}")
             # Cleanup in case of error
@@ -2498,10 +2997,9 @@ class MainWindow(QMainWindow):
             self.param_displays["Gas Detect Signal"].setText("Yxx: OFF")
             self.param_displays["Arc Starting Signal"].setText("Yxx: OFF")
             self.param_displays["Arc Detect Signal"].setText("Xxx: OFF")
-
+            QMessageBox.critical(self, "Error", f"Arc start failed: {str(e)}")
 
     def end_arc_process(self):
-       
         """Handle the full arc end sequence using saved parameters from JSON and interface."""
         try:
             # Load parameters from the JSON file for current and voltage
@@ -2590,7 +3088,7 @@ class MainWindow(QMainWindow):
             print(f"Arc ending with current {ending_current} A and voltage {ending_voltage} V for {arc_ending_time} seconds")
             time.sleep(arc_ending_time)
 
-             #Step 2: Prevent stick phase
+            # Step 2: Prevent stick phase
             self.welding_machine.set_current(self.robot,remove_stick_current)
             self.welding_machine.set_voltage(self.robot,remove_stick_voltage)
             print(f"Preventing stick with current {remove_stick_current} A and voltage {remove_stick_voltage} V for {proof_stick_time} seconds")
@@ -2642,7 +3140,7 @@ class MainWindow(QMainWindow):
 
         # Layout vertical pour les boutons à gauche de "New Project"
         left_buttons_layout = QVBoxLayout()
-        left_buttons_layout.setSpacing(5)
+        left_buttons_layout.setSpacing(10)
         insert_position_group = QGroupBox("Insert Mode")
         insert_position_group.setStyleSheet("""
             QGroupBox {
@@ -2660,6 +3158,7 @@ class MainWindow(QMainWindow):
             }
         """)
         insert_position_layout = QVBoxLayout(insert_position_group)
+        insert_position_layout.setSpacing(8)
 
         self.add_before_radio = QRadioButton("Add before")
         self.add_before_radio.setChecked(True)
@@ -2755,16 +3254,16 @@ class MainWindow(QMainWindow):
 
         # Layout pour les boutons "Start", "Stop", "Step", "Delete"
         control_layout = QHBoxLayout()
-        control_layout.setSpacing(5)
+        control_layout.setSpacing(10)
 
         self.start_button = QPushButton("Start")
         self.start_button.clicked.connect(self.execute_all_movements)
         
-        self.start_button.setFixedSize(100, 40)
+        self.start_button.setFixedSize(60, 40)
         self.start_button.setStyleSheet("""
             QPushButton {
             
-                background-color: #E0E0E0;
+                background-color: #008000;
                 border: 1px solid #A9A9A9;
                 border-radius: 5px;
                 padding: 5px;
@@ -2785,19 +3284,19 @@ class MainWindow(QMainWindow):
         border: 2px solid #d0d0d0;
         border-radius: 8px;
         font-size: 14px;
-        padding: 8px 16px;
+        padding: 0px 0px;
     }
         """)
         control_layout.addWidget(self.start_button)
 
         stop_button = QPushButton("Stop")
-        stop_button.setFixedSize(100, 40)
+        stop_button.setFixedSize(60, 40)
         stop_button.setStyleSheet("""
             QPushButton {
                 background-color: #4682B4;
                 border: 1px solid #A9A9A9;
                 border-radius: 5px;
-                padding: 5px;
+                padding: 0px;
                 color: white;
                 font-weight: bold;
                 font-size: 12pt;
@@ -2811,38 +3310,16 @@ class MainWindow(QMainWindow):
             }
         """)
         stop_button.clicked.connect(self.stop_robot_movement)
-        control_layout.addWidget(stop_button)  # Connexion du bouton d'arrêt à la méthode stop_loop
+        control_layout.addWidget(stop_button)
+        
         self.pause_button = QPushButton("pause")
-        control_layout.addWidget(stop_button)  # Connexion du bouton d'arrêt à la méthode stop_loop
-        stop_button_1 = QPushButton("Stop loop")
-        stop_button_1.setFixedSize(100, 40)
-        stop_button_1.setStyleSheet("""
-            QPushButton {
-                background-color: #4682B4;
-                border: 1px solid #A9A9A9;
-                border-radius: 5px;
-                padding: 5px;
-                color: white;
-                font-weight: bold;
-                font-size: 12pt;
-            }
-            QPushButton:hover {
-                background-color: #4169E1;
-            }
-            QPushButton:pressed {
-                background-color: #E0E0E0;
-                color: black;
-            }
-        """)
-        stop_button_1.clicked.connect(self.stop_loop_robot_motion)
-        control_layout.addWidget(stop_button_1)
-        self.pause_button.setFixedSize(100, 40)
+        self.pause_button.setFixedSize(60, 40)
         self.pause_button.setStyleSheet("""
             QPushButton {
                 background-color: #4682B4;
                 border: 1px solid #A9A9A9;
                 border-radius: 5px;
-                padding: 5px;
+                padding: 0px;
                 color: white;
                 font-weight: bold;
                 font-size: 12pt;
@@ -2857,17 +3334,38 @@ class MainWindow(QMainWindow):
         """)
         self.pause_button.clicked.connect(self.Pause_robot_movement)
         control_layout.addWidget(self.pause_button)
-            
-
-        step_button = QPushButton("Step")
+        
+        stop_button_1 = QPushButton("S-loop")
+        stop_button_1.setFixedSize(60, 40)
+        stop_button_1.setStyleSheet("""
+            QPushButton {
+                background-color: #4682B4;
+                border: 1px solid #A9A9A9;
+                border-radius: 5px;
+                padding: 0px;
+                color: white;
+                font-weight: bold;
+                font-size: 12pt;
+            }
+            QPushButton:hover {
+                background-color: #4169E1;
+            }
+            QPushButton:pressed {
+                background-color: #E0E0E0;
+                color: black;
+            }
+        """)
+        stop_button_1.clicked.connect(self.stop_loop_robot_motion)
+        control_layout.addWidget(stop_button_1)
+        step_button = QPushButton("ST")
         step_button.clicked.connect(self.on_step_button_clicked)
-        step_button.setFixedSize(100, 40)
+        step_button.setFixedSize(60, 40)
         step_button.setStyleSheet("""
             QPushButton {
                 background-color: #E0E0E0;
                 border: 1px solid #A9A9A9;
                 border-radius: 5px;
-                padding: 5px;
+                padding: 0px;
                 color: black;
                 font-weight: bold;
                 font-size: 12pt;
@@ -2882,8 +3380,8 @@ class MainWindow(QMainWindow):
         """)
         control_layout.addWidget(step_button)
 
-        delete_button = QPushButton("Delete")
-        delete_button.setFixedSize(100, 40)
+        delete_button = QPushButton("D")
+        delete_button.setFixedSize(60, 40)
         delete_button.setStyleSheet("""
             QPushButton {
                 background-color: #FF4040;
@@ -2903,6 +3401,7 @@ class MainWindow(QMainWindow):
         """)
         delete_button.clicked.connect(self.delete_selected_item)
         control_layout.addWidget(delete_button)
+        
         
 
 
@@ -2952,7 +3451,7 @@ class MainWindow(QMainWindow):
 
         self.basic_condition_widget = QWidget()
         basic_condition_layout = QVBoxLayout(self.basic_condition_widget)
-        basic_condition_layout.setSpacing(5)
+        basic_condition_layout.setSpacing(15)
         basic_condition_layout.setContentsMargins(0, 0, 0, 0)
         
         basic_condition_label = QLabel("Basic Condition")
@@ -2996,7 +3495,7 @@ class MainWindow(QMainWindow):
 
         for group in button_groups:
             group_layout = QHBoxLayout()
-            group_layout.setSpacing(5)
+            group_layout.setSpacing(10)
             for btn_text, tooltip in group:
                 if btn_text:
                     btn = QPushButton(btn_text)
@@ -3860,10 +4359,13 @@ class MainWindow(QMainWindow):
                 return
             file_number = str(self.current_file)
             json_speed = float(self.file_parameters[file_number].get("speed", 2000.00))
+            print("False Here")
             self.in_arc_sequence = False
             loop_stack = self.loop_stack  # already initialized
             self.stop_requested = getattr(self, "stop_requested", False)
             while i < root.childCount():
+                self.current_execution_index = i
+                print("current",self.current_execution_index)
                 item = root.child(i)
                 item_text = item.text(0)
                 movement_data = item.data(0, Qt.UserRole)
@@ -3888,9 +4390,9 @@ class MainWindow(QMainWindow):
                             break
                     if not self.arc_detected:
                         print("Arc failed to start within 2 seconds. Stopping.")
+                        self.welding_machine.set_gas(self.robot,False)
                         self.welding_machine.set_current(self.robot,0)
                         self.welding_machine.set_voltage(self.robot,0)
-                        self.welding_machine.set_gas(self.robot,False)
                         self.welding_machine.set_arc_signal(self.robot,False)
                         QMessageBox.critical(self, "Avertissement", "Arc_notdetected") 
                         return   
@@ -3939,10 +4441,10 @@ class MainWindow(QMainWindow):
 
                 # === TIMER PAUSE BLOCK ✅ ===
                 elif action_type == "timer":
-                    self.current_execution_index = i + 1  # resume from next step
+                    self.current_execution_index = i + 1
                     print(f"⏳ Pause de {action_value} seconde(s)")
-                    QTimer.singleShot(int(action_value) * 1000, self.resume_after_timer)
-                    return  # Exit current execution loop
+                    self.timer.start(int(action_value) * 1000)  # ms
+                    return
 
                 # === ARC LOGIC ===
                 
@@ -4032,6 +4534,9 @@ class MainWindow(QMainWindow):
         
     def stop_robot_movement(self):
         self.robot.move_stop()
+        if self.timer.isActive():
+            self.timer.stop()
+            print("⏹ Timer stopped manually")
         if(self.in_arc_sequence):
             self.welding_machine.set_current(self.robot,0)
             self.welding_machine.set_voltage(self.robot,0)
@@ -4043,28 +4548,46 @@ class MainWindow(QMainWindow):
         self.pause_button.setText("pause")
          # Réactiver le bouton de démarrage
          # Terminer le processus de travail après l'exécution
+    def Pause_robotnotebutton_movement(self):
+        if(self.in_arc_sequence):
+            self.checked=True
+            self.robot.move_pause()
+            print("from new",self.pause_button.text())
+            self.welding_machine.set_current(self.robot,0)
+            self.welding_machine.set_voltage(self.robot,0)
+            self.welding_machine.set_gas(self.robot,False)
+            self.welding_machine.set_arc_signal(self.robot,False)
+            self.pause_button.setText("resume")
+            self.start_button.setDisabled(True)
+      
     def Pause_robot_movement(self):
         print(self.pause_button.text())
         self.robot.move_pause()
         if(self.pause_button.text() == "pause"):
+            if self.timer.isActive():
+                self.timer_remaining = self.timer.remainingTime()
+                self.timer.stop()
+                self.timer_is_paused = True
             print("hey")
             self.pause_button.setText("resume")
             self.start_button.setDisabled(True)
             if(self.in_arc_sequence):
-                self.checked=True
+                self.checked=False
                 self.welding_machine.set_current(self.robot,0)
                 self.welding_machine.set_voltage(self.robot,0)
                 self.welding_machine.set_gas(self.robot,False)
                 self.welding_machine.set_arc_signal(self.robot,False)
         elif(self.pause_button.text() == "resume"):
             print("resume")
-            if(self.while_arc_pause == True and self.in_arc_sequence == True):
+            if(self.timer_is_paused == True):
+                self.timer.start(self.timer_remaining)
+            if(self.while_arc_pause == True and self.in_arc_sequence == True ):
                 self.start_arc_process()
                 start_time = time.time()
                 while time.time() - start_time < 2:
                     if self.welding_machine.detect_arc(self.robot) == 1.0:
                         print("ooooo resume done")
-                        self.checked=False
+                        self.checked=True
                         self.robot.move_continue()
                         self.start_button.setEnabled(True) 
                         self.pause_button.setText("pause")
@@ -4080,10 +4603,13 @@ class MainWindow(QMainWindow):
                     QMessageBox.critical(self, "Avertissement", "Arc_notdetectedafteresume") 
                     return   
             else:
-                self.checked=False
+                self.checked=True
                 self.robot.move_continue()
                 self.start_button.setEnabled(True) 
                 self.pause_button.setText("pause")
+            if(self.after_urgence==True):
+                self.execute_from_index(self.current_execution_index)
+                self.after_urgence=False
                 
         
     def move_robot_to_coordinates(self, coordinates):
@@ -4190,7 +4716,7 @@ class MainWindow(QMainWindow):
             self.waypoints_data = (first_joints_tuple, second_joints_tuple, third_joints_tuple)
             print("----------------------------",self.robot.get_robot_state())
             self.start_move_track_process(self.waypoints_data,end_max_line_velc,end_max_line_acc)
-            self.wait_until_circular_motion_complete(self.waypoints_data, tolerance=0.05)
+            self.wait_until_back_to_start(first_joints_tuple, tolerance=0.05)
             print("finished")
             self.worker_process.kill()   
             
@@ -4213,14 +4739,13 @@ class MainWindow(QMainWindow):
             if mode == "Joint":
                 if (self.in_arc_sequence==False and self.robot.get_robot_state() != RobotStatus.Resumed or RobotStatus.Paused):
                     print("helpmeeejoint")
-                    self.robot.move_stop()
                 result = self.robot.move_joint(joint_radian=target_joints_tuple, issync=False)
                 self.wait_until_motion_complete(target_joints_tuple)
                         
             elif mode == "Line":
                 if (self.in_arc_sequence==False and self.robot.get_robot_state() != RobotStatus.Resumed or RobotStatus.Paused):
                     print("helpmeeeline")
-                    self.robot.move_stop()
+
                 result = self.robot.move_line(joint_radian=target_joints_tuple,issync=False)
                 self.wait_until_motion_complete(target_joints_tuple)
             else:
@@ -4238,57 +4763,45 @@ class MainWindow(QMainWindow):
         Paused = 2
     # 机械臂当前恢复
         Resumed = 3
-    def wait_until_circular_motion_complete(self, waypoints, tolerance=0.03, timeout=50):
-        """
-        Waits until the robot moves through all waypoints and returns to the first one (circular motion complete).
-        """
-        visited = [False] * len(waypoints)
+    def wait_until_back_to_start(self, start_joints, tolerance=0.05, timeout=100):
+   
         start_time = time.time()
+        start_reached_once = False
+        has_left_start = False
 
-        print("🎯 Starting circular motion monitoring...")
+        print("🎯 Waiting for robot to return to start...")
 
-        while time.time() - start_time < timeout: 
-            arc_status = self.welding_machine.detect_arc(self.robot)
-            print("arcstatus = ",arc_status)
-            if arc_status != 1.0 and self.checked == False and self.in_arc_sequence == True:
-                print("❌ Arc lost during welding!")
-                self.welding_machine.set_current(self.robot, 0)
-                self.welding_machine.set_voltage(self.robot, 0)
-                self.welding_machine.set_gas(self.robot, False)
-                self.robot.move_pause()
-                self.welding_machine.set_arc_signal(self.robot, False)
-                QMessageBox.critical(self, "Avertissement", "Arc lost during welding!")
-                self.checked = True
-                self.while_arc_pause=True
-                continue
-            current_wp = self.robot.get_current_waypoint()
-            if not current_wp:
+        while time.time() - start_time < timeout:
+            wp = self.robot.get_current_waypoint()
+            if not wp:
                 continue
 
-            current_joints = current_wp.get("joint")
-            if not current_joints:
+            joints = wp.get("joint")
+            if not joints:
                 continue
 
-            for i, target_joints in enumerate(waypoints):
-                diffs = [abs(curr - target) for curr, target in zip(current_joints, target_joints)]
-                #print(f"WP{i+1} diff: {diffs}")  # Debugging
-                if not visited[i] and sum(d <= tolerance for d in diffs) >= 4:
-                    visited[i] = True
-                    print(f"✅ Reached waypoint {i + 1}: {target_joints}")
+            diffs = [abs(curr - target) for curr, target in zip(joints, start_joints)]
+            is_at_start = all(d <= tolerance for d in diffs)
 
-            # Condition to finish: all points visited OR returned to WP1 after WP2
-            if all(visited):
-                if all(abs(curr - target) <= tolerance for curr, target in zip(current_joints, waypoints[0])):
-                    print("🏁 Full circle completed. Back at start.")
-                    return True
+            if is_at_start and not start_reached_once:
+                start_reached_once = True
+                print("✅ Reached start point first time")
 
-            # Backup: check if robot stopped
+            elif start_reached_once and not is_at_start:
+                has_left_start = True
+            #print("↔️ Robot left start point")
+
+            elif start_reached_once and has_left_start and is_at_start:
+                print("🏁 Robot returned to start point")
+                return True
 
             QApplication.processEvents()
             time.sleep(0.05)
 
-        print("⏰ Timeout reached without completing circular motion.")
+        print("⏰ Timeout waiting for return to start")
         return False
+
+
 
 
 
@@ -4304,15 +4817,20 @@ class MainWindow(QMainWindow):
         print("🎯 Target joints:", target_joints)
 
         while True:
-            arc_status = self.welding_machine.detect_arc(self.robot)
-            if arc_status != 1.0 and self.checked == False and self.in_arc_sequence == True:
-                print("arcstatus = ",arc_status)
+            self.arc_detected = self.welding_machine.detect_arc(self.robot)
+            if self.arc_detected != 1.0 and self.checked == False and self.in_arc_sequence == True:
+                print("arcstatus = ",self.arc_detected)
                 print("❌ Arc lost during welding!")
-                self.while_arc_pause=True  
-                self.Pause_robot_movement()
-                QMessageBox.critical(self, "Avertissement", "Arc lost during welding!")
-                self.checked = True             
+                self.while_arc_pause=True
+                self.checked = True
+                self.Pause_robotnotebutton_movement()
+                QMessageBox.critical(self, "Avertissement", "Arc lost during welding!")             
                 continue
+            elif (self.checked == True):
+                self.arc_detected = self.welding_machine.detect_arc(self.robot)
+                if self.arc_detected==1.0:
+                    self.checked = False
+
             current_wp = self.robot.get_current_waypoint()
             if current_wp is None:
                 continue
@@ -4327,7 +4845,10 @@ class MainWindow(QMainWindow):
 
             QApplication.processEvents()
             time.sleep(0.05)
-    
+    def on_test_button_clicked(self):
+        self.arc_detected=True
+    def on_test2_button_clicked(self):
+        self.arc_detected=False
     def on_step_button_clicked(self):
         if not self.check_save_before_execution():
             return
@@ -4559,44 +5080,116 @@ class MainWindow(QMainWindow):
             joint_accs = [float(val) if isinstance(val, str) else val for val in joint_accs]
             speed = joint_speeds[0] * radius  # Convertir rad/s en mm/s
 
-        dialog = EditSpeedDialog(self, current_speed=speed)
+        dialog = EditSpeedDialog(self, current_speed=speed, item=item)
         if dialog.exec_():
             new_speed = dialog.get_speed()
 
-            if movement_type == "Circle":
-                new_coordinates = ((first_values, second_values, third_values), new_speed, acc)
-            elif movement_type == "Line":
-                new_coordinates = (joint_values, new_speed, acc)
-            else:  # Move Joint
-                new_joint_speeds = [new_speed / radius] * len(joint_speeds)
-                new_coordinates = (joint_values, new_joint_speeds, joint_accs)
-
-            item.setData(0, Qt.UserRole, (movement_type, new_coordinates))
-
-            try:
+            # Use the latest movement_data from the item
+            latest_movement_data = item.data(0, Qt.UserRole)
+            if latest_movement_data:
+                movement_type, coordinates = latest_movement_data
                 if movement_type == "Circle":
-                    item.setText(0, f"Move Circle ({', '.join(f'{x:.2f}' for x in first_values)}) -> "
-                                    f"({', '.join(f'{x:.2f}' for x in second_values)}) -> "
-                                    f"({', '.join(f'{x:.2f}' for x in third_values)}), "
-                                    f"Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²")
+                    (first_values, second_values, third_values), speed, acc = coordinates
+                    new_coordinates = ((first_values, second_values, third_values), new_speed, acc)
                 elif movement_type == "Line":
-                    item.setText(0, f"Move Line ({', '.join(f'{x:.2f}' for x in joint_values)}, "
-                                    f"Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²)")
+                    joint_values, speed, acc = coordinates
+                    new_coordinates = (joint_values, new_speed, acc)
                 else:  # Move Joint
-                    speeds_str = ", ".join([f"{new_speed:.2f}" for _ in range(len(joint_speeds))])
-                    item.setText(0, f"Move Joint ({', '.join(f'{x:.2f}' for x in joint_values)}, "
-                                    f"Speeds: {speeds_str} mm/s)")
-            except Exception as e:
-                print(f"Erreur lors de la mise à jour du texte : {e}")
-                return
+                    joint_values, joint_speeds, joint_accs = coordinates
+                    new_joint_speeds = [new_speed / radius] * len(joint_speeds)
+                    new_coordinates = (joint_values, new_joint_speeds, joint_accs)
 
-            self.is_modified = True
-            print(f"✅ Vitesse modifiée pour '{movement_type}' : {new_speed:.2f} mm/s")
+                item.setData(0, Qt.UserRole, (movement_type, new_coordinates))
+
+                try:
+                    if movement_type == "Circle":
+                        item.setText(0, f"Move Circle ({', '.join(f'{x:.2f}' for x in first_values)}) -> "
+                                        f"({', '.join(f'{x:.2f}' for x in second_values)}) -> "
+                                        f"({', '.join(f'{x:.2f}' for x in third_values)}), "
+                                        f"Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²")
+                    elif movement_type == "Line":
+                        item.setText(0, f"Move Line ({', '.join(f'{x:.2f}' for x in joint_values)}, "
+                                        f"Speed: {new_speed:.2f} mm/s, Acc: {acc:.2f} mm/s²)")
+                    else:  # Move Joint
+                        speeds_str = ", ".join([f"{new_speed:.2f}" for _ in range(len(joint_speeds))])
+                        item.setText(0, f"Move Joint ({', '.join(f'{x:.2f}' for x in joint_values)}, "
+                                        f"Speeds: {speeds_str} mm/s)")
+                except Exception as e:
+                    print(f"Erreur lors de la mise à jour du texte : {e}")
+                    return
+
+                self.is_modified = True
+                print(f"✅ Vitesse modifiée pour '{movement_type}' : {new_speed:.2f} mm/s")
     def generate_program_name_with_date(self):
         """Génère un nom de programme basé sur la date et l'heure actuelles (format : Program_YYYYMMDD_HHMMSS)."""
         from datetime import datetime
         current_date = datetime.now().strftime("%Y%m%d_%H%M%S")  # Format YYYYMMDD_HHMMSS
         return f"Program_{current_date}"
+    def on_update_position_clicked(self, item=None):
+        selected_items = self.project_tree.selectedItems() if not item else [item]
+        if not selected_items:
+            QMessageBox.warning(self, "Avertissement", "Veuillez sélectionner un élément de mouvement dans l'arborescence !")
+            return
+        item = selected_items[0]
+        item_text = item.text(0)
+        if not (item_text.startswith("Move Joint") or item_text.startswith("Move Line")):
+            QMessageBox.warning(self, "Avertissement", "Veuillez sélectionner un élément 'Move Joint' ou 'Move Line' ! (Move Circle non supporté pour le moment)")
+            return
+
+        # Récupérer la position actuelle du robot
+        current_wp = self.robot.get_current_waypoint()
+        if not current_wp:
+            QMessageBox.critical(self, "Erreur", "Impossible d'obtenir la position actuelle du robot !")
+            return
+        current_joints = current_wp.get("joint")
+        if not current_joints:
+            QMessageBox.critical(self, "Erreur", "Aucune donnée de joints dans la position actuelle !")
+            return
+        current_degrees = [math.degrees(j) for j in current_joints]  # Convertir en degrés
+
+        # Préparer la chaîne pour la confirmation
+        coords_str = ', '.join(f'{x:.6f}' for x in current_degrees[:6])
+
+        # Demander confirmation
+        reply = QMessageBox.question(self, "Confirmer la mise à jour", 
+                                    f"Mettre à jour la position à ({coords_str}) ?", 
+                                    QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply != QMessageBox.Yes:
+            return
+
+        # Récupérer les données actuelles de l'élément
+        movement_data = item.data(0, Qt.UserRole)
+        if not movement_data:
+            QMessageBox.critical(self, "Erreur", "Aucune donnée de mouvement associée à cet élément !")
+            return
+        movement_type, coordinates = movement_data
+
+        # Mettre à jour les coordonnées (préserver vitesse/acc si présentes)
+        if movement_type == "Joint":
+            _, joint_speeds, joint_accs = coordinates
+            new_coordinates = (current_degrees, joint_speeds, joint_accs)
+        elif movement_type == "Line":
+            _, speed, acc = coordinates
+            new_coordinates = (current_degrees, speed, acc)
+
+        # Mettre à jour les données de l'élément
+        item.setData(0, Qt.UserRole, (movement_type, new_coordinates))
+
+        # Mettre à jour le texte de l'élément
+        base_text = item_text.split('(', 1)[0].strip()
+        if "Speed" in item_text or "Acc" in item_text:
+            extra_parts = item_text.rsplit(')', 1)[0].rsplit(',', 2)[1:]
+            new_text = f"{base_text} ({coords_str}{', ' + ', '.join(extra_parts) if extra_parts else ''})"
+        else:
+            new_text = f"{base_text} ({coords_str})"
+
+        item.setText(0, new_text)
+
+        # Marquer comme modifié
+        self.is_modified = True
+        QMessageBox.information(self, "Succès", "Position mise à jour avec succès !")
     
 
    
+
+

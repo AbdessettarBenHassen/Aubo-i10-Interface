@@ -1,6 +1,6 @@
 import sqlite3
 
-DB_PATH = "C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db"
+DB_PATH = "/root/AuboRobotWorkSpace/teachpendant/share/teachpendant/database/tool_coord_param.db"
 
 def fetch_all_tool_names():
     conn = sqlite3.connect(DB_PATH)

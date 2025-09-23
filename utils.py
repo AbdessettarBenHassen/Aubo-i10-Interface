@@ -1,9 +1,11 @@
-from robotcontrol import*
+from robot_bridge_client import*
 from PyQt5.QtCore import QThread, pyqtSignal, Qt, QTimer
 import main as mn
 import threads as th  # Importez le module threads pour accéder à th.joints
 import math
 import logging
+import os
+from logging.handlers import RotatingFileHandler
 from robot_db import get_full_tool_data
 
 logger = logging.getLogger('main.robotcontrol')
@@ -117,7 +119,7 @@ def setup_robot(ip, tool_name):
     # Use this tool_dynamics for robot startup and setting tool params
     robot.robot_startup(6, tool_dynamics)
     robot.init_profile()
-
+    robot.enable_robot_event()
     return robot, tool_dynamics
 
 # Dictionnaire pour stocker les timers
@@ -171,9 +173,9 @@ def start_move_joint(robot, joint, direction, self, joint_step_value):
     joint_mode = joint_mapping.get(joint, TeachMoveMode.NO_TEACH)
     if(not(self.st)):
         if(direction == "+"):
-            libpyauboi5.teach_move_start(robot.rshd,joint_mode, True)
+            robot.teach_move_start(joint_mode, True)
         else:
-            libpyauboi5.teach_move_start(robot.rshd,joint_mode, False)
+            robot.teach_move_start(joint_mode, False)
     else:
         move_joint(robot, joint, direction, self.st, joint_step_value)
 
@@ -181,8 +183,7 @@ def stop_move_joint(robot, joint, direction):
     """
     Stop the movement of a specific joint in a specific direction.
     """
-
-    libpyauboi5.teach_move_stop(robot.rshd)
+    robot.teach_move_stop()
        
 
 def update_joint_speed_from_slider(value, robot):
@@ -332,21 +333,23 @@ def start_move_cartesian(robot, axis, direction, self):
     # Get the correct TeachMoveMode value from joint number
         joint_mode = axe_mapping.get(axis, TeachMoveMode.NO_TEACH)
         if(direction == "+"):
-            libpyauboi5.teach_move_start(robot.rshd,joint_mode, True)
+            robot.teach_move_start(joint_mode, True)
         else:
-            libpyauboi5.teach_move_start(robot.rshd,joint_mode, False)
+            robot.teach_move_start(joint_mode, False)
     else:
         # Mode Step : déplacer d'un seul pas
         move_cartesian(robot, axis, direction, self.st, self.position_step_value.text(),self. orientation_step_value.text())
 
-def stop_move_cartesian(axis=None, direction=None):
+def stop_move_cartesian(robot,self):
     """
     Arrête le mouvement cartésien dans une direction spécifique.
     Si axis et direction ne sont pas fournis, arrête tous les mouvements cartésiens.
     :param axis: Numéro de l'axe (1: X, 2: Y, 3: Z, 4: RX, 5: RY, 6: RZ).
     :param direction: "+" pour augmenter, "-" pour diminuer.
     """
-    libpyauboi5.teach_move_stop(0)
+    # Note: This function needs a robot parameter to work
+    # You may need to pass the robot instance when calling this function
+    robot.teach_move_stop()
 
 
 
@@ -380,7 +383,7 @@ def move_to_zero_pose(robot):
 import sqlite3
 
 def fetch_user_coord_from_db(coord_name):
-    db_path = "C:/Users/abdes/OneDrive/Desktop/Aubo/tool_coord_param.db"
+    db_path = "/root/AuboRobotWorkSpace/teachpendant/share/teachpendant/database/tool_coord_param.db"
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
 
@@ -484,20 +487,16 @@ def on_reference_changed(robot, value):
     print(f"Reference coordinate changed to: {value}")
     
     if value == "Base":
-        libpyauboi5.set_teach_base_coord(robot.rshd)
+        robot.set_teach_base_coord()
     elif value == "flange_center":
-        libpyauboi5.set_teach_end_coord(robot.rshd)
+        robot.set_teach_end_coord()
     else:
         # Assume it's a user coordinate system
         user_coord = fetch_user_coord_from_db(value)
         print(user_coord)
         print(robot.check_user_coord(user_coord))
         if user_coord:
-                result = libpyauboi5.set_teach_user_coord(robot.rshd, user_coord)
-                if result == RobotErrorType.RobotError_SUCC:
-                    print("User coordinate set successfully.")
-                else:
-                    print("Failed to set user coordinate.")
+                robot.set_teach_user_coord(user_coord)
 
        
 
@@ -539,6 +538,7 @@ def stop_movement(robot):
     # Implementation depends on your robot API
     # Example:
     robot.stop()  # Or equivalent command
+
 
 
 

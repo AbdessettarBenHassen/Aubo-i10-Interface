@@ -1,5 +1,5 @@
 import utils as utl  # Remplace ça par ton module qui contient `self.robo
-from robotcontrol import *
+from robot_bridge_client import *
 from PyQt5.QtWidgets import QApplication
 import time
 def run_move_track_process(waypoints_data,vel,acc,ip):   

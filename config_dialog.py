@@ -1,18 +1,18 @@
-from PyQt5.QtWidgets import QDialog, QLabel, QComboBox, QVBoxLayout, QLineEdit, QPushButton
+from PyQt5.QtWidgets import QDialog, QLabel, QVBoxLayout, QListWidget, QPushButton
 from robot_db import fetch_all_tool_names, get_full_tool_data
-from PyQt5.QtGui import QFont, QIcon
+from PyQt5.QtGui import QIcon
+
 class ConfigDialog(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("TuniBot - Robot Initilize -")
         self.resize(500, 400)
-        self.setWindowIcon(QIcon("C:/Users/Emna/Downloads/lgo.jpeg"))
-        self.tool_combo = QComboBox()
-        self.tool_combo.addItems(fetch_all_tool_names())
-        self.tool_combo.currentTextChanged.connect(self.update_display)
+        self.setWindowIcon(QIcon("/root/桌面/Aubo/Logo.jpeg"))
 
-        self.ip_combo = QComboBox()
-        self.ip_combo.addItems(["192.168.23.129", "192.168.0.23"])
+        # List widget instead of ComboBox
+        self.tool_list = QListWidget()
+        self.tool_list.addItems(fetch_all_tool_names())
+        self.tool_list.currentItemChanged.connect(self.on_item_changed)
 
         self.info_label = QLabel("Tool info here...")
 
@@ -21,14 +21,19 @@ class ConfigDialog(QDialog):
 
         layout = QVBoxLayout()
         layout.addWidget(QLabel("Tool Name:"))
-        layout.addWidget(self.tool_combo)
-        layout.addWidget(QLabel("Robot IP:"))
-        layout.addWidget(self.ip_combo)
+        layout.addWidget(self.tool_list)
         layout.addWidget(self.info_label)
         layout.addWidget(self.save_btn)
         self.setLayout(layout)
 
-        self.update_display(self.tool_combo.currentText())
+        # Initialize with first item if available
+        if self.tool_list.count() > 0:
+            self.tool_list.setCurrentRow(0)
+            self.update_display(self.tool_list.currentItem().text())
+
+    def on_item_changed(self, current, previous):
+        if current:
+            self.update_display(current.text())
 
     def update_display(self, tool_name):
         data = get_full_tool_data(tool_name)
@@ -46,6 +51,11 @@ Gravity Center: ({dyn['gravity_center_x']}, {dyn['gravity_center_y']}, {dyn['gra
 """)
 
     def save_settings(self):
-        self.selected_tool = self.tool_combo.currentText()
-        self.selected_ip = self.ip_combo.currentText()
+        current_item = self.tool_list.currentItem()
+        if current_item:
+            self.selected_tool = current_item.text()
+        else:
+            self.selected_tool = None
+        self.selected_ip = "127.0.0.1"
         self.accept()
+

@@ -1,0 +1,17 @@
+[
+    {
+        "text": "Arc Start",
+        "data": null
+    },
+    {
+        "text": "timer (2s)",
+        "data": [
+            "timer",
+            2
+        ]
+    },
+    {
+        "text": "Arc End",
+        "data": null
+    }
+]

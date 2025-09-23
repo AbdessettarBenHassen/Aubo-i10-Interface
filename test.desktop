@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=TuniBot - Aubo i10 Interface
+Comment=Launch the Aubo i10 GUI with bridge
+Exec=/root/桌面/Aubo/Aubo-i10-Interface/run_robot.sh
+Icon=/root/桌面/Aubo/Logo.jpeg
+Terminal=False
+Categories=Utility;Robot;

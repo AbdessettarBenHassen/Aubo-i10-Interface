@@ -24360,3 +24360,619 @@
 2025-08-15 15:07:53,200 [17336] INFO: robot.rshd=0
 2025-08-15 15:07:53,200 [17336] INFO: Process started.
 2025-08-15 15:07:53,201 [17336] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:10:15,255 [27456] INFO: Aug 19 2025 10:10:15 test beginning...
+2025-08-19 10:10:15,259 [27456] INFO: robot.rshd=0
+2025-08-19 10:10:15,260 [27456] INFO: Process started.
+2025-08-19 10:10:15,260 [27456] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:18:20,881 [7496] INFO: Aug 19 2025 10:18:20 test beginning...
+2025-08-19 10:18:20,885 [7496] INFO: robot.rshd=0
+2025-08-19 10:18:20,886 [7496] INFO: Process started.
+2025-08-19 10:18:20,886 [7496] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:25:37,573 [10012] INFO: Aug 19 2025 10:25:37 test beginning...
+2025-08-19 10:25:37,578 [10012] INFO: robot.rshd=0
+2025-08-19 10:25:37,578 [10012] INFO: Process started.
+2025-08-19 10:25:37,579 [10012] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:27:27,048 [28484] INFO: Aug 19 2025 10:27:27 test beginning...
+2025-08-19 10:27:27,052 [28484] INFO: robot.rshd=0
+2025-08-19 10:27:27,053 [28484] INFO: Process started.
+2025-08-19 10:27:27,053 [28484] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:28:39,329 [4360] INFO: Aug 19 2025 10:28:39 test beginning...
+2025-08-19 10:28:39,333 [4360] INFO: robot.rshd=0
+2025-08-19 10:28:39,334 [4360] INFO: Process started.
+2025-08-19 10:28:39,334 [4360] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:38:45,816 [7344] INFO: Aug 19 2025 10:38:45 test beginning...
+2025-08-19 10:38:45,819 [7344] INFO: robot.rshd=0
+2025-08-19 10:38:45,820 [7344] INFO: Process started.
+2025-08-19 10:38:45,820 [7344] INFO: ip=192.168.0.23, port=8899
+2025-08-19 10:40:55,797 [12748] INFO: Aug 19 2025 10:40:55 test beginning...
+2025-08-19 10:40:55,801 [12748] INFO: robot.rshd=0
+2025-08-19 10:40:55,801 [12748] INFO: Process started.
+2025-08-19 10:40:55,801 [12748] INFO: ip=192.168.0.23, port=8899
+2025-08-19 11:14:36,740 [16764] INFO: Aug 19 2025 11:14:36 test beginning...
+2025-08-19 11:14:36,743 [16764] INFO: robot.rshd=0
+2025-08-19 11:14:36,744 [16764] INFO: Process started.
+2025-08-19 11:14:36,744 [16764] INFO: ip=192.168.0.23, port=8899
+2025-08-19 11:18:07,991 [15880] INFO: Aug 19 2025 11:18:07 test beginning...
+2025-08-19 11:18:07,997 [15880] INFO: robot.rshd=0
+2025-08-19 11:18:07,997 [15880] INFO: Process started.
+2025-08-19 11:18:07,997 [15880] INFO: ip=192.168.0.23, port=8899
+2025-08-19 11:18:58,338 [19516] INFO: Aug 19 2025 11:18:58 test beginning...
+2025-08-19 11:18:58,342 [19516] INFO: robot.rshd=0
+2025-08-19 11:18:58,342 [19516] INFO: Process started.
+2025-08-19 11:18:58,343 [19516] INFO: ip=192.168.0.23, port=8899
+2025-08-19 11:20:04,247 [24256] INFO: Aug 19 2025 11:20:04 test beginning...
+2025-08-19 11:20:04,251 [24256] INFO: robot.rshd=0
+2025-08-19 11:20:04,251 [24256] INFO: Process started.
+2025-08-19 11:20:04,252 [24256] INFO: ip=192.168.0.23, port=8899
+2025-08-21 12:06:56,572 [8824] INFO: Aug 21 2025 12:06:56 test beginning...
+2025-08-21 12:06:56,583 [8824] INFO: robot.rshd=0
+2025-08-21 12:06:56,590 [8824] INFO: Process started.
+2025-08-21 12:06:56,597 [8824] INFO: ip=192.168.0.23, port=8899
+2025-08-21 12:11:29,225 [8824] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-08-21 12:11:30,529 [8824] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:11:31,042 [8824] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:11:31,482 [8824] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:11:32,112 [8824] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:11:34,239 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:34,793 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:35,251 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:35,682 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:35,989 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:36,230 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:36,501 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:36,879 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:53,977 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:55,854 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:56,053 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:56,288 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:56,529 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:56,764 [8824] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:11:57,741 [8824] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-08-21 12:16:29,074 [20396] INFO: Aug 21 2025 12:16:29 test beginning...
+2025-08-21 12:16:29,083 [20396] INFO: robot.rshd=0
+2025-08-21 12:16:29,083 [20396] INFO: Process started.
+2025-08-21 12:16:29,084 [20396] INFO: ip=192.168.0.23, port=8899
+2025-08-21 12:19:25,151 [20396] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-08-21 12:19:26,213 [20396] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:19:26,958 [20396] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:19:27,598 [20396] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:19:28,176 [20396] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:19:28,749 [20396] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 12:19:36,552 [20396] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 12:19:38,091 [20396] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 12:20:00,725 [20396] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:20:01,298 [20396] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:20:01,739 [20396] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:20:01,896 [20396] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 12:20:03,189 [20396] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-08-21 12:38:38,265 [5856] INFO: Aug 21 2025 12:38:38 test beginning...
+2025-08-21 12:38:38,269 [5856] INFO: robot.rshd=0
+2025-08-21 12:38:38,270 [5856] INFO: Process started.
+2025-08-21 12:38:38,270 [5856] INFO: ip=192.168.0.23, port=8899
+2025-08-21 12:54:48,034 [15528] INFO: Aug 21 2025 12:54:48 test beginning...
+2025-08-21 12:54:48,038 [15528] INFO: robot.rshd=0
+2025-08-21 12:54:48,038 [15528] INFO: Process started.
+2025-08-21 12:54:48,038 [15528] INFO: ip=192.168.0.23, port=8899
+2025-08-21 12:58:49,082 [23148] INFO: Aug 21 2025 12:58:49 test beginning...
+2025-08-21 12:58:49,086 [23148] INFO: robot.rshd=0
+2025-08-21 12:58:49,086 [23148] INFO: Process started.
+2025-08-21 12:58:49,087 [23148] INFO: ip=192.168.0.23, port=8899
+2025-08-21 13:09:55,948 [9628] INFO: Aug 21 2025 13:09:55 test beginning...
+2025-08-21 13:09:55,953 [9628] INFO: robot.rshd=0
+2025-08-21 13:09:55,953 [9628] INFO: Process started.
+2025-08-21 13:09:55,953 [9628] INFO: ip=192.168.0.23, port=8899
+2025-08-21 13:12:52,684 [9628] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-08-21 13:12:54,135 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:54,874 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:55,101 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:55,320 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:55,533 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:55,788 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:56,014 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:56,433 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:12:56,648 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:13:00,493 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:13:01,190 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:13:01,774 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:13:02,486 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:13:02,710 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:13:02,950 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:13:05,041 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:37:21,256 [9628] INFO: Moved cartesian axis 1 in direction -
+2025-08-21 13:37:22,466 [9628] INFO: Moved cartesian axis 1 in direction +
+2025-08-21 13:37:54,644 [9628] INFO: Step Mode désactivé. Pas de déplacement désactivés.
+2025-08-21 13:39:39,813 [9628] INFO: Aug 21 2025 13:39:39 test beginning...
+2025-08-21 13:39:39,815 [9628] INFO: robot.rshd=1
+2025-08-21 13:39:39,816 [9628] INFO: Process started.
+2025-08-21 13:39:39,816 [9628] INFO: ip=192.168.0.23, port=8899
+2025-08-21 13:39:45,484 [9628] INFO: Step Mode activé. Pas de déplacement : Position = 1000.0 mm, Orientation = 28.64788975654116 deg, Joint = 28.64788975654116 deg
+2025-08-21 13:39:46,712 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:47,807 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:48,409 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:48,713 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:49,013 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:49,309 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:49,609 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:49,930 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:50,206 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:51,742 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:52,028 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:52,329 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:52,626 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:52,927 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:53,230 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:53,556 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:53,863 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:54,171 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:54,445 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:54,734 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:55,024 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:55,310 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:55,652 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:55,929 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:56,250 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:56,527 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:56,849 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:57,124 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:57,412 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:57,758 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:58,063 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:58,376 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:58,650 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:58,977 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:39:59,281 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:40:01,328 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:02,192 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:02,725 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:03,037 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:03,349 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:03,626 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:03,953 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:04,240 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:04,558 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:04,847 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:05,129 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:05,457 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:05,764 [9628] INFO: Moved cartesian axis 3 in direction +
+2025-08-21 13:40:38,061 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:41:38,538 [9628] INFO: Moved cartesian axis 5 in direction -
+2025-08-21 13:41:40,058 [9628] INFO: Moved cartesian axis 5 in direction +
+2025-08-21 13:41:41,363 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:42,050 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:43,793 [9628] INFO: Moved cartesian axis 4 in direction +
+2025-08-21 13:41:44,371 [9628] INFO: Moved cartesian axis 4 in direction +
+2025-08-21 13:41:44,813 [9628] INFO: Moved cartesian axis 4 in direction +
+2025-08-21 13:41:45,693 [9628] INFO: Moved cartesian axis 4 in direction +
+2025-08-21 13:41:47,736 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:48,829 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:49,119 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:49,133 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:49,171 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:49,182 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:49,343 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:50,040 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:50,604 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:50,936 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:50,977 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:50,989 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:51,001 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:51,017 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:51,029 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:51,315 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:52,501 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:53,044 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:53,061 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:53,099 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:53,114 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:53,127 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:56,031 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:56,561 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:56,574 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:56,588 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:56,624 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:56,637 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:56,652 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:56,687 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:57,330 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:57,864 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:57,893 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:57,946 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:57,967 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:57,988 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:58,203 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:58,257 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:58,290 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:59,168 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:41:59,384 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:41:59,960 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:00,216 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:00,350 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:00,527 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:00,680 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:00,850 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:01,202 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:01,237 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:01,349 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:01,990 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:02,027 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:03,030 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:03,068 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:03,083 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:03,143 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:03,312 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:03,469 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:04,360 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:04,689 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:04,720 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:04,862 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:05,538 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:05,577 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:05,590 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:06,775 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:06,973 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:09,709 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:10,246 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:10,258 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:10,297 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:10,313 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:10,330 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:11,227 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:11,446 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:11,624 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:12,006 [9628] INFO: Moved cartesian axis 4 in direction -
+2025-08-21 13:42:14,492 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:14,645 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:14,894 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:14,987 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:15,237 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:15,329 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:15,570 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:15,641 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:15,906 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:16,025 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:16,250 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:16,356 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:16,608 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:16,688 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:16,945 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:16,995 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:17,155 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:17,385 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:17,464 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:17,722 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:17,805 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:18,065 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:18,116 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:18,270 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:18,506 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:18,598 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:18,818 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:18,908 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:19,136 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:19,238 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:19,473 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:19,548 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:19,797 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:19,870 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:20,150 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:20,231 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:20,482 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:20,573 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:20,847 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:20,975 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:21,192 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:21,303 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:21,576 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:21,663 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:21,958 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:22,037 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:22,441 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:22,759 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:22,912 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:23,430 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:25,364 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:26,549 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:31,210 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:31,692 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:31,838 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:32,059 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:32,185 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:32,437 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:32,509 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:32,747 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:32,841 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:33,053 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:33,152 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:33,388 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:33,473 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:33,703 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:33,787 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:34,035 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:34,143 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:34,371 [9628] INFO: Moved cartesian axis 2 in direction +
+2025-08-21 13:42:34,457 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:36,167 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:36,316 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:36,568 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:42:36,663 [9628] ERROR: Error during cartesian movement: RobotError type2004 code=10023 msg=move error
+2025-08-21 13:42:36,950 [9628] INFO: Moved cartesian axis 3 in direction -
+2025-08-21 13:59:34,341 [22188] INFO: Aug 21 2025 13:59:34 test beginning...
+2025-08-21 13:59:34,344 [22188] INFO: robot.rshd=0
+2025-08-21 13:59:34,345 [22188] INFO: Process started.
+2025-08-21 13:59:34,345 [22188] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:00:50,735 [29460] INFO: Aug 21 2025 14:00:50 test beginning...
+2025-08-21 14:00:50,738 [29460] INFO: robot.rshd=0
+2025-08-21 14:00:50,739 [29460] INFO: Process started.
+2025-08-21 14:00:50,740 [29460] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:11:31,332 [20364] INFO: Aug 21 2025 14:11:31 test beginning...
+2025-08-21 14:11:31,336 [20364] INFO: robot.rshd=0
+2025-08-21 14:11:31,336 [20364] INFO: Process started.
+2025-08-21 14:11:31,337 [20364] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:16:52,771 [20364] INFO: Aug 21 2025 14:16:52 test beginning...
+2025-08-21 14:16:52,774 [20364] INFO: robot.rshd=1
+2025-08-21 14:16:52,775 [20364] INFO: Process started.
+2025-08-21 14:16:52,775 [20364] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:19:35,432 [27764] INFO: Aug 21 2025 14:19:35 test beginning...
+2025-08-21 14:19:35,436 [27764] INFO: robot.rshd=0
+2025-08-21 14:19:35,437 [27764] INFO: Process started.
+2025-08-21 14:19:35,437 [27764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:21:10,007 [27764] INFO: Aug 21 2025 14:21:10 test beginning...
+2025-08-21 14:21:10,009 [27764] INFO: robot.rshd=1
+2025-08-21 14:21:10,010 [27764] INFO: Process started.
+2025-08-21 14:21:10,010 [27764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:39:07,938 [27764] INFO: Aug 21 2025 14:39:07 test beginning...
+2025-08-21 14:39:07,941 [27764] INFO: robot.rshd=2
+2025-08-21 14:39:07,942 [27764] INFO: Process started.
+2025-08-21 14:39:07,942 [27764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:51:19,192 [3832] INFO: Aug 21 2025 14:51:19 test beginning...
+2025-08-21 14:51:19,197 [3832] INFO: robot.rshd=0
+2025-08-21 14:51:19,198 [3832] INFO: Process started.
+2025-08-21 14:51:19,198 [3832] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:52:34,337 [3832] INFO: Aug 21 2025 14:52:34 test beginning...
+2025-08-21 14:52:34,341 [3832] INFO: robot.rshd=1
+2025-08-21 14:52:34,342 [3832] INFO: Process started.
+2025-08-21 14:52:34,342 [3832] INFO: ip=192.168.0.23, port=8899
+2025-08-21 14:53:33,139 [11720] INFO: Aug 21 2025 14:53:33 test beginning...
+2025-08-21 14:53:33,143 [11720] INFO: robot.rshd=0
+2025-08-21 14:53:33,144 [11720] INFO: Process started.
+2025-08-21 14:53:33,144 [11720] INFO: ip=192.168.0.23, port=8899
+2025-08-21 15:45:50,766 [11720] INFO: Aug 21 2025 15:45:50 test beginning...
+2025-08-21 15:45:50,768 [11720] INFO: robot.rshd=1
+2025-08-21 15:45:50,769 [11720] INFO: Process started.
+2025-08-21 15:45:50,769 [11720] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:07:47,417 [11344] INFO: Aug 21 2025 16:07:47 test beginning...
+2025-08-21 16:07:47,421 [11344] INFO: robot.rshd=0
+2025-08-21 16:07:47,422 [11344] INFO: Process started.
+2025-08-21 16:07:47,422 [11344] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:08:55,478 [11344] INFO: Aug 21 2025 16:08:55 test beginning...
+2025-08-21 16:08:55,481 [11344] INFO: robot.rshd=1
+2025-08-21 16:08:55,481 [11344] INFO: Process started.
+2025-08-21 16:08:55,481 [11344] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:11:25,284 [9460] INFO: Aug 21 2025 16:11:25 test beginning...
+2025-08-21 16:11:25,288 [9460] INFO: robot.rshd=0
+2025-08-21 16:11:25,288 [9460] INFO: Process started.
+2025-08-21 16:11:25,289 [9460] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:12:56,716 [24684] INFO: Aug 21 2025 16:12:56 test beginning...
+2025-08-21 16:12:56,720 [24684] INFO: robot.rshd=0
+2025-08-21 16:12:56,720 [24684] INFO: Process started.
+2025-08-21 16:12:56,720 [24684] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:13:46,913 [24684] INFO: Aug 21 2025 16:13:46 test beginning...
+2025-08-21 16:13:46,916 [24684] INFO: robot.rshd=1
+2025-08-21 16:13:46,917 [24684] INFO: Process started.
+2025-08-21 16:13:46,917 [24684] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:15:33,811 [21764] INFO: Aug 21 2025 16:15:33 test beginning...
+2025-08-21 16:15:33,815 [21764] INFO: robot.rshd=0
+2025-08-21 16:15:33,815 [21764] INFO: Process started.
+2025-08-21 16:15:33,816 [21764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:16:31,977 [21764] INFO: Aug 21 2025 16:16:31 test beginning...
+2025-08-21 16:16:31,981 [21764] INFO: robot.rshd=1
+2025-08-21 16:16:31,981 [21764] INFO: Process started.
+2025-08-21 16:16:31,982 [21764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:22:34,918 [21764] INFO: Aug 21 2025 16:22:34 test beginning...
+2025-08-21 16:22:34,921 [21764] INFO: robot.rshd=2
+2025-08-21 16:22:34,921 [21764] INFO: Process started.
+2025-08-21 16:22:34,922 [21764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:39:39,869 [21764] INFO: Aug 21 2025 16:39:39 test beginning...
+2025-08-21 16:39:39,872 [21764] INFO: robot.rshd=3
+2025-08-21 16:39:39,872 [21764] INFO: Process started.
+2025-08-21 16:39:39,872 [21764] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:40:49,475 [14844] INFO: Aug 21 2025 16:40:49 test beginning...
+2025-08-21 16:40:49,478 [14844] INFO: robot.rshd=0
+2025-08-21 16:40:49,479 [14844] INFO: Process started.
+2025-08-21 16:40:49,479 [14844] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:42:43,346 [14844] INFO: Aug 21 2025 16:42:43 test beginning...
+2025-08-21 16:42:43,350 [14844] INFO: robot.rshd=1
+2025-08-21 16:42:43,350 [14844] INFO: Process started.
+2025-08-21 16:42:43,351 [14844] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:43:57,040 [13944] INFO: Aug 21 2025 16:43:57 test beginning...
+2025-08-21 16:43:57,044 [13944] INFO: robot.rshd=0
+2025-08-21 16:43:57,045 [13944] INFO: Process started.
+2025-08-21 16:43:57,045 [13944] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:46:40,848 [12508] INFO: Aug 21 2025 16:46:40 test beginning...
+2025-08-21 16:46:40,852 [12508] INFO: robot.rshd=0
+2025-08-21 16:46:40,852 [12508] INFO: Process started.
+2025-08-21 16:46:40,852 [12508] INFO: ip=192.168.0.23, port=8899
+2025-08-21 16:56:35,840 [15708] INFO: Aug 21 2025 16:56:35 test beginning...
+2025-08-21 16:56:35,844 [15708] INFO: robot.rshd=0
+2025-08-21 16:56:35,845 [15708] INFO: Process started.
+2025-08-21 16:56:35,845 [15708] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:05:43,952 [22380] INFO: Aug 21 2025 17:05:43 test beginning...
+2025-08-21 17:05:43,957 [22380] INFO: robot.rshd=0
+2025-08-21 17:05:43,957 [22380] INFO: Process started.
+2025-08-21 17:05:43,957 [22380] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:10:17,109 [24932] INFO: Aug 21 2025 17:10:17 test beginning...
+2025-08-21 17:10:17,113 [24932] INFO: robot.rshd=0
+2025-08-21 17:10:17,113 [24932] INFO: Process started.
+2025-08-21 17:10:17,113 [24932] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:11:54,814 [2580] INFO: Aug 21 2025 17:11:54 test beginning...
+2025-08-21 17:11:54,818 [2580] INFO: robot.rshd=0
+2025-08-21 17:11:54,819 [2580] INFO: Process started.
+2025-08-21 17:11:54,819 [2580] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:14:11,738 [23980] INFO: Aug 21 2025 17:14:11 test beginning...
+2025-08-21 17:14:11,742 [23980] INFO: robot.rshd=0
+2025-08-21 17:14:11,742 [23980] INFO: Process started.
+2025-08-21 17:14:11,742 [23980] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:15:02,630 [23360] INFO: Aug 21 2025 17:15:02 test beginning...
+2025-08-21 17:15:02,634 [23360] INFO: robot.rshd=0
+2025-08-21 17:15:02,635 [23360] INFO: Process started.
+2025-08-21 17:15:02,635 [23360] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:16:56,092 [17748] INFO: Aug 21 2025 17:16:56 test beginning...
+2025-08-21 17:16:56,096 [17748] INFO: robot.rshd=0
+2025-08-21 17:16:56,096 [17748] INFO: Process started.
+2025-08-21 17:16:56,097 [17748] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:20:40,538 [20924] INFO: Aug 21 2025 17:20:40 test beginning...
+2025-08-21 17:20:40,541 [20924] INFO: robot.rshd=0
+2025-08-21 17:20:40,541 [20924] INFO: Process started.
+2025-08-21 17:20:40,542 [20924] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:24:52,070 [27332] INFO: Aug 21 2025 17:24:52 test beginning...
+2025-08-21 17:24:52,074 [27332] INFO: robot.rshd=0
+2025-08-21 17:24:52,074 [27332] INFO: Process started.
+2025-08-21 17:24:52,074 [27332] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:29:40,345 [5052] INFO: Aug 21 2025 17:29:40 test beginning...
+2025-08-21 17:29:40,348 [5052] INFO: robot.rshd=0
+2025-08-21 17:29:40,349 [5052] INFO: Process started.
+2025-08-21 17:29:40,350 [5052] INFO: ip=192.168.0.23, port=8899
+2025-08-21 17:30:21,860 [25556] INFO: Aug 21 2025 17:30:21 test beginning...
+2025-08-21 17:30:21,865 [25556] INFO: robot.rshd=0
+2025-08-21 17:30:21,865 [25556] INFO: Process started.
+2025-08-21 17:30:21,866 [25556] INFO: ip=192.168.0.23, port=8899
+2025-08-22 01:26:54,362 [1860] INFO: Aug 22 2025 01:26:54 test beginning...
+2025-08-22 01:26:54,376 [1860] INFO: robot.rshd=0
+2025-08-22 01:26:54,376 [1860] INFO: Process started.
+2025-08-22 01:26:54,377 [1860] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:29:18,434 [20796] INFO: Aug 22 2025 01:29:18 test beginning...
+2025-08-22 01:29:18,439 [20796] INFO: robot.rshd=0
+2025-08-22 01:29:18,440 [20796] INFO: Process started.
+2025-08-22 01:29:18,440 [20796] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:30:33,568 [4904] INFO: Aug 22 2025 01:30:33 test beginning...
+2025-08-22 01:30:33,572 [4904] INFO: robot.rshd=0
+2025-08-22 01:30:33,572 [4904] INFO: Process started.
+2025-08-22 01:30:33,572 [4904] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:33:10,227 [23584] INFO: Aug 22 2025 01:33:10 test beginning...
+2025-08-22 01:33:10,231 [23584] INFO: robot.rshd=0
+2025-08-22 01:33:10,232 [23584] INFO: Process started.
+2025-08-22 01:33:10,232 [23584] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:34:59,699 [276] INFO: Aug 22 2025 01:34:59 test beginning...
+2025-08-22 01:34:59,704 [276] INFO: robot.rshd=0
+2025-08-22 01:34:59,705 [276] INFO: Process started.
+2025-08-22 01:34:59,705 [276] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:37:08,116 [26444] INFO: Aug 22 2025 01:37:08 test beginning...
+2025-08-22 01:37:08,122 [26444] INFO: robot.rshd=0
+2025-08-22 01:37:08,122 [26444] INFO: Process started.
+2025-08-22 01:37:08,123 [26444] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:44:08,861 [29436] INFO: Aug 22 2025 01:44:08 test beginning...
+2025-08-22 01:44:08,867 [29436] INFO: robot.rshd=0
+2025-08-22 01:44:08,867 [29436] INFO: Process started.
+2025-08-22 01:44:08,868 [29436] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:45:18,724 [25644] INFO: Aug 22 2025 01:45:18 test beginning...
+2025-08-22 01:45:18,729 [25644] INFO: robot.rshd=0
+2025-08-22 01:45:18,730 [25644] INFO: Process started.
+2025-08-22 01:45:18,730 [25644] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:45:30,751 [25644] INFO: Aug 22 2025 01:45:30 test beginning...
+2025-08-22 01:45:30,755 [25644] INFO: robot.rshd=1
+2025-08-22 01:45:30,756 [25644] INFO: Process started.
+2025-08-22 01:45:30,756 [25644] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:45:55,053 [24880] INFO: Aug 22 2025 01:45:55 test beginning...
+2025-08-22 01:45:55,057 [24880] INFO: robot.rshd=0
+2025-08-22 01:45:55,059 [24880] INFO: Process started.
+2025-08-22 01:45:55,059 [24880] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:47:10,780 [28156] INFO: Aug 22 2025 01:47:10 test beginning...
+2025-08-22 01:47:10,784 [28156] INFO: robot.rshd=0
+2025-08-22 01:47:10,785 [28156] INFO: Process started.
+2025-08-22 01:47:10,785 [28156] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:48:50,988 [28156] INFO: Aug 22 2025 01:48:50 test beginning...
+2025-08-22 01:48:50,994 [28156] INFO: robot.rshd=1
+2025-08-22 01:48:50,994 [28156] INFO: Process started.
+2025-08-22 01:48:50,995 [28156] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:49:37,941 [28156] INFO: Aug 22 2025 01:49:37 test beginning...
+2025-08-22 01:49:37,946 [28156] INFO: robot.rshd=2
+2025-08-22 01:49:37,947 [28156] INFO: Process started.
+2025-08-22 01:49:37,947 [28156] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:51:02,781 [28156] INFO: Aug 22 2025 01:51:02 test beginning...
+2025-08-22 01:51:02,785 [28156] INFO: robot.rshd=3
+2025-08-22 01:51:02,785 [28156] INFO: Process started.
+2025-08-22 01:51:02,785 [28156] INFO: ip=192.168.23.129, port=8899
+2025-08-22 01:54:32,336 [9532] INFO: Aug 22 2025 01:54:32 test beginning...
+2025-08-22 01:54:32,342 [9532] INFO: robot.rshd=0
+2025-08-22 01:54:32,343 [9532] INFO: Process started.
+2025-08-22 01:54:32,343 [9532] INFO: ip=192.168.23.129, port=8899
+2025-08-22 10:02:15,526 [21556] INFO: Aug 22 2025 10:02:15 test beginning...
+2025-08-22 10:02:15,531 [21556] INFO: robot.rshd=0
+2025-08-22 10:02:15,532 [21556] INFO: Process started.
+2025-08-22 10:02:15,532 [21556] INFO: ip=192.168.0.23, port=8899
+2025-08-22 10:13:17,267 [12972] INFO: Aug 22 2025 10:13:17 test beginning...
+2025-08-22 10:13:17,272 [12972] INFO: robot.rshd=0
+2025-08-22 10:13:17,273 [12972] INFO: Process started.
+2025-08-22 10:13:17,273 [12972] INFO: ip=192.168.0.23, port=8899
+2025-08-22 10:22:56,283 [15104] INFO: Aug 22 2025 10:22:56 test beginning...
+2025-08-22 10:22:56,287 [15104] INFO: robot.rshd=0
+2025-08-22 10:22:56,287 [15104] INFO: Process started.
+2025-08-22 10:22:56,287 [15104] INFO: ip=192.168.0.23, port=8899
+2025-08-22 10:40:03,412 [7196] INFO: Aug 22 2025 10:40:03 test beginning...
+2025-08-22 10:40:03,415 [7196] INFO: robot.rshd=0
+2025-08-22 10:40:03,416 [7196] INFO: Process started.
+2025-08-22 10:40:03,416 [7196] INFO: ip=192.168.0.23, port=8899
+2025-08-22 10:51:37,133 [7544] INFO: Aug 22 2025 10:51:37 test beginning...
+2025-08-22 10:51:37,137 [7544] INFO: robot.rshd=0
+2025-08-22 10:51:37,138 [7544] INFO: Process started.
+2025-08-22 10:51:37,138 [7544] INFO: ip=192.168.0.23, port=8899
+2025-08-22 10:54:41,135 [7544] INFO: Aug 22 2025 10:54:41 test beginning...
+2025-08-22 10:54:41,138 [7544] INFO: robot.rshd=1
+2025-08-22 10:54:41,138 [7544] INFO: Process started.
+2025-08-22 10:54:41,138 [7544] INFO: ip=192.168.0.23, port=8899
+2025-08-22 10:55:14,857 [7544] INFO: Aug 22 2025 10:55:14 test beginning...
+2025-08-22 10:55:14,860 [7544] INFO: robot.rshd=2
+2025-08-22 10:55:14,860 [7544] INFO: Process started.
+2025-08-22 10:55:14,861 [7544] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:04:03,540 [19588] INFO: Aug 22 2025 11:04:03 test beginning...
+2025-08-22 11:04:03,544 [19588] INFO: robot.rshd=0
+2025-08-22 11:04:03,544 [19588] INFO: Process started.
+2025-08-22 11:04:03,544 [19588] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:09:14,343 [17740] INFO: Aug 22 2025 11:09:14 test beginning...
+2025-08-22 11:09:14,347 [17740] INFO: robot.rshd=0
+2025-08-22 11:09:14,347 [17740] INFO: Process started.
+2025-08-22 11:09:14,348 [17740] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:15:15,896 [21788] INFO: Aug 22 2025 11:15:15 test beginning...
+2025-08-22 11:15:15,900 [21788] INFO: robot.rshd=0
+2025-08-22 11:15:15,901 [21788] INFO: Process started.
+2025-08-22 11:15:15,901 [21788] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:17:56,998 [18376] INFO: Aug 22 2025 11:17:56 test beginning...
+2025-08-22 11:17:57,001 [18376] INFO: robot.rshd=0
+2025-08-22 11:17:57,002 [18376] INFO: Process started.
+2025-08-22 11:17:57,002 [18376] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:23:29,000 [18376] INFO: Aug 22 2025 11:23:29 test beginning...
+2025-08-22 11:23:29,003 [18376] INFO: robot.rshd=1
+2025-08-22 11:23:29,003 [18376] INFO: Process started.
+2025-08-22 11:23:29,004 [18376] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:27:42,485 [13488] INFO: Aug 22 2025 11:27:42 test beginning...
+2025-08-22 11:27:42,489 [13488] INFO: robot.rshd=0
+2025-08-22 11:27:42,490 [13488] INFO: Process started.
+2025-08-22 11:27:42,490 [13488] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:29:34,592 [13488] INFO: Aug 22 2025 11:29:34 test beginning...
+2025-08-22 11:29:34,594 [13488] INFO: robot.rshd=1
+2025-08-22 11:29:34,596 [13488] INFO: Process started.
+2025-08-22 11:29:34,596 [13488] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:34:11,526 [27476] INFO: Aug 22 2025 11:34:11 test beginning...
+2025-08-22 11:34:11,530 [27476] INFO: robot.rshd=0
+2025-08-22 11:34:11,530 [27476] INFO: Process started.
+2025-08-22 11:34:11,531 [27476] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:36:48,631 [17320] INFO: Aug 22 2025 11:36:48 test beginning...
+2025-08-22 11:36:48,635 [17320] INFO: robot.rshd=0
+2025-08-22 11:36:48,635 [17320] INFO: Process started.
+2025-08-22 11:36:48,636 [17320] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:39:16,582 [16864] INFO: Aug 22 2025 11:39:16 test beginning...
+2025-08-22 11:39:16,586 [16864] INFO: robot.rshd=0
+2025-08-22 11:39:16,586 [16864] INFO: Process started.
+2025-08-22 11:39:16,586 [16864] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:49:08,919 [24452] INFO: Aug 22 2025 11:49:08 test beginning...
+2025-08-22 11:49:08,923 [24452] INFO: robot.rshd=0
+2025-08-22 11:49:08,924 [24452] INFO: Process started.
+2025-08-22 11:49:08,924 [24452] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:51:40,638 [26564] INFO: Aug 22 2025 11:51:40 test beginning...
+2025-08-22 11:51:40,641 [26564] INFO: robot.rshd=0
+2025-08-22 11:51:40,641 [26564] INFO: Process started.
+2025-08-22 11:51:40,642 [26564] INFO: ip=192.168.0.23, port=8899
+2025-08-22 11:57:09,164 [8144] INFO: Aug 22 2025 11:57:09 test beginning...
+2025-08-22 11:57:09,168 [8144] INFO: robot.rshd=0
+2025-08-22 11:57:09,169 [8144] INFO: Process started.
+2025-08-22 11:57:09,169 [8144] INFO: ip=192.168.0.23, port=8899

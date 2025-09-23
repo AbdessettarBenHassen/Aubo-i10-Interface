@@ -1,61 +1,25 @@
+
 from ui import *
 import utils as utl 
 from multiprocessing import Process, Queue
-import robotcontrol as mim
-from joystick import JoystickManager
 from threads import *
 from config_dialog import ConfigDialog
 import sys
-from PyQt5.QtWidgets import QApplication,QProgressDialog
+from PyQt5.QtWidgets import QApplication,QProgressDialog,QDesktopWidget
 from PyQt5.QtCore import QTimer,Qt, QThread, pyqtSignal
-
+import multiprocessing as mp
+import subprocess, time
 #ip = '192.168.0.23'
 ip = ''
 tooltest = ""
+from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtCore import Qt
+import sys
 robot = None
 window = None
-movement_active = False
-rt = False
-step = False
-speed = 1
+# Joystick-related variables removed - pygame functionality disabled
 
-def button_handler(button_id: int, pressed: bool):
-    global rt, step, speed
-    if button_id == 9 and pressed:
-        rt = not rt
-    elif button_id == 10 and pressed:
-        step = not step
-    elif button_id == 11 and pressed:
-        speed += 1
-    elif button_id == 12 and pressed:
-        speed -= 1
-
-def axis_handler(axis_id: int, value: int):
-    global step, speed, movement_active
-    if axis_id < 3:
-        if axis_id == 0:
-            axis_id = 1
-        elif axis_id == 1:
-            axis_id = 0
-        if not robot:
-            return
-        control_axis = axis_id + 4 if rt else axis_id + 1
-        if abs(value) > 0.8:
-            direction = "-" if value < 0 else "+"
-            try:
-                utl.move_cartesian(robot, control_axis, direction, step, str(speed), str(speed))
-                movement_active = True
-            except Exception as e:
-                print(f"Movement error: {e}")
-        elif movement_active:
-            try:
-                utl.stop_movement(robot)
-                movement_active = False
-            except Exception as e:
-                print(f"Stop error: {e}")
-
-def hat_handler(hat_id: int, value: tuple):
-    pass
+# Joystick handlers removed - pygame functionality disabled
 def show_robot_error_popup(message):
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Critical)
@@ -69,6 +33,77 @@ import socket
 from multiprocessing import Process, Queue
 from PyQt5.QtWidgets import QApplication, QProgressDialog, QMessageBox
 from PyQt5.QtCore import Qt, QTimer
+import json
+import os
+CONFIG_FILE = os.path.expanduser("~/.robot_config.json")
+def save_config(ip, tool):
+    data = {"ip": ip, "tool": tool}
+    with open(CONFIG_FILE, "w") as f:
+        json.dump(data, f)
+import os, subprocess, time, sys
+
+bridge_process = None
+
+def start_bridge_once():
+    global bridge_process
+    # ensure old bridge is closed
+    stop_bridge()
+
+    base_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+    bridge_script = os.path.join(base_path, "robot_bridge_server.py")
+
+    bridge_process = subprocess.Popen(["python2", bridge_script])
+   
+    print(f"[Bridge] Started with PID {bridge_process.pid}")
+    
+    # Wait for bridge server to be ready
+    max_wait = 10  # seconds
+    start_time = time.time()
+    while time.time() - start_time < max_wait:
+        try:
+            # Test if bridge server is responding
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(1)
+            s.connect(('127.0.0.1', 5000))
+            s.send(json.dumps({"action": "get_status"}).encode('utf-8'))
+            data = s.recv(1024)
+            s.close()
+            response = json.loads(data.decode('utf-8'))
+            if response.get("status") == "ok":
+                print("[Bridge] Server is ready!")
+                return True
+        except Exception as e:
+            print(f"[Bridge] Waiting for server... {e}")
+            time.sleep(0.5)
+    
+    print("[Bridge] Server failed to start within timeout")
+    return False
+
+def stop_bridge():
+    global bridge_process
+    if bridge_process is not None:
+        try:
+            # Try graceful shutdown first
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(2)
+            try:
+                s.connect(('127.0.0.1', 5000))
+                shutdown_cmd = json.dumps({"action": "shutdown"})
+                s.send(shutdown_cmd.encode('utf-8'))
+                s.close()
+                time.sleep(1.5)  # give bridge time to cleanup sockets
+            except Exception as e:
+                print("[Bridge Stop Warning] Could not request shutdown: {}".format(e))
+
+            # If still alive, kill it
+            if bridge_process.poll() is None:
+                bridge_process.terminate()
+                bridge_process.wait(timeout=3)
+
+        except Exception as e:
+            print("[Bridge Stop Error] {}".format(e))
+        finally:
+            bridge_process = None
 
 
 # Process function: only check socket reachability
@@ -79,6 +114,7 @@ def check_robot_reachable(ip, queue, port=8899, timeout=5000):
     except Exception as e:
         print(f"[Connection Test Error] {e}")
         queue.put(False)
+    
 
 class AppController:
     def __init__(self):
@@ -96,13 +132,21 @@ class AppController:
 
     def show_config(self):
         if self.config.exec_() == self.config.Accepted:
+            self.tooltest = self.config.selected_tool
+            self.ip = self.config.selected_ip
+            save_config(self.ip, self.tooltest)
+            start_bridge_once()
             self.start_connection()
+            # Bridge server is already running manually - skip this check
+            # if not start_bridge_once():
+            #     QMessageBox.critical(None, "Error", "Failed to start bridge server. Please try again.")
+            #     self.show_config()
+            #     return
         else:
             sys.exit()
 
     def start_connection(self):
-        self.tooltest = self.config.selected_tool
-        self.ip = self.config.selected_ip
+ 
 
         # Show loading dialog
         self.loading = QProgressDialog("Connecting to robot...", None, 0, 0)
@@ -150,20 +194,15 @@ class AppController:
             robot.ui_ref = window
             robot.enable_robot_event()
 
-            joystick = JoystickManager(
-                axis_threshold=0.1,
-                button_callback=button_handler,
-                axis_callback=axis_handler,
-                hat_callback=hat_handler
-            )
-            joystick.start()
-
             # Use a dict to hold the robot reference so we can update it on reconnect
             self.robot_container = {"robot": robot}
 
             self.start_position_timer(window)
-
             window.show()
+
+      
+            
+
 
     def start_position_timer(self, window):
         self.timer = QTimer(window)
@@ -215,7 +254,17 @@ class AppController:
                 return
 
             try:
+                # Use bridge client for reconnection
+                from robot_bridge_client import Auboi5Robot
+                robot = Auboi5Robot(bridge_host='127.0.0.1', bridge_port=5000)
+                
+                if not robot.check_connection():
+                    raise RuntimeError("Bridge server not responding")
+                
                 robot, tool_dynamics = utl.setup_robot(self.ip, self.tooltest)
+                if result != 0:
+                    raise RuntimeError(f"Robot startup failed with code: {result}")
+                
                 self.robot_container["robot"] = robot
             except Exception as e:
                 QMessageBox.critical(None, "Error", f"Reconnect failed: {e}")
@@ -234,19 +283,15 @@ class AppController:
             robot.ui_ref = window
             robot.enable_robot_event()
 
-            joystick = JoystickManager(
-                axis_threshold=0.1,
-                button_callback=button_handler,
-                axis_callback=axis_handler,
-                hat_callback=hat_handler
-            )
-            joystick.start()
 
             # Restart position timer with new window
             self.start_position_timer(window)
             window.show()
+            
 
 if __name__ == "__main__":
+    mp.set_start_method("spawn", force=True)
     controller = AppController()
     controller.start()
+
 
